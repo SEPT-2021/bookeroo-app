@@ -6,25 +6,29 @@ import App from "./pages/App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import Login from "./pages/Login";
+import PageNotfound from "./pages/PageNotFound/PageNotFound";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <CssBaseline />
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/app">
-            <App />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Redirect to="/login" />
-        </Switch>
-      </BrowserRouter>
-    </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <React.StrictMode>
+        <CssBaseline />
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <Switch>
+                    <Route path="/app">
+                        <App />
+                    </Route>
+                    <Route path="/login">
+                        <Login />
+                    </Route>
+                    <Route path="">
+                        <PageNotfound/>
+                    </Route>
+                    <Redirect to="/login" />
+                </Switch>
+            </BrowserRouter>
+        </ThemeProvider>
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
