@@ -1,29 +1,33 @@
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import {CssBaseline, ThemeProvider} from "@material-ui/core";
 import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import ReactDOM from "react-dom";
 import App from "./pages/App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import Login from "./pages/Login";
 import PageNotfound from "./pages/PageNotFound/PageNotFound";
+import HomePage from "./pages/HomePage/HomePage";
 
 ReactDOM.render(
     <React.StrictMode>
-        <CssBaseline />
+        <CssBaseline/>
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Switch>
+                    <Route path="/home">
+                        <HomePage/>
+                    </Route>
                     <Route path="/app">
-                        <App />
+                        <App/>
                     </Route>
                     <Route path="/login">
-                        <Login />
+                        <Login/>
                     </Route>
                     <Route path="">
                         <PageNotfound/>
                     </Route>
-                    <Redirect to="/login" />
+                    <Redirect to="/home"/>
                 </Switch>
             </BrowserRouter>
         </ThemeProvider>

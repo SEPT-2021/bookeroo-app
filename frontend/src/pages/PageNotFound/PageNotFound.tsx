@@ -23,7 +23,7 @@ function PageNotfound({classes}: PageNotFound) {
                 <img src={logo} alt="logo"/>
 
                 <h1>404 - Not Found!</h1>
-                <a href="/login">
+                <a href="/home">
                     <Button variant="contained" color="primary" onClick={() => {
                     }}>Go Back</Button>
                 </a>
