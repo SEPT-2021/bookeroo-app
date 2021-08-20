@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Avatar,
     Box,
@@ -19,7 +19,7 @@ import {
 import { LockOutlined } from "@material-ui/icons";
 import logo from "../../assets/logo.svg";
 
-function SignUp({ classes }: SignUpProps) {
+function Register({ classes }: RegisterProps) {
     return (
         <Grid container component="main" className={classes.root}>
             <Grid item xs={12} sm={4} md={7} className={classes.steps}>
@@ -47,7 +47,7 @@ function SignUp({ classes }: SignUpProps) {
                         <LockOutlined />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        SignUp
+                        Register
                     </Typography>
                     <Box>
                         <TextField
@@ -59,6 +59,7 @@ function SignUp({ classes }: SignUpProps) {
                             label="Email Address"
                             name="email"
                             autoComplete="email"
+
                             autoFocus
                         />
                         <TextField
@@ -114,7 +115,7 @@ function SignUp({ classes }: SignUpProps) {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign-Up Now
+                            Register Now
                         </Button>
                         <Grid container>
                             <Grid item>
@@ -167,6 +168,6 @@ const styles = (theme: Theme) =>
         },
     });
 
-type SignUpProps = WithStyles<typeof styles>;
+type RegisterProps = WithStyles<typeof styles>;
 
-export default withStyles(styles)(SignUp);
+export default withStyles(styles)(Register);

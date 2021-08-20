@@ -5,7 +5,8 @@ import ReactDOM from "react-dom";
 import App from "./pages/App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
+import Register from "./pages/SignUp/Register";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,6 +17,9 @@ ReactDOM.render(
           <Route path="/app">
             <App />
           </Route>
+            <Route path="/register" >
+                <Register />
+            </Route>
           <Route path="/login">
             <Login />
           </Route>
