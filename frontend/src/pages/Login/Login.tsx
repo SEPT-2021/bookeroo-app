@@ -92,8 +92,8 @@ function Login({ classes }: LoginProps) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/sign-up" variant="body2">
-                  Don't have an account? Sign Up
+                <Link href="/register" variant="body2">
+                  Don't have an account? Register
                 </Link>
               </Grid>
             </Grid>
