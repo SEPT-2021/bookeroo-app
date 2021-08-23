@@ -15,31 +15,39 @@ import {
   Theme,
   Typography,
   withStyles,
-  WithStyles
+  WithStyles,
 } from "@material-ui/core";
 import { LockOutlined } from "@material-ui/icons";
 import logo from "../../assets/logo.svg";
 
 function Register({ classes }: RegisterProps) {
-  const [usernameR, setUsername] = useState("");
-  const [firstNameR, setFirstName] = useState("");
-  const [lastNameR, setLastName] = useState("");
-  const [passwordR, setPassword] = useState("");
-  const [confirmPasswordR, setConfirmPassword] = useState("");
+  const [Username, setUsername] = useState("");
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
 
-  const reg = () => {
-    axios
-      .post("/api/users/register", {
-        username: usernameR,
-        firstName: firstNameR,
-        lastName: lastNameR,
-        password: passwordR,
-        confirmPassword: confirmPasswordR
-      })
-      .then((response) => {
-        console.log(response);
-      });
-  };
+  async function registerPost() {
+    axios({
+      method: "POST",
+      url: "/api/users/register",
+      data: {
+        username: Username,
+        firstName: FirstName,
+        lastName: LastName,
+        password: Password,
+        confirmPassword: ConfirmPassword,
+      },
+    }).then(
+      (response) => {
+        // eslint-disable-next-line no-console
+        return(response.data.json)
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -139,13 +147,13 @@ function Register({ classes }: RegisterProps) {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={reg}
+              onClick={registerPost}
             >
               Register Now
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link href="/api/users/login" variant="body2">
                   Have an account? Login Now
                 </Link>
               </Grid>
@@ -167,31 +175,31 @@ function Register({ classes }: RegisterProps) {
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      height: "100vh"
+      height: "100vh",
     },
     steps: {
       "& img": {
         width: 230,
-        margin: theme.spacing(6)
+        margin: theme.spacing(6),
       },
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      flexDirection: "column"
+      flexDirection: "column",
     },
     paper: {
       margin: theme.spacing(8, 4),
       display: "flex",
       flexDirection: "column",
-      alignItems: "center"
+      alignItems: "center",
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.secondary.main,
     },
     submit: {
-      margin: theme.spacing(3, 0, 2)
-    }
+      margin: theme.spacing(3, 0, 2),
+    },
   });
 
 type RegisterProps = WithStyles<typeof styles>;
