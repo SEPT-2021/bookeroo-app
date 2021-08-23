@@ -27,23 +27,26 @@ function Register({ classes }: RegisterProps) {
   const [Password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
 
+  const registerDetails = {
+    username: Username,
+    firstName: FirstName,
+    lastName: LastName,
+    password: Password,
+    confirmPassword: ConfirmPassword,
+  };
+
   async function registerPost() {
     axios({
       method: "POST",
       url: "/api/users/register",
-      data: {
-        username: Username,
-        firstName: FirstName,
-        lastName: LastName,
-        password: Password,
-        confirmPassword: ConfirmPassword,
-      },
+      data: { registerDetails },
     }).then(
       (response) => {
         // eslint-disable-next-line no-console
-        return(response.data.json)
+        return response.data.json;
       },
       (error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       }
     );

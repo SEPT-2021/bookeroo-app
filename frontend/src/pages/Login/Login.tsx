@@ -30,20 +30,6 @@ function Login({ classes }: LoginProps) {
     password: Password,
   };
 
-  const state = {
-    loginDetails: []
-  };
-
-  // function loginPost() {
-  //   return axios({
-  //     method: "POST",
-  //     url: "/api/users/login",
-  //     data: { loginDetails },
-  //   })
-  //     .then((response) => response.data)
-  //     .catch((error) => error);
-  // }
-  //
   function loginPost() {
     return axios({
       method: "POST",

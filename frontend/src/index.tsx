@@ -15,13 +15,13 @@ ReactDOM.render(
       <BrowserRouter>
         <Switch>
           <Route path="/app">
-            <App/>
+            <App />
           </Route>
           <Route path="/api/users/register">
-            <Register/>
+            <Register />
           </Route>
           <Route path="/api/users/login">
-            <Login/>
+            <Login />
           </Route>
           <Redirect to="/api/users/login" />
         </Switch>
