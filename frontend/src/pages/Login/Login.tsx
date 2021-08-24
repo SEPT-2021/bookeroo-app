@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { Redirect } from "react-router-dom";
+import { LockOutlined } from "@material-ui/icons";
+import { useMutation } from "react-query";
 import {
   Avatar,
   Box,
@@ -18,8 +20,11 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { LockOutlined } from "@material-ui/icons";
 import logo from "../../assets/logo.svg";
+
+const postLogin = async (loginDetails: unknown) => {
+  return axios.post("/api/users/login", loginDetails);
+};
 
 function Login({ classes }: LoginProps) {
   const [Username, setUsername] = useState("");
@@ -30,27 +35,39 @@ function Login({ classes }: LoginProps) {
     password: Password,
   };
 
-  function loginPost() {
-    return axios({
-      method: "POST",
-      url: "/api/users/login",
-      data: { loginDetails },
-    })
-      .then((response) => {
-        // eslint-disable-next-line no-console
-        console.log(response.data);
-      })
-      .catch((error) => {
-        if (error) {
-          // eslint-disable-next-line no-console
-          console.log(error.message);
-        }
-      });
+  const mutation = useMutation(() => {
+    return postLogin(loginDetails);
+  });
+  const { data: returnFromDB, isSuccess } = mutation;
+
+  // eslint-disable-next-line no-console
+  console.log(returnFromDB);
+
+  const onSubmit = async (data: never) => {
+    mutation.mutate(data);
+  };
+
+  if (isSuccess) {
+    return <Redirect to="/api/users/loginSuccess" />;
   }
 
-  async function getLoginPostResponse() {
-    return loginPost();
-  }
+  // function loginPost() {
+  //   return axios({
+  //     method: "POST",
+  //     url: "/api/users/login",
+  //     data: { loginDetails },
+  //   })
+  //     .then((response) => {
+  //       // eslint-disable-next-line no-console
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       if (error) {
+  //         // eslint-disable-next-line no-console
+  //         console.log(error.message);
+  //       }
+  //     });
+  // }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -116,7 +133,7 @@ function Login({ classes }: LoginProps) {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={getLoginPostResponse}
+              onClick={onSubmit}
             >
               Sign In
             </Button>

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
+import { LockOutlined } from "@material-ui/icons";
+import { useMutation } from "react-query";
 import {
   Avatar,
   Box,
@@ -17,8 +20,11 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { LockOutlined } from "@material-ui/icons";
 import logo from "../../assets/logo.svg";
+
+const postRegistration = async (registerDetails: unknown) => {
+  return fetch(await axios.post("/api/users/register", registerDetails));
+};
 
 function Register({ classes }: RegisterProps) {
   const [Username, setUsername] = useState("");
@@ -35,21 +41,20 @@ function Register({ classes }: RegisterProps) {
     confirmPassword: ConfirmPassword,
   };
 
-  async function registerPost() {
-    axios({
-      method: "POST",
-      url: "/api/users/register",
-      data: { registerDetails },
-    }).then(
-      (response) => {
-        // eslint-disable-next-line no-console
-        return response.data.json;
-      },
-      (error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-      }
-    );
+  const mutation = useMutation(() => {
+    return postRegistration(registerDetails);
+  });
+  const { data: returnFromDB, isSuccess } = mutation;
+
+  // eslint-disable-next-line no-console
+  console.log(returnFromDB);
+
+  const onSubmit = async (data: never) => {
+    mutation.mutate(data);
+  };
+
+  if (isSuccess) {
+    return <Redirect to="/api/users/registerSuccess" />;
   }
 
   return (
@@ -150,7 +155,7 @@ function Register({ classes }: RegisterProps) {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={registerPost}
+              onClick={onSubmit}
             >
               Register Now
             </Button>
