@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import App from "./App";
+import Register from ".";
 
-test("renders app", () => {
-  const { container } = render(<App />);
+test("renders register page", () => {
+  const { container } = render(<Register />);
   expect(container).toMatchSnapshot();
 });

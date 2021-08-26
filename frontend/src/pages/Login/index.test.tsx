@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import App from "./App";
+import Login from ".";
 
-test("renders app", () => {
-  const { container } = render(<App />);
+test("renders learn react link", () => {
+  const { container } = render(<Login />);
   expect(container).toMatchSnapshot();
 });

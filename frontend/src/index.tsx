@@ -6,8 +6,8 @@ import ReactDOM from "react-dom";
 import theme from "./theme";
 
 import App from "./pages/App";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import RegisterSuccess from "./pages/Register/RegisterSuccess";
 import RegisterFailed from "./pages/Register/RegisterFailed";
 import LoginSuccess from "./pages/Login/LoginSuccess";

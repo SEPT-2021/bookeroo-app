@@ -11,12 +11,12 @@ this project to install the needed dependencies.
 
 ### Linting and Code Style
 
-We use ESLint and Prettier to enforce a consistent coding styles and best practises within our codebase. Our code style
-is based off the popular airbnb framework.
+We use ESLint and Prettier to enforce a consistent coding styles and best practises within our codebase.\
+Our code style is based off the popular airbnb ruleset.
 
 You can run the linter as so: `yarn lint`
 
-To fix any errors the linter can fix for you, do `yarn lint --fix`.
+To fix any (simple) errors the linter finds, do `yarn lint --fix`.
 
 ## Other scripts:
 
