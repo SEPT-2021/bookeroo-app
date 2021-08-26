@@ -4,6 +4,8 @@ exports[`renders internal link 1`] = `
 <div>
   <mock-link
     to="/example-page"
-  />
+  >
+    Example
+  </mock-link>
 </div>
 `;

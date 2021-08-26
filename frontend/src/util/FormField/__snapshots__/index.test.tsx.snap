@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders normal 1`] = `
+<div>
+  <mock-formfield
+    name="test"
+  />
+</div>
+`;
+
+exports[`renders with other error 1`] = `
+<div>
+  <mock-formfield
+    errors="[object Object]"
+    name="test"
+  />
+</div>
+`;
+
+exports[`renders with real error 1`] = `
+<div>
+  <mock-formfield
+    errors="[object Object]"
+    name="test"
+  />
+</div>
+`;

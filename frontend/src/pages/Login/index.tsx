@@ -1,19 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 import { useMutation } from "react-query";
 import {
   Avatar,
   Box,
-  Button,
-  Checkbox,
   createStyles,
-  FormControlLabel,
   Grid,
   Hidden,
   Paper,
-  TextField,
   Theme,
   Typography,
   withStyles,
@@ -21,34 +16,21 @@ import {
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
 import Link from "../../util/Link";
-
-const postLogin = async (loginDetails: unknown) => {
-  return axios.post("/api/users/login", loginDetails);
-};
+import { loginUser } from "../../util/api";
+import LoadingButton from "../../util/LoadingButton";
+import FormField from "../../util/FormField";
 
 function Login({ classes }: LoginProps) {
-  const [Username, setUsername] = useState("");
-  const [Password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const loginDetails = {
-    username: Username,
-    password: Password,
-  };
-
-  const mutation = useMutation(() => {
-    return postLogin(loginDetails);
-  });
-  const { data: returnFromDB, isSuccess } = mutation;
-
+  const { isLoading, mutate, error, data, isSuccess } = useMutation(loginUser);
+  const onSubmit = () => mutate({ username, password });
+  // TODO testing
   // eslint-disable-next-line no-console
-  console.log(returnFromDB);
-
-  const onSubmit = async (data: never) => {
-    mutation.mutate(data);
-  };
-
+  console.log(data);
   if (isSuccess) {
-    return <Redirect to="/api/users/loginSuccess" />;
+    return <Redirect to="/loginSuccess" />;
   }
 
   return (
@@ -81,36 +63,25 @@ function Login({ classes }: LoginProps) {
             Sign in
           </Typography>
           <Box>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
+            <FormField
+              errors={error?.response?.data}
+              name="username"
               autoComplete="email"
-              autoFocus
-              onChange={(e) => setUsername(e.target.value)}
+              label="Email Address"
+              value={username}
+              onChange={setUsername}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+            <FormField
+              errors={error?.response?.data}
               name="password"
               label="Password"
               type="password"
-              id="password"
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
+            <LoadingButton
               type="submit"
+              loading={isLoading}
               fullWidth
               variant="contained"
               color="primary"
@@ -118,7 +89,7 @@ function Login({ classes }: LoginProps) {
               onClick={onSubmit}
             >
               Sign In
-            </Button>
+            </LoadingButton>
             <Grid container>
               <Grid item xs>
                 <Link to="/forgot-password" variant="body2">

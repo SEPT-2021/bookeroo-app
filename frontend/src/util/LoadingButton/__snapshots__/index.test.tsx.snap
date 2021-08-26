@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders default 1`] = `
+<div>
+  <mock-loadingbutton>
+    Example
+  </mock-loadingbutton>
+</div>
+`;
+
+exports[`renders loading 1`] = `
+<div>
+  <mock-loadingbutton
+    loading="true"
+  >
+    Example
+  </mock-loadingbutton>
+</div>
+`;

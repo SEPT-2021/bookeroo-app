@@ -1,6 +1,7 @@
 import React from "react";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
 import theme from "./theme";
@@ -17,6 +18,7 @@ ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
