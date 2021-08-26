@@ -2,10 +2,11 @@
 
 exports[`renders internal link 1`] = `
 <div>
-  <mock-link
-    to="/example-page"
+  <a
+    class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-body2 MuiTypography-colorPrimary"
+    href="/example-page"
   >
     Example
-  </mock-link>
+  </a>
 </div>
 `;
