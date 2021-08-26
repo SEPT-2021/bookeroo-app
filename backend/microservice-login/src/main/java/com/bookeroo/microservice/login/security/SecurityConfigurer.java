@@ -83,7 +83,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js").permitAll()
                 .antMatchers(SecurityConstant.SIGN_UP_PATHS).permitAll()
-                .antMatchers(SecurityConstant.H2_PATHS).permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
