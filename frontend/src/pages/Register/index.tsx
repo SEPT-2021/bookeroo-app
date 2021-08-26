@@ -5,9 +5,7 @@ import { useMutation } from "react-query";
 import {
   Avatar,
   Box,
-  Checkbox,
   createStyles,
-  FormControlLabel,
   Grid,
   Hidden,
   Paper,
