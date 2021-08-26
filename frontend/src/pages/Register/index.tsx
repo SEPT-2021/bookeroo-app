@@ -12,7 +12,6 @@ import {
   FormControlLabel,
   Grid,
   Hidden,
-  Link,
   Paper,
   TextField,
   Theme,
@@ -21,6 +20,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
+import Link from "../../util/Link";
 
 const postRegistration = async (registerDetails: unknown) => {
   return fetch(await axios.post("/api/users/register", registerDetails));
@@ -161,9 +161,7 @@ function Register({ classes }: RegisterProps) {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/api/users/login" variant="body2">
-                  Have an account? Login Now
-                </Link>
+                <Link to="/api/users/login">Have an account? Login Now</Link>
               </Grid>
             </Grid>
             <Box mt={5}>

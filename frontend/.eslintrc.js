@@ -28,6 +28,7 @@ module.exports = {
     },
     rules: {
         // Opinionated:
+        'react/jsx-props-no-spreading': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'react/no-unescaped-entities': 'off',
         // Other:

@@ -332,12 +332,11 @@ exports[`renders register page 1`] = `
             <div
               class="MuiGrid-root MuiGrid-item"
             >
-              <a
-                class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-body2 MuiTypography-colorPrimary"
-                href="/api/users/login"
+              <mock-link
+                to="/api/users/login"
               >
                 Have an account? Login Now
-              </a>
+              </mock-link>
             </div>
           </div>
           <div

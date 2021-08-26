@@ -12,7 +12,6 @@ import {
   FormControlLabel,
   Grid,
   Hidden,
-  Link,
   Paper,
   TextField,
   Theme,
@@ -21,6 +20,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
+import Link from "../../util/Link";
 
 const postLogin = async (loginDetails: unknown) => {
   return axios.post("/api/users/login", loginDetails);
@@ -50,24 +50,6 @@ function Login({ classes }: LoginProps) {
   if (isSuccess) {
     return <Redirect to="/api/users/loginSuccess" />;
   }
-
-  // function loginPost() {
-  //   return axios({
-  //     method: "POST",
-  //     url: "/api/users/login",
-  //     data: { loginDetails },
-  //   })
-  //     .then((response) => {
-  //       // eslint-disable-next-line no-console
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       if (error) {
-  //         // eslint-disable-next-line no-console
-  //         console.log(error.message);
-  //       }
-  //     });
-  // }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -139,12 +121,12 @@ function Login({ classes }: LoginProps) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/forgot-password" variant="body2">
+                <Link to="/forgot-password" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/api/users/register" variant="body2">
+                <Link to="/api/users/register" variant="body2">
                   Don't have an account? Register
                 </Link>
               </Grid>

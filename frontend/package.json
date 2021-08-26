@@ -22,8 +22,7 @@
     "lint": "eslint src --max-warnings=0",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:ci": "cross-env CI=true yarn test",
-    "eject": "react-scripts eject"
+    "test:ci": "cross-env CI=true yarn test"
   },
   "proxy": "http://localhost:8080",
   "browserslist": {

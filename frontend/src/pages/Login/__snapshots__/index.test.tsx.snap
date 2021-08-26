@@ -194,22 +194,22 @@ exports[`renders learn react link 1`] = `
             <div
               class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true"
             >
-              <a
-                class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-body2 MuiTypography-colorPrimary"
-                href="/forgot-password"
+              <mock-link
+                to="/forgot-password"
+                variant="body2"
               >
                 Forgot password?
-              </a>
+              </mock-link>
             </div>
             <div
               class="MuiGrid-root MuiGrid-item"
             >
-              <a
-                class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-body2 MuiTypography-colorPrimary"
-                href="/api/users/register"
+              <mock-link
+                to="/api/users/register"
+                variant="body2"
               >
                 Don't have an account? Register
-              </a>
+              </mock-link>
             </div>
           </div>
           <div
