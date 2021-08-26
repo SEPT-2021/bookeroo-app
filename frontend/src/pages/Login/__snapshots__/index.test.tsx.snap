@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders learn react link 1`] = `
+exports[`renders login 1`] = `
 <div>
   <main
     class="MuiGrid-root Login-root-1 MuiGrid-container"
@@ -205,7 +205,7 @@ exports[`renders learn react link 1`] = `
               class="MuiGrid-root MuiGrid-item"
             >
               <mock-link
-                to="/api/users/register"
+                to="/register"
                 variant="body2"
               >
                 Don't have an account? Register

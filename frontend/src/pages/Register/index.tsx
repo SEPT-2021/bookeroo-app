@@ -161,7 +161,7 @@ function Register({ classes }: RegisterProps) {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/api/users/login">Have an account? Login Now</Link>
+                <Link to="/login">Have an account? Login Now</Link>
               </Grid>
             </Grid>
             <Box mt={5}>

@@ -333,7 +333,7 @@ exports[`renders register page 1`] = `
               class="MuiGrid-root MuiGrid-item"
             >
               <mock-link
-                to="/api/users/login"
+                to="/login"
               >
                 Have an account? Login Now
               </mock-link>

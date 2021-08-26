@@ -126,7 +126,7 @@ function Login({ classes }: LoginProps) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/api/users/register" variant="body2">
+                <Link to="/register" variant="body2">
                   Don't have an account? Register
                 </Link>
               </Grid>

@@ -4,8 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
 import theme from "./theme";
-
-import App from "./pages/App";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import RegisterSuccess from "./pages/Register/RegisterSuccess";
@@ -22,25 +20,22 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
-            <Route path="/app">
-              <App />
-            </Route>
-            <Route path="/api/users/register">
+            <Route path="/register">
               <Register />
             </Route>
-            <Route path="/api/users/registerSuccess">
+            <Route path="/registerSuccess">
               <RegisterSuccess />
             </Route>
-            <Route path="/api/users/registerFailed">
+            <Route path="/registerFailed">
               <RegisterFailed />
             </Route>
-            <Route path="/api/users/login">
+            <Route path="/login">
               <Login />
             </Route>
-            <Route path="/api/users/loginSuccess">
+            <Route path="/loginSuccess">
               <LoginSuccess />
             </Route>
-            <Redirect to="/api/users/login" />
+            <Redirect to="/login" />
           </Switch>
         </BrowserRouter>
       </ThemeProvider>
