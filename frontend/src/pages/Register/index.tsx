@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 import { useMutation } from "react-query";
 import {
   Avatar,
   Box,
-  Button,
   Checkbox,
   createStyles,
   FormControlLabel,
   Grid,
   Hidden,
   Paper,
-  TextField,
   Theme,
   Typography,
   withStyles,
@@ -21,36 +18,26 @@ import {
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
 import Link from "../../util/Link";
-
-const postRegistration = async (registerDetails: unknown) => {
-  return fetch(await axios.post("/api/users/register", registerDetails));
-};
+import { registerUser } from "../../util/api";
+import LoadingButton from "../../util/LoadingButton";
+import FormField from "../../util/FormField";
 
 function Register({ classes }: RegisterProps) {
-  const [Username, setUsername] = useState("");
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [Password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const registerDetails = {
-    username: Username,
-    firstName: FirstName,
-    lastName: LastName,
-    password: Password,
-    confirmPassword: ConfirmPassword,
-  };
+  const { data, error, isSuccess, isLoading, mutate } =
+    useMutation(registerUser);
 
-  const mutation = useMutation(() => {
-    return postRegistration(registerDetails);
-  });
-  const { data: returnFromDB, isSuccess } = mutation;
-
+  // TODO debugging
   // eslint-disable-next-line no-console
-  console.log(returnFromDB);
+  console.log(data);
 
-  const onSubmit = async (data: never) => {
-    mutation.mutate(data);
+  const onSubmit = async () => {
+    mutate({ username, password, confirmPassword, firstName, lastName });
   };
 
   if (isSuccess) {
@@ -87,78 +74,53 @@ function Register({ classes }: RegisterProps) {
             Register
           </Typography>
           <Box>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
+            <FormField
+              errors={error?.response?.data}
               label="Email Address"
-              name="email"
+              name="username"
               autoComplete="email"
-              autoFocus
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={setUsername}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+            <FormField
+              errors={error?.response?.data}
               name="firstName"
               label="First Name"
-              id="firstName"
               autoComplete="firstName"
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={setFirstName}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+            <FormField
+              errors={error?.response?.data}
               name="lastName"
               label="Last Name"
-              id="lastName"
               autoComplete="lastName"
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={setLastName}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+            <FormField
+              errors={error?.response?.data}
               name="password"
               label="Password"
               type="password"
-              id="password"
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+            <FormField
+              errors={error?.response?.data}
               name="confirmPassword"
               label="Confirm Password"
               type="password"
-              id="confirmPassword"
               autoComplete="current-password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={setConfirmPassword}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
+            <LoadingButton
+              loading={isLoading}
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
               onClick={onSubmit}
             >
-              Register Now
-            </Button>
+              Register
+            </LoadingButton>
             <Grid container>
               <Grid item>
                 <Link to="/login">Have an account? Login Now</Link>

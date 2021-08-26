@@ -80,7 +80,6 @@ function Login({ classes }: LoginProps) {
               onChange={setPassword}
             />
             <LoadingButton
-              type="submit"
               loading={isLoading}
               fullWidth
               variant="contained"

@@ -14,20 +14,16 @@ const makeTypedAPICall =
 
 export const registerUser = makeTypedAPICall<
   {
-    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
     password: string;
     confirmPassword: string;
   },
   unknown
->(({ email, password, confirmPassword }) =>
-  api.post("/api/users/register", {
-    username: email,
-    password,
-    confirmPassword,
-  })
-);
+>((args) => api.post("/api/users/register", args));
 
 export const loginUser = makeTypedAPICall<
   { username: string; password: string },
   unknown
->((args) => api.post(`/api/users/login`, args));
+>((args) => api.post("/api/users/login", args));
