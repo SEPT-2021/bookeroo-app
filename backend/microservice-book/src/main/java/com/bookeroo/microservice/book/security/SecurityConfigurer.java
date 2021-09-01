@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -23,18 +22,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private JWTAuthenticationEntryPoint unauthorisedHandler;
 
-
-    private BCryptPasswordEncoder passwordEncoder;
-
     @Autowired
     public void setUnauthorisedHandler(JWTAuthenticationEntryPoint unauthorisedHandler) {
         this.unauthorisedHandler = unauthorisedHandler;
-    }
-
-
-    @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -42,12 +32,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -66,9 +50,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js").permitAll()
                 .antMatchers(SecurityConstant.SIGN_UP_PATHS).permitAll()
-                .antMatchers(SecurityConstant.H2_PATHS).permitAll()
                 .anyRequest().authenticated();
-
     }
 
 }

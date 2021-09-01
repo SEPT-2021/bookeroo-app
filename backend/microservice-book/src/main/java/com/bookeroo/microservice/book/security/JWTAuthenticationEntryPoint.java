@@ -1,7 +1,5 @@
 package com.bookeroo.microservice.book.security;
 
-
-
 import com.bookeroo.microservice.book.exception.InvalidLoginResponse;
 import com.google.gson.Gson;
 import org.springframework.security.core.AuthenticationException;

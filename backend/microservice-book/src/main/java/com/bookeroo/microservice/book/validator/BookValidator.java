@@ -1,17 +1,14 @@
 package com.bookeroo.microservice.book.validator;
 
-
-
-
 import com.bookeroo.microservice.book.model.Book;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-
 @Component
 public class BookValidator implements Validator {
 
+    public static final int MINIMUM_ISBN_LENGTH = 13;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -21,8 +18,8 @@ public class BookValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         Book book = (Book) object;
-        if ((book.getISBN()).length() >= 12)
-            errors.rejectValue("ISBN", "Length", ("ISBN must be at least 13 characters"));
+        if ((book.getIsbn()).length() < MINIMUM_ISBN_LENGTH)
+            errors.rejectValue("isbn", "Length", String.format("ISBN must be at least %d characters", MINIMUM_ISBN_LENGTH));
     }
 
 }
