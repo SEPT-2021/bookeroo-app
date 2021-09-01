@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MicroserviceBookApplication {
 
     public static void main(String[] args) {
+        System.setProperty("spring.config.name", "microservice-book");
         SpringApplication.run(MicroserviceBookApplication.class, args);
     }
 
