@@ -65,8 +65,30 @@ public class BookController {
     }
 
     @GetMapping()
-    public ResponseEntity<Iterable<Book>> searchByKeyword(@RequestParam("search") String search) {
-        return new ResponseEntity<>(bookService.searchBook(search), HttpStatus.OK);
+    public ResponseEntity<Iterable<Book>> searchForBook(
+            @RequestParam("search") String value,
+            @RequestParam(name = "type", required = false) String type) {
+        Iterable<Book> searchResults = null;
+        if (type != null) {
+            switch (type) {
+                case "title":
+                    searchResults = bookService.searchBookByTitle(value);
+                    break;
+                case "author":
+                    searchResults = bookService.searchBookByAuthor(value);
+                    break;
+                // TODO redundant, if search by keyword is required simply omit the "type" param
+                case "keyword":
+                    searchResults = bookService.searchBookByKeyword(value);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            searchResults = bookService.searchBookByKeyword(value);
+        }
+
+        return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 
     //turn to title, return json list of books

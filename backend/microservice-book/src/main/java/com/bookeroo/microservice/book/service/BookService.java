@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +46,21 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    // TODO extend to further searchBy"?" methods as necessary
-    public List<Book> searchBook(String keyword) {
+    public List<Book> searchBookByTitle(String title) {
+        List<Book> results = new ArrayList<>();
+        bookRepository.findByTitleContains(title).forEach(results::add);
+
+        return results;
+    }
+
+    public List<Book> searchBookByAuthor(String author) {
+        List<Book> results = new ArrayList<>();
+        bookRepository.findByAuthorContains(author).forEach(results::add);
+
+        return results;
+    }
+
+    public List<Book> searchBookByKeyword(String keyword) {
         List<Book> results = new ArrayList<>();
         bookRepository.findByTitleContains(keyword).forEach(results::add);
         bookRepository.findByAuthorContains(keyword).forEach(results::add);
