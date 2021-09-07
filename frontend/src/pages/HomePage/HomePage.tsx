@@ -5,17 +5,22 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 import backgroundImage from "../../assets/backgroundBook.png";
+import BooksToBuy from "../../components/bookList";
 
 function HomePage({ classes }: HomePageProps) {
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Header />
+      <BooksToBuy />
     </div>
   );
 }
+
+
+
 
 const styles = () =>
   createStyles({
