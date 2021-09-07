@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line func-names
 export default function () {
   const classes = useStyles();
   const checked = useWindowPosition("header");
