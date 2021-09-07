@@ -6,8 +6,8 @@ import App from "./pages/App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import Login from "./pages/Login";
-import PageNotfound from "./pages/PageNotFound/PageNotFound";
-import HomePage from "./pages/HomePage/HomePage";
+import PageNotfound from "./pages/PageNotFound";
+import HomePage from "./pages/HomePage";
 
 ReactDOM.render(
   <React.StrictMode>

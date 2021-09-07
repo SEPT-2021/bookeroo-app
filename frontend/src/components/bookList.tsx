@@ -4,6 +4,9 @@ import Image from "./Image";
 import useWindowPosition from "../hook/useWindowPosition";
 import books from "../static/books";
 
+// if we import image
+import image from "../assets/GoldMoon.png";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
@@ -31,7 +34,8 @@ export default function () {
   return (
     <div className={classes.root} id="images">
       <Image
-        imageUrl={books[0].imageUrl}
+        // then pass in like this it works
+        imageUrl={`${process.env.PUBLIC_URL + image}`}
         title={books[0].title}
         description={books[0].description}
         checked={checked}
@@ -46,6 +50,12 @@ export default function () {
         imageUrl={books[2].imageUrl}
         title={books[2].title}
         description={books[2].description}
+        checked={checked}
+      />
+      <Image
+        imageUrl={books[3].imageUrl}
+        title={books[3].title}
+        description={books[3].description}
         checked={checked}
       />
     </div>
