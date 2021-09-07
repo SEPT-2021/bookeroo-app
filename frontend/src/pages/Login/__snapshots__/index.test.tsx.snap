@@ -62,7 +62,6 @@ exports[`renders login 1`] = `
             color="primary"
             fullwidth="true"
             loading="false"
-            type="submit"
             variant="contained"
           >
             Sign In
