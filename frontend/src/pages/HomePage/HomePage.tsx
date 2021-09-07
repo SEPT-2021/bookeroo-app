@@ -19,9 +19,6 @@ function HomePage({ classes }: HomePageProps) {
   );
 }
 
-
-
-
 const styles = () =>
   createStyles({
     root: {
