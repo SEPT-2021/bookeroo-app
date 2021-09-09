@@ -3,22 +3,21 @@ import { createStyles, Theme } from "@material-ui/core/styles";
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { useMutation } from "react-query";
 import SearchBar from "../../components/searchBar";
-import { findBookById } from "../../util/api";
+import { deleteBookById } from "../../util/api";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
 
-function BookSearch({ classes }: BookSearchProps) {
+function DeleteBook({ classes }: DeleteBookProps) {
   const [id, setId] = useState("");
 
   const { isLoading, mutate, error, data, isSuccess } =
-    useMutation(findBookById);
+    useMutation(deleteBookById);
   const onSubmit = () => mutate({ id });
-
 
   // TODO testing
   if (isSuccess) {
     // eslint-disable-next-line no-console
-    console.log(data);
+    console.log("DELETED BOOK SUCCESS");
   }
 
   return (
@@ -52,7 +51,7 @@ function BookSearch({ classes }: BookSearchProps) {
                 color="primary"
                 onClick={onSubmit}
               >
-                Find My Book!
+                Delete My Book!
               </LoadingButton>
             </Box>
           </form>
@@ -101,6 +100,6 @@ const styles = (theme: Theme) =>
     },
   });
 
-type BookSearchProps = WithStyles<typeof styles>;
+type DeleteBookProps = WithStyles<typeof styles>;
 
-export default withStyles(styles)(BookSearch);
+export default withStyles(styles)(DeleteBook);

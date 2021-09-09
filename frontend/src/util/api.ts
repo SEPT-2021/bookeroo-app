@@ -43,4 +43,11 @@ export const findBookById = makeTypedAPICall<
     id: string;
   },
   unknown
->((args) => api.get("api/books/add", args));
+>((args) => api.get(`api/books/${args.id}`));
+
+export const deleteBookById = makeTypedAPICall<
+  {
+    id: string;
+  },
+  unknown
+  >((args) => api.delete(`api/books/${args.id}`));
