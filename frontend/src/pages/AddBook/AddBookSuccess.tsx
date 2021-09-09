@@ -8,11 +8,18 @@ import {
   WithStyles,
 } from "@material-ui/core";
 
-function LoginSuccess({ classes }: LoginSuccessProps) {
+function AddBookSuccess({ classes }: LoginSuccessProps) {
   return (
-    <Grid container spacing={2} justify="center">
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+      style={{ minHeight: "100vh" }}
+    >
       <Grid className={classes.root}>
-        <h1> LOGIN SUCCESS </h1>
+        <h1> Add Book SUCCESS </h1>
       </Grid>
     </Grid>
   );
@@ -50,4 +57,4 @@ const styles = (theme: Theme) =>
 
 type LoginSuccessProps = WithStyles<typeof styles>;
 
-export default withStyles(styles)(LoginSuccess);
+export default withStyles(styles)(AddBookSuccess);

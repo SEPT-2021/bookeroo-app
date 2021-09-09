@@ -27,3 +27,20 @@ export const loginUser = makeTypedAPICall<
   { username: string; password: string },
   unknown
 >((args) => api.post("/api/users/login", args));
+
+export const addBook = makeTypedAPICall<
+  {
+    title: string;
+    author: string;
+    isbn: string;
+    pageCount: string;
+  },
+  unknown
+>((args) => api.post("api/books/add", args));
+
+export const findBookById = makeTypedAPICall<
+  {
+    id: string;
+  },
+  unknown
+>((args) => api.get("api/books/add", args));

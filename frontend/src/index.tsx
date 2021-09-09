@@ -11,6 +11,9 @@ import RegisterSuccess from "./pages/Register/RegisterSuccess";
 import RegisterFailed from "./pages/Register/RegisterFailed";
 import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
+import BookSearch from "./pages/BookSearch";
+import AddBook from "./pages/AddBook";
+import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +39,15 @@ ReactDOM.render(
             </Route>
             <Route path="/loginSuccess">
               <LoginSuccess />
+            </Route>
+            <Route path="/search">
+              <BookSearch />
+            </Route>
+            <Route path="/addBook">
+              <AddBook />
+            </Route>
+            <Route path="/addBookSuccess">
+              <AddBookSuccess />
             </Route>
             <Redirect to="/login" />
           </Switch>
