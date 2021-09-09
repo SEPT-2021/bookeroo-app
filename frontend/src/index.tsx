@@ -12,42 +12,44 @@ import RegisterFailed from "./pages/Register/RegisterFailed";
 import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const queryClient = new QueryClient();
 
 ReactDOM.render(
-    <React.StrictMode>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools />
-            <ThemeProvider theme={theme}>
-                <BrowserRouter>
-                    <Switch>
-                        <Route path="/">
-                            <HomePage />
-                        </Route>
-                        <Route path="/register">
-                            <Register />
-                        </Route>
-                        <Route path="/registerSuccess">
-                            <RegisterSuccess />
-                        </Route>
-                        <Route path="/registerFailed">
-                            <RegisterFailed />
-                        </Route>
-                        <Route path="/login">
-                            <Login />
-                        </Route>
-                        <Route path="/loginSuccess">
-                            <LoginSuccess />
-                        </Route>
-                        <Redirect to="/" />
-                    </Switch>
-                </BrowserRouter>
-            </ThemeProvider>
-        </QueryClientProvider>
-    </React.StrictMode>,
-    document.getElementById("root")
+  <React.StrictMode>
+    <CssBaseline />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact>
+              <HomePage />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/registerSuccess">
+              <RegisterSuccess />
+            </Route>
+            <Route path="/registerFailed">
+              <RegisterFailed />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/loginSuccess">
+              <LoginSuccess />
+            </Route>
+            <Route component={NotFoundPage} />
+            <Redirect to="/" />
+          </Switch>
+        </BrowserRouter>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

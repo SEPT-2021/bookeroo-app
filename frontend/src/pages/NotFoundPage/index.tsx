@@ -26,7 +26,7 @@ function NotFoundPage({ classes }: PageNotFound) {
         <h1>404 - Not Found!</h1>
         <Link href="/">
           <Button variant="contained" color="primary">
-            Go Back
+            Go Home
           </Button>
         </Link>
       </Grid>
