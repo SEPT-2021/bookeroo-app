@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -55,6 +57,10 @@ public class UserService {
             throw new UserNotFoundException(String.format("User by id %d not found\n", id));
 
         userRepository.deleteUserById(id);
+    }
+
+    public List<User> getAllNonAdminUsers() {
+        return userRepository.findAllByRolesNotContaining(User.Role.ADMIN.name());
     }
 
 }

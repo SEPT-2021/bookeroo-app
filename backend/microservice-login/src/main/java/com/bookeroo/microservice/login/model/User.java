@@ -10,6 +10,10 @@ import java.util.Date;
 @Entity
 public class User {
 
+    public enum Role {
+        USER, ADMIN
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
