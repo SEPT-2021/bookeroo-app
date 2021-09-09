@@ -2,11 +2,10 @@ import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
-import App from "./pages/App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import Login from "./pages/Login";
-import PageNotfound from "./pages/PageNotFound";
+import NotFoundPage from "./pages/NotFoundPage";
 import HomePage from "./pages/HomePage";
 
 ReactDOM.render(
@@ -15,19 +14,14 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Switch>
-          <Route path="/home">
+          <Route path="/">
             <HomePage />
-          </Route>
-          <Route path="/app">
-            <App />
           </Route>
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="">
-            <PageNotfound />
-          </Route>
-          <Redirect to="/home" />
+          <Route component={NotFoundPage} />
+          <Redirect to="/f" />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

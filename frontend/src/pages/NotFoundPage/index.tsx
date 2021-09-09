@@ -3,13 +3,14 @@ import {
   Button,
   createStyles,
   Grid,
+  Link,
   Theme,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
 
-function PageNotfound({ classes }: PageNotFound) {
+function NotFoundPage({ classes }: PageNotFound) {
   return (
     <Grid container component="main" className={classes.root}>
       <Grid
@@ -23,11 +24,11 @@ function PageNotfound({ classes }: PageNotFound) {
         <img src={logo} alt="logo" />
 
         <h1>404 - Not Found!</h1>
-        <a href="/home">
-          <Button variant="contained" color="primary" onClick={() => {}}>
+        <Link href="/">
+          <Button variant="contained" color="primary">
             Go Back
           </Button>
-        </a>
+        </Link>
       </Grid>
     </Grid>
   );
@@ -65,4 +66,4 @@ const styles = (theme: Theme) =>
 
 type PageNotFound = WithStyles<typeof styles>;
 
-export default withStyles(styles)(PageNotfound);
+export default withStyles(styles)(NotFoundPage);
