@@ -1,53 +1,44 @@
 package com.bookeroo.microservice.login.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.Collection;
 import java.util.Date;
 
 @Entity
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Email(message = "Username needs to be an email")
+    private long id;
     @NotBlank(message = "Username cannot be blank")
+    @Email(message = "Username needs to be an email address")
     @Column(unique = true)
     private String username;
-
-    @NotBlank(message = "Firstname cannot be blank")
-    private String firstName;
-
-    @NotBlank(message = "Lastname cannot be blank")
-    private String lastName;
-
     @NotBlank(message = "Password cannot be blank")
     private String password;
-
-    @Transient
-    private String confirmPassword;
+    @NotBlank(message = "Firstname cannot be blank")
+    private String firstName;
+    @NotBlank(message = "Lastname cannot be blank")
+    private String lastName;
+    private String roles;
+    private boolean enabled;
     private Date createdAt;
     private Date updatedAt;
 
     public User() {
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
@@ -72,7 +63,6 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -81,12 +71,30 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
     }
 
     public Date getCreatedAt() {
@@ -105,63 +113,21 @@ public class User implements UserDetails {
         this.updatedAt = updatedAt;
     }
 
-    @PrePersist
-    protected void onCreate(){
-        this.createdAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate(){
-        this.updatedAt = new Date();
-    }
-
     @Override
     @JsonIgnore
     public String toString() {
         return String.format("User {\n" +
-                "\tid: \"%s\",\n" +
-                "\tusername: \"%s\"\n" +
-                "\tfirstName: \"%s\"\n" +
-                "\tlastName: \"%s\"\n" +
-                "\tpassword: \"%s\"\n" +
-                "\tconfirmPassword: \"%s\"\n" +
-                "\tcreatedAt: \"%s\"\n" +
-                "\tupdatedAt: \"%s\"\n" +
-                "}", id, username, firstName, lastName, password, confirmPassword, createdAt, updatedAt);
-    }
-
-    /*
-     * methods from interface UserDetails
-     */
-
-    @Override
-    @JsonIgnore
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isEnabled() {
-        return true;
+                        "\tid: %s,\n" +
+                        "\tusername: %s\n" +
+                        "\tpassword: %s\n" +
+                        "\tfirstName: %s\n" +
+                        "\tlastName: %s\n" +
+                        "\troles: %s\n" +
+                        "\tenabled: %b\n" +
+                        "\tcreatedAt: %s\n" +
+                        "\tupdatedAt: %s\n" +
+                        "}",
+                id, username, password, firstName, lastName, roles, enabled, createdAt, updatedAt);
     }
 
 }
