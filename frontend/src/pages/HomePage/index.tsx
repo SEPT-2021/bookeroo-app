@@ -12,7 +12,6 @@ import BooksToBuy from "../../components/bookList";
 function HomePage({ classes }: HomePageProps) {
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <Header />
       <BooksToBuy />
     </div>

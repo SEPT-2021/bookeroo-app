@@ -17,6 +17,11 @@ const theme = createTheme({
       root: {
         borderRadius: 50,
       },
+      outlinedSecondary: {
+        "& span": {
+          color: "black",
+        },
+      },
       label: {
         color: "white",
         textTransform: "none",

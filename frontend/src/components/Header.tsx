@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   AppBar,
+  Box,
+  Button,
   Collapse,
   createStyles,
   IconButton,
+  Theme,
   Toolbar,
   withStyles,
   WithStyles,
@@ -11,6 +14,8 @@ import {
 import SortIcon from "@material-ui/icons/Sort";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
+import logo from "../assets/logo.svg";
+import Link from "../util/Link";
 
 function Header({ classes }: HeaderProps) {
   const [checked, setChecked] = useState(false);
@@ -19,19 +24,31 @@ function Header({ classes }: HeaderProps) {
   }, []);
   return (
     <div className={classes.root} id="header">
-      <AppBar className={classes.appbar} elevation={0}>
+      <AppBar className={classes.appbar} elevation={5}>
         <Toolbar className={classes.appbarWrapper}>
-          <h1 className={classes.appbarTitle}>
-            <span className={classes.colorText}>Bookeroo.</span>
-          </h1>
-          <IconButton>
-            <SortIcon className={classes.icon} />
-          </IconButton>
+          <Box display="flex" flexGrow={1} alignItems="center">
+            <img src={logo} alt="logo" className={classes.navLogo} />
+            <h1 className={classes.colorText}>Bookeroo.</h1>
+          </Box>
+          <Box className={classes.buttons}>
+            <Link to="/login">
+              <Button variant="contained" color="primary">
+                Login
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button variant="outlined" color="secondary">
+                Register
+              </Button>
+            </Link>
+            <IconButton>
+              <SortIcon className={classes.icon} />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Collapse
         in={checked}
-        /* eslint-disable react/jsx-props-no-spreading */
         {...(checked ? { timeout: 1000 } : {})}
         collapsedHeight={50}
       >
@@ -51,7 +68,7 @@ function Header({ classes }: HeaderProps) {
   );
 }
 
-const styles = () =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
@@ -61,7 +78,7 @@ const styles = () =>
       fontFamily: "Arial Rounded MT Bold",
     },
     appbar: {
-      background: "none",
+      background: "white",
     },
     appbarWrapper: {
       width: "80%",
@@ -87,6 +104,16 @@ const styles = () =>
     goDown: {
       color: "#A8D0E6",
       fontSize: "4rem",
+    },
+    navLogo: {
+      marginRight: theme.spacing(3),
+      width: 60,
+      height: 60,
+    },
+    buttons: {
+      "& button": {
+        margin: theme.spacing(0, 1),
+      },
     },
   });
 
