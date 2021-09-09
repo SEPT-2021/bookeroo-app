@@ -12,7 +12,8 @@ import {
 } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import axios from "axios";
+import { useMutation } from "react-query";
+import { getBookBySearchTerm } from "../util/api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,33 +75,29 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SearchBar() {
   const classes = useStyles();
 
-  const SEARCH_URL = `/api/books`;
   const [searchTerm, setSearchTerm] = useState("");
-  const [books, setBooks] = useState("");
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data, error, isSuccess, isLoading, mutate } =
+    useMutation(getBookBySearchTerm);
+
+  if (isSuccess) {
+    // eslint-disable-next-line no-console
+    console.log("SEARCH WORKS");
+    // eslint-disable-next-line no-console
+    console.log(data);
+  }
+
+  const handleKeyPress = async (event: { key: string }) => {
+    if (event.key === "Enter") {
+      mutate({ searchTerm });
+    }
+  };
 
   const onInputChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setSearchTerm(e.target.value);
-  };
-
-  const fetchBooks = async () => {
-    const result = await axios.get(`${SEARCH_URL}?search=${searchTerm}`);
-    if (result.status === 200) {
-      setBooks(result.data);
-    }
-    // eslint-disable-next-line no-console
-    console.log(result.status);
-  };
-
-  const onSubmitHandler = () => {
-    fetchBooks();
-  };
-
-  const handleKeyPress = (event: { key: string }) => {
-    if (event.key === "Enter") {
-      onSubmitHandler();
-    }
   };
 
   return (
@@ -120,7 +117,7 @@ export default function SearchBar() {
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon onClick={onSubmitHandler} />
+              <SearchIcon />
             </div>
             <InputBase
               type="search"
@@ -137,8 +134,6 @@ export default function SearchBar() {
           </div>
         </Toolbar>
       </AppBar>
-
-
     </div>
   );
 }
