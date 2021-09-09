@@ -16,21 +16,30 @@ import {
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
 import Link from "../../util/Link";
-import { loginUser } from "../../util/api";
+import { registerUser } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
 
-function Login({ classes }: LoginProps) {
+function Register({ classes }: RegisterProps) {
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { isLoading, mutate, error, data, isSuccess } = useMutation(loginUser);
-  const onSubmit = () => mutate({ username, password });
-  // TODO testing
+  const { data, error, isSuccess, isLoading, mutate } =
+    useMutation(registerUser);
+
+  // TODO debugging
   // eslint-disable-next-line no-console
   console.log(data);
+
+  const onSubmit = async () => {
+    mutate({ username, password, confirmPassword, firstName, lastName });
+  };
+
   if (isSuccess) {
-    return <Redirect to="/loginSuccess" />;
+    return <Redirect to="/api/users/registerSuccess" />;
   }
 
   return (
@@ -60,16 +69,29 @@ function Login({ classes }: LoginProps) {
             <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Register
           </Typography>
           <Box>
             <FormField
               errors={error?.response?.data}
+              label="Email Address"
               name="username"
               autoComplete="email"
-              label="Email Address"
-              value={username}
               onChange={setUsername}
+            />
+            <FormField
+              errors={error?.response?.data}
+              name="firstName"
+              label="First Name"
+              autoComplete="firstName"
+              onChange={setFirstName}
+            />
+            <FormField
+              errors={error?.response?.data}
+              name="lastName"
+              label="Last Name"
+              autoComplete="lastName"
+              onChange={setLastName}
             />
             <FormField
               errors={error?.response?.data}
@@ -79,6 +101,14 @@ function Login({ classes }: LoginProps) {
               autoComplete="current-password"
               onChange={setPassword}
             />
+            <FormField
+              errors={error?.response?.data}
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              autoComplete="current-password"
+              onChange={setConfirmPassword}
+            />
             <LoadingButton
               loading={isLoading}
               fullWidth
@@ -87,18 +117,11 @@ function Login({ classes }: LoginProps) {
               className={classes.submit}
               onClick={onSubmit}
             >
-              Sign In
+              Register
             </LoadingButton>
             <Grid container>
-              <Grid item xs>
-                <Link to="/forgot-password" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link to="/register" variant="body2">
-                  Don't have an account? Register
-                </Link>
+                <Link to="/login">Have an account? Login Now</Link>
               </Grid>
             </Grid>
             <Box mt={5}>
@@ -145,6 +168,6 @@ const styles = (theme: Theme) =>
     },
   });
 
-type LoginProps = WithStyles<typeof styles>;
+type RegisterProps = WithStyles<typeof styles>;
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(Register);
