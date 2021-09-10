@@ -90,7 +90,7 @@ export default function SearchBar() {
       setBooks(result.data);
     }
     // eslint-disable-next-line no-console
-    console.log(result.status);
+    console.log(result.data);
   };
 
   const onSubmitHandler = () => {

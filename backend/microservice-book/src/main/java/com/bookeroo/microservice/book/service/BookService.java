@@ -39,6 +39,10 @@ public class BookService {
         return book.get();
     }
 
+    public Iterable<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
     public void removeBook(Long id) {
         if (!bookRepository.existsById(id))
             throw new BookNotFoundException(String.format("Book with id %s not found", id));
