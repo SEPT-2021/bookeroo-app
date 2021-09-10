@@ -88,6 +88,7 @@ export default function SearchBar() {
     console.log(data);
   }
 
+
   const handleKeyPress = async (event: { key: string }) => {
     if (event.key === "Enter") {
       mutate({ searchTerm });

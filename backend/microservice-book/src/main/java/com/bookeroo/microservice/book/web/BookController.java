@@ -2,8 +2,6 @@ package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
-import com.bookeroo.microservice.book.payload.searchrequest;
-import com.bookeroo.microservice.book.payload.searchsuccessresponse;
 import com.bookeroo.microservice.book.service.BookDetailsService;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
@@ -54,6 +52,11 @@ public class BookController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllBooks() {
+        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Book> deleteBook(@PathVariable("id") Long id) {
         try {
@@ -89,15 +92,6 @@ public class BookController {
         }
 
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
-    }
-
-    //turn to title, return json list of books
-    @PostMapping("/idsearch")
-    public ResponseEntity<?> idsearchbook(@RequestBody searchrequest searchrequest) throws BookNotFoundException {
-        Book book = bookDetailsService.loadBookById(searchrequest.getId());
-        System.out.println(book.getTitle());
-        return ResponseEntity.ok(new searchsuccessresponse(true, book.getTitle()));
-
     }
 
 }

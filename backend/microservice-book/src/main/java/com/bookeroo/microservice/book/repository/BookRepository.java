@@ -5,6 +5,7 @@ import com.bookeroo.microservice.book.model.Book;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,5 +20,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     Iterable<Book> findByTitleContains(String keyword);
 
     Iterable<Book> findByAuthorContains(String keyword);
+
+    Iterable<Book> findAll();
 
 }
