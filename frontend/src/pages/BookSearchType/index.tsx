@@ -3,21 +3,20 @@ import { createStyles, Theme } from "@material-ui/core/styles";
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { useMutation } from "react-query";
 import SearchBar from "../../components/searchBar";
-import { deleteBookById } from "../../util/api";
+import { getBookByType } from "../../util/api";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
 
-function DeleteBook({ classes }: DeleteBookProps) {
-  const [id, setId] = useState("");
+function BookSearchType({ classes }: BookSearchProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [type, setType] = useState("");
 
   const { isLoading, mutate, error, data, isSuccess } =
-    useMutation(deleteBookById);
-  const onSubmit = () => mutate({ id });
+    useMutation(getBookByType);
+  const onSubmit = () => mutate({ searchTerm, type });
 
   // TODO testing
   if (isSuccess) {
-    // eslint-disable-next-line no-console
-    console.log("DELETED BOOK SUCCESS");
     // eslint-disable-next-line no-console
     console.log(data);
   }
@@ -41,11 +40,29 @@ function DeleteBook({ classes }: DeleteBookProps) {
               <FormField
                 errors={error?.response?.data}
                 id="outlined-secondary"
-                name="id"
-                label="Book ID"
+                name="searchTerm"
+                label="Search For"
                 variant="outlined"
                 color="secondary"
-                onChange={setId}
+                onChange={setSearchTerm}
+              />
+              <FormField
+                errors={error?.response?.data}
+                id="outlined-secondary"
+                name="type"
+                label="Title / Author / Keyword"
+                variant="outlined"
+                color="secondary"
+                onChange={setType}
+              />
+              <FormField
+                errors={error?.response?.data}
+                id="outlined-secondary"
+                name="type"
+                label="Book type"
+                variant="outlined"
+                color="secondary"
+                onChange={setType}
               />
               <LoadingButton
                 loading={isLoading}
@@ -53,7 +70,7 @@ function DeleteBook({ classes }: DeleteBookProps) {
                 color="primary"
                 onClick={onSubmit}
               >
-                Delete My Book!
+                Find My Book!
               </LoadingButton>
             </Box>
           </form>
@@ -102,6 +119,6 @@ const styles = (theme: Theme) =>
     },
   });
 
-type DeleteBookProps = WithStyles<typeof styles>;
+type BookSearchProps = WithStyles<typeof styles>;
 
-export default withStyles(styles)(DeleteBook);
+export default withStyles(styles)(BookSearchType);

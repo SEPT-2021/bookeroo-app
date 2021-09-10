@@ -15,7 +15,7 @@ import AddBook from "./pages/AddBook";
 import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 import DeleteBook from "./pages/DeleteBook";
 import reportWebVitals from "./reportWebVitals";
-
+import BookSearchType from "./pages/BookSearchType";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +44,9 @@ ReactDOM.render(
             </Route>
             <Route path="/search">
               <BookSearch />
+            </Route>
+            <Route path="/searchType">
+              <BookSearchType />
             </Route>
             <Route path="/addBook">
               <AddBook />
