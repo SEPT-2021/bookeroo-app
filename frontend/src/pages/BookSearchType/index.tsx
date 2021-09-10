@@ -7,7 +7,7 @@ import { getBookByType } from "../../util/api";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
 
-function BookSearchType({ classes }: BookSearchProps) {
+function BookSearchType({ classes }: BookSearchTypeProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [type, setType] = useState("");
 
@@ -51,15 +51,6 @@ function BookSearchType({ classes }: BookSearchProps) {
                 id="outlined-secondary"
                 name="type"
                 label="Title / Author / Keyword"
-                variant="outlined"
-                color="secondary"
-                onChange={setType}
-              />
-              <FormField
-                errors={error?.response?.data}
-                id="outlined-secondary"
-                name="type"
-                label="Book type"
                 variant="outlined"
                 color="secondary"
                 onChange={setType}
@@ -119,6 +110,6 @@ const styles = (theme: Theme) =>
     },
   });
 
-type BookSearchProps = WithStyles<typeof styles>;
+type BookSearchTypeProps = WithStyles<typeof styles>;
 
 export default withStyles(styles)(BookSearchType);

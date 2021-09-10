@@ -14,7 +14,6 @@ function BookSearch({ classes }: BookSearchProps) {
     useMutation(findBookById);
   const onSubmit = () => mutate({ id });
 
-
   // TODO testing
   if (isSuccess) {
     // eslint-disable-next-line no-console
@@ -25,6 +24,38 @@ function BookSearch({ classes }: BookSearchProps) {
     <Grid container component="main" className={classes.root}>
       <Grid item xs={12}>
         <SearchBar />
+      </Grid>
+      <Grid container spacing={2} justify="center">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <form className={classes.box} noValidate autoComplete="off">
+            <Box>
+              <FormField
+                errors={error?.response?.data}
+                id="outlined-secondary"
+                name="id"
+                label="Book ID"
+                variant="outlined"
+                color="secondary"
+                onChange={setId}
+              />
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                color="primary"
+                onClick={onSubmit}
+              >
+                Find My Book!
+              </LoadingButton>
+            </Box>
+          </form>
+        </div>
       </Grid>
     </Grid>
   );
