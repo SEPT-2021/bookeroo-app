@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import Header from "../../components/Header";
 import backgroundImage from "../../assets/books/backgroundBook2.png";
-import BooksToBuy from "../../components/bookList";
+import BooksToBuy from "../../components/BookList";
 
 function HomePage({ classes }: HomePageProps) {
   return (
