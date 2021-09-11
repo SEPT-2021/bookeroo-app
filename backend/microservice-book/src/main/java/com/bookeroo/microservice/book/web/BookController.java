@@ -2,32 +2,35 @@ package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
-import com.bookeroo.microservice.book.service.BookDetailsService;
 import com.bookeroo.microservice.book.service.BookService;
+import com.bookeroo.microservice.book.service.S3Service;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
-
 import com.bookeroo.microservice.book.validator.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
 
     private final BookService bookService;
-    private final BookDetailsService bookDetailsService;
+    private final S3Service s3Service;
     private final ValidationErrorService validationErrorService;
     private final BookValidator bookValidator;
 
     @Autowired
-    public BookController(BookService bookService, BookDetailsService bookDetailsService, ValidationErrorService validationErrorService, BookValidator bookValidator) {
+    public BookController(BookService bookService, S3Service s3Service, ValidationErrorService validationErrorService, BookValidator bookValidator) {
         this.bookService = bookService;
-        this.bookDetailsService = bookDetailsService;
+        this.s3Service = s3Service;
         this.validationErrorService = validationErrorService;
         this.bookValidator = bookValidator;
     }
@@ -92,6 +95,28 @@ public class BookController {
         }
 
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(@RequestPart(value = "file") MultipartFile file) {
+        try {
+            System.out.println(s3Service.uploadFile(file));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BookNotFoundException | IOException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<?> upload(@RequestParam("file") String file) {
+        try {
+            ByteArrayOutputStream downloadInputStream = s3Service.downloadFile(file);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_PNG)
+                    .body(downloadInputStream.toByteArray());
+        } catch (BookNotFoundException | IOException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
