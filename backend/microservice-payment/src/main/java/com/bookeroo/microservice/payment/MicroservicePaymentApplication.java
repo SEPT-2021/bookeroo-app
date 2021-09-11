@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MicroservicePaymentApplication {
 
     public static void main(String[] args) {
+        System.setProperty("spring.config.name", "microservice-payment");
         SpringApplication.run(MicroservicePaymentApplication.class, args);
     }
 
