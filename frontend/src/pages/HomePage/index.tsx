@@ -3,12 +3,14 @@ import { createStyles, withStyles, WithStyles } from "@material-ui/core";
 import Header from "../../components/Header";
 import backgroundImage from "../../assets/books/backgroundBook2.png";
 import BooksToBuy from "../../components/BookList";
+import Footer from "../../components/Footer";
 
 function HomePage({ classes }: HomePageProps) {
   return (
     <div className={classes.root}>
       <Header />
       <BooksToBuy />
+      <Footer />
     </div>
   );
 }
