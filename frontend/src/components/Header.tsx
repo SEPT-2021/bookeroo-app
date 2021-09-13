@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
-  Button,
   Collapse,
   createStyles,
   IconButton,
@@ -11,11 +10,10 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import SortIcon from "@material-ui/icons/Sort";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
 import logo from "../assets/logo.svg";
-import Link from "../util/Link";
+import NavBarDropDown from "./NavBarDropDown";
 
 function Header({ classes }: HeaderProps) {
   const [checked, setChecked] = useState(false);
@@ -31,18 +29,8 @@ function Header({ classes }: HeaderProps) {
             <h1 className={classes.colorText}>Bookeroo.</h1>
           </Box>
           <Box className={classes.buttons}>
-            <Link to="/login">
-              <Button variant="contained" color="primary">
-                Login
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button variant="outlined" color="secondary">
-                Register
-              </Button>
-            </Link>
             <IconButton>
-              <SortIcon className={classes.icon} />
+              <NavBarDropDown />
             </IconButton>
           </Box>
         </Toolbar>
@@ -57,7 +45,7 @@ function Header({ classes }: HeaderProps) {
             Welcome to <br />
             <span className={classes.colorText}>Bookeroo.</span>
           </h1>
-          <Scroll to="images" smooth>
+          <Scroll to="book-list" smooth>
             <IconButton>
               <ExpandMoreIcon className={classes.goDown} />
             </IconButton>

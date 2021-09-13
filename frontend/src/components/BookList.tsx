@@ -5,9 +5,6 @@ import Image from "./Image";
 import useWindowPosition from "../hook/useWindowPosition";
 import books from "../static/books";
 
-// if we import image
-import image from "../assets/GoldMoon.png";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
@@ -28,12 +25,14 @@ export default function BookList() {
   const checked = useWindowPosition("header");
 
   return (
-    <Grid container id="header" alignItems="center" justifyContent="center">
-      {books.map((book) => (
-        <Grid item md={3} className={classes.gridItem}>
-          <Image book={book} key={book.title} checked />
-        </Grid>
-      ))}
-    </Grid>
+    <div className={classes.root} id="book-list">
+      <Grid container id="header" alignItems="center" justifyContent="center">
+        {books.map((book) => (
+          <Grid item md={3} className={classes.gridItem}>
+            <Image book={book} key={book.title} checked={checked} />
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 }
