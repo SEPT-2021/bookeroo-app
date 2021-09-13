@@ -12,10 +12,8 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank(message = "Title cannot be blank")
     private String title;
-
     @NotBlank(message = "Author cannot be blank")
     private String author;
 
@@ -26,9 +24,10 @@ public class Book {
     */
     @NotBlank(message = "Number of pages cannot be zero")
     private String pageCount;
-
     @NotBlank(message = "ISBN must be valid")
     private String isbn;
+    @NotBlank(message = "Books must have a cover")
+    private String cover;
 
     private Date createdAt;
     private Date updatedAt;
@@ -76,14 +75,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    @PrePersist
-    protected void onCreate(){
-        this.createdAt = new Date();
+    public String getCover() {
+        return cover;
     }
 
-    @PreUpdate
-    protected void onUpdate(){
-        this.updatedAt = new Date();
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public Date getCreatedAt() {
@@ -100,6 +97,16 @@ public class Book {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
     }
 
     @Override

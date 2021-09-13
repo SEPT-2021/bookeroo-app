@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 @Configuration
 public class S3Configurer {
 
@@ -22,7 +20,6 @@ public class S3Configurer {
     private String region;
 
     @Bean
-    @PostConstruct
     public AmazonS3 amazonS3() {
         final BasicAWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
         return AmazonS3ClientBuilder

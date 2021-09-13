@@ -6,6 +6,8 @@ import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.S3Service;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
 import com.bookeroo.microservice.book.validator.BookValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,9 +16,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 @RestController
 @RequestMapping("/api/books")
@@ -28,20 +30,43 @@ public class BookController {
     private final BookValidator bookValidator;
 
     @Autowired
-    public BookController(BookService bookService, S3Service s3Service, ValidationErrorService validationErrorService, BookValidator bookValidator) {
+    public BookController(
+            BookService bookService,
+            S3Service s3Service,
+            ValidationErrorService validationErrorService,
+            BookValidator bookValidator) {
         this.bookService = bookService;
         this.s3Service = s3Service;
         this.validationErrorService = validationErrorService;
         this.bookValidator = bookValidator;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addNewBook(@Valid @RequestBody Book book, BindingResult result) {
+    @PostMapping(value = "/add", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
+    public ResponseEntity<?> addNewBook(
+            @RequestPart(value = "book") String bookJson,
+            @RequestPart(value = "cover") MultipartFile cover,
+            BindingResult result) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Book book;
+        try {
+            book = objectMapper.readValue(bookJson, Book.class);
+        } catch (JsonProcessingException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         bookValidator.validate(book, result);
 
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
+
+        try {
+            book.setCover(s3Service.uploadFile(cover));
+        } catch (IOException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(bookService.saveBook(book), HttpStatus.CREATED);
     }
@@ -83,7 +108,7 @@ public class BookController {
                 case "author":
                     searchResults = bookService.searchBookByAuthor(value);
                     break;
-                // TODO redundant, if search by keyword is required simply omit the "type" param
+                // TODO redundant, if search by keyword is desired simply omit the "type" param
                 case "keyword":
                     searchResults = bookService.searchBookByKeyword(value);
                     break;
@@ -97,8 +122,9 @@ public class BookController {
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestPart(value = "file") MultipartFile file) {
+    // TODO what follows are temporary testing methods to verify S3 is configured properly
+    @PostMapping("/upload-file")
+    public ResponseEntity<?> uploadImageByFile(@RequestPart(value = "file") MultipartFile file) {
         try {
             System.out.println(s3Service.uploadFile(file));
             return new ResponseEntity<>(HttpStatus.OK);
@@ -107,15 +133,40 @@ public class BookController {
         }
     }
 
+    @PostMapping("/upload-url")
+    public ResponseEntity<?> uploadImageByUrl(@RequestParam("url") URL url, @RequestParam("name") String name) {
+        try {
+            System.out.println(s3Service.uploadFile(url, name));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BookNotFoundException | IOException | URISyntaxException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/download")
     public ResponseEntity<?> upload(@RequestParam("file") String file) {
         try {
-            ByteArrayOutputStream downloadInputStream = s3Service.downloadFile(file);
+            byte[] byteArray = s3Service.downloadFile(file).toByteArray();
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_PNG)
-                    .body(downloadInputStream.toByteArray());
+                    .contentType(deduceContentType(file))
+                    .body(byteArray);
         } catch (BookNotFoundException | IOException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private MediaType deduceContentType(String fileName) {
+        String[] splitByPeriod = fileName.split("\\.");
+        String fileExtension = splitByPeriod[splitByPeriod.length - 1];
+        switch (fileExtension) {
+            case "png":
+                return MediaType.IMAGE_PNG;
+            case "jpg":
+                return MediaType.IMAGE_JPEG;
+            case "gif":
+                return MediaType.IMAGE_GIF;
+            default:
+                return MediaType.APPLICATION_OCTET_STREAM;
         }
     }
 

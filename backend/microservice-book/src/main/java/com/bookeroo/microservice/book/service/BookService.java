@@ -22,7 +22,7 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public Book saveBook(Book book) { // throws runtime exception resulting in a 400 http bad request
+    public Book saveBook(Book book) {
         System.out.println(book);
         if (bookRepository.findByIsbn(book.getIsbn()) != null)
             throw new ISBNAlreadyExistsException(String.format("ISBN \"%s\" already exists", book.getIsbn()));

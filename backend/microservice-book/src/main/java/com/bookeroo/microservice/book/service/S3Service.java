@@ -11,15 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class S3Service  {
 
     @Value("${aws.s3.bucket}")
-    private String bucketName = "bookeroo-test-bucket";
+    private String bucketName;
     private final AmazonS3 amazonS3;
 
     @Autowired
@@ -27,25 +28,55 @@ public class S3Service  {
         this.amazonS3 = amazonS3;
     }
 
+    @Async
+    public void uploadFileAsync(String fileName, File file) {
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file));
+    }
+
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         File file = convertMultiPartFileToFile(multipartFile);
-        String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
-        uploadFileToS3Bucket(uniqueFileName, file);
+        String uniqueFileName = getUniqueFileName(file.getName());
+        uploadFileAsync(uniqueFileName, file);
         if (!file.delete())
             throw new IOException();
 
         return uniqueFileName;
     }
 
-    public ByteArrayOutputStream downloadFile(String url) throws IOException {
-        S3Object object = amazonS3.getObject(new GetObjectRequest(bucketName, url));
+    public String uploadFile(URL fileUrl, String fileName) throws IOException, URISyntaxException {
+        BufferedInputStream inputStream = new BufferedInputStream(fileUrl.openStream());
+        File file = new File(fileName.replace(" ", "_"));
+        FileOutputStream outputStream = new FileOutputStream(file);
+
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+
+        inputStream.close();
+        outputStream.flush();
+        outputStream.close();
+
+        String uniqueFileName = getUniqueFileName(file.getName());
+        uploadFileAsync(uniqueFileName, file);
+        if (!file.delete())
+            throw new IOException();
+
+        return uniqueFileName;
+    }
+
+    public ByteArrayOutputStream downloadFile(String fileUrl) throws IOException {
+        S3Object object = amazonS3.getObject(new GetObjectRequest(bucketName, fileUrl));
         InputStream inputStream = object.getObjectContent();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        int length;
-        byte[] buffer = new byte[4096];
-        while ((length = inputStream.read(buffer, 0, buffer.length)) != -1)
-            outputStream.write(buffer, 0, length);
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) != -1)
+            outputStream.write(buffer, 0, bytesRead);
 
+        inputStream.close();
+        outputStream.close();
         return outputStream;
     }
 
@@ -57,9 +88,8 @@ public class S3Service  {
         return file;
     }
 
-    @Async
-    public void uploadFileToS3Bucket(String fileName, File file) {
-        amazonS3.putObject(new PutObjectRequest(this.bucketName, fileName, file));
+    private String getUniqueFileName(String fileName) {
+        return LocalDateTime.now() + "_" + fileName;
     }
 
 }
