@@ -10,8 +10,17 @@ import {
 
 function RegisterSuccess({ classes }: RegisterSuccessProps) {
   return (
-    <Grid className={classes.root}>
-      <h1> SUCCESS </h1>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+      style={{ minHeight: "100vh" }}
+    >
+      <Grid className={classes.root}>
+        <h1> SUCCESS </h1>
+      </Grid>
     </Grid>
   );
 }

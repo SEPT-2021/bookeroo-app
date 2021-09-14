@@ -11,6 +11,11 @@ import RegisterSuccess from "./pages/Register/RegisterSuccess";
 import RegisterFailed from "./pages/Register/RegisterFailed";
 import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
+import BookSearch from "./pages/BookSearch";
+import AddBook from "./pages/AddBook";
+import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
+import DeleteBook from "./pages/DeleteBook";
+import BookSearchType from "./pages/BookSearchType";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +41,21 @@ ReactDOM.render(
             </Route>
             <Route path="/loginSuccess">
               <LoginSuccess />
+            </Route>
+            <Route path="/search">
+              <BookSearch />
+            </Route>
+            <Route path="/searchType">
+              <BookSearchType />
+            </Route>
+            <Route path="/addBook">
+              <AddBook />
+            </Route>
+            <Route path="/addBookSuccess">
+              <AddBookSuccess />
+            </Route>
+            <Route path="/deleteBook">
+              <DeleteBook />
             </Route>
             <Redirect to="/login" />
           </Switch>
