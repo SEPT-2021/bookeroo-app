@@ -43,7 +43,6 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>7.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -52,8 +51,8 @@
         </dependency>
         <dependency>
             <groupId>com.paypal.sdk</groupId>
-            <artifactId>rest-api-sdk</artifactId>
-            <version>1.14.0</version>
+            <artifactId>checkout-sdk</artifactId>
+            <version>1.0.4</version>
         </dependency>
     </dependencies>
 

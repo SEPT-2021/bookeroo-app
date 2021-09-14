@@ -1,14 +1,10 @@
 package com.bookeroo.microservice.payment.config;
 
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.rest.OAuthTokenCredential;
-import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.core.PayPalEnvironment;
+import com.paypal.core.PayPalHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class PayPalConfigurer {
@@ -21,22 +17,19 @@ public class PayPalConfigurer {
     private String mode;
 
     @Bean
-    public Map<String, String> configurationMap() {
-        Map<String, String> configMap = new HashMap<>();
-        configMap.put("mode", mode);
-        return configMap;
+    public PayPalEnvironment payPalEnvironment() {
+        switch (mode) {
+            case "live":
+                return new PayPalEnvironment.Live(clientId, clientSecret);
+            case "sandbox":
+            default:
+                return new PayPalEnvironment.Sandbox(clientId, clientSecret);
+        }
     }
 
     @Bean
-    public OAuthTokenCredential oAuthTokenCredential() {
-        return new OAuthTokenCredential(clientId, clientSecret, configurationMap());
-    }
-
-    @Bean
-    public APIContext apiContext() throws PayPalRESTException {
-        APIContext context = new APIContext(oAuthTokenCredential().getAccessToken());
-        context.setConfigurationMap(configurationMap());
-        return context;
+    public PayPalHttpClient payPalClient() {
+        return new PayPalHttpClient(payPalEnvironment());
     }
 
 }

@@ -1,67 +1,99 @@
 package com.bookeroo.microservice.payment.service;
 
-import com.paypal.api.payments.*;
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.core.PayPalHttpClient;
+import com.paypal.http.HttpResponse;
+import com.paypal.orders.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.bookeroo.microservice.payment.config.PaymentConstants.*;
 
 @Service
 public class PayPalService {
 
-    private final APIContext apiContext;
+    private final PayPalHttpClient payPalClient;
 
     @Autowired
-    public PayPalService(APIContext apiContext) {
-        this.apiContext = apiContext;
+    public PayPalService(PayPalHttpClient payPalClient) {
+        this.payPalClient = payPalClient;
     }
 
-    public Payment createPayment(
-            Double total,
-            String currency,
-            String method,
-            String intent,
-            String description,
-            String cancelUrl,
-            String successUrl) throws PayPalRESTException {
-        Amount amount = new Amount();
-        amount.setCurrency(currency);
-        total = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        amount.setTotal(String.format("%.2f", total));
-
-        Transaction transaction = new Transaction();
-        transaction.setDescription(description);
-        transaction.setAmount(amount);
-
-        List<Transaction> transactions = new ArrayList<>();
-        transactions.add(transaction);
-
-        Payer payer = new Payer();
-        payer.setPaymentMethod(method);
-
-        Payment payment = new Payment();
-        payment.setIntent(intent);
-        payment.setPayer(payer);
-        payment.setTransactions(transactions);
-        RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl(cancelUrl);
-        redirectUrls.setReturnUrl(successUrl);
-        payment.setRedirectUrls(redirectUrls);
-
-        return payment.create(apiContext);
+    public HttpResponse<Order> createOrder() throws IOException {
+        OrdersCreateRequest request = new OrdersCreateRequest();
+        request.prefer("return=representation");
+        request.requestBody(buildOrderRequestBody());
+        return payPalClient.execute(request);
     }
 
-    public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException{
-        Payment payment = new Payment();
-        payment.setId(paymentId);
-        PaymentExecution paymentExecute = new PaymentExecution();
-        paymentExecute.setPayerId(payerId);
-        return payment.execute(apiContext, paymentExecute);
+    private OrderRequest buildOrderRequestBody() {
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.checkoutPaymentIntent(CHECKOUT_PAYMENT_INTENT);
+
+        ApplicationContext applicationContext = new ApplicationContext()
+                .brandName(BRAND_NAME)
+                .landingPage(LANDING_PAGE)
+                .shippingPreference(SHIPPING_PREFERENCE);
+        orderRequest.applicationContext(applicationContext);
+
+        List<PurchaseUnitRequest> purchaseUnitRequests = new ArrayList<>();
+        PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
+                .description(DESCRIPTION)
+                .amountWithBreakdown(new AmountWithBreakdown()
+                        .currencyCode(CURRENCY_CODE)
+                        .value("10.00")
+                        .amountBreakdown(new AmountBreakdown()
+                                .itemTotal(new Money().currencyCode(CURRENCY_CODE).value("8.00"))
+                                .shipping(new Money().currencyCode(CURRENCY_CODE).value("2.00"))))
+                .items(new ArrayList<Item>() {
+                    {
+                        add(new Item()
+                                .name("The Brothers Karamazov")
+                                .description("9780192835093")
+                                .unitAmount(new Money()
+                                        .currencyCode(CURRENCY_CODE)
+                                        .value("4.00"))
+                                .quantity("1")
+                                .category("PHYSICAL_GOODS"));
+                        add(new Item()
+                                .name("The Old Man and the Sea")
+                                .description("9788804325963")
+                                .unitAmount(new Money()
+                                        .currencyCode(CURRENCY_CODE)
+                                        .value("2.00"))
+                                .quantity("2")
+                                .category("PHYSICAL_GOODS"));
+                    }
+                })
+                .shippingDetail(new ShippingDetail()
+                        .name(new Name()
+                                .fullName("John Doe"))
+                        .addressPortable(new AddressPortable()
+                                .addressLine1("123 Bookeroo St")
+                                .addressLine2("Floor 1")
+                                .adminArea2("Melbourne>")
+                                .adminArea1("VIC")
+                                .postalCode("3001")
+                                .countryCode("AU")));
+
+        purchaseUnitRequests.add(purchaseUnitRequest);
+        orderRequest.purchaseUnits(purchaseUnitRequests);
+        return orderRequest;
+    }
+
+    public HttpResponse<Order> captureOrder(String orderId) throws IOException {
+        OrdersCaptureRequest request = new OrdersCaptureRequest(orderId);
+        request.prefer("return=representation");
+        request.requestBody(new OrderRequest());
+        return payPalClient.execute(request);
+    }
+
+    public HttpResponse<Order> getOrder(String orderId) throws IOException {
+        OrdersGetRequest request = new OrdersGetRequest(orderId);
+        return payPalClient.execute(request);
     }
 
 }
