@@ -1,13 +1,12 @@
 package com.bookeroo.microservice.login.security;
 
-import com.bookeroo.microservice.login.model.User;
 import com.bookeroo.microservice.login.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,7 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
+
+import static com.bookeroo.microservice.login.security.SecurityConstant.HEADER_KEY;
+import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_TOKEN_PREFIX;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
@@ -37,25 +38,24 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String token = null;
-            String bearerToken = request.getHeader(SecurityConstant.HEADER_STRING);
-            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(SecurityConstant.TOKEN_PREFIX)) {
-                token = bearerToken.substring(SecurityConstant.TOKEN_PREFIX.length());
-            }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        String authorizationHeader = request.getHeader(HEADER_KEY);
+        String username = null, jwt = null;
 
-            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-                Long userId = tokenProvider.getUserIdFromJWT(token);
-                User userDetails = userDetailsService.loadUserById(userId);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, Collections.emptyList());
+        if (authorizationHeader != null && authorizationHeader.startsWith(JWT_TOKEN_PREFIX)) {
+            jwt = authorizationHeader.substring(JWT_TOKEN_PREFIX.length());
+            username = tokenProvider.extractUsername(jwt);
+        }
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (tokenProvider.validateToken(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(token);
             }
-        } catch (Exception exception) {
-            logger.error("Could not set user authentication in security context", exception);
         }
 
         filterChain.doFilter(request, response);

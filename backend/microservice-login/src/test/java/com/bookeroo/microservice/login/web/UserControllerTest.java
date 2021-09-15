@@ -37,7 +37,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
 
         mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +52,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
 
         String response = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +69,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
 
         String response = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +86,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
         service.saveUser(user);
 
         LoginRequest request = new LoginRequest();
@@ -110,7 +106,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
         service.saveUser(user);
 
         LoginRequest request = new LoginRequest();
@@ -131,7 +126,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
         service.saveUser(user);
 
         LoginRequest request = new LoginRequest();
@@ -152,7 +146,6 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("testPassword");
         service.saveUser(user);
 
         LoginRequest request = new LoginRequest();
@@ -164,7 +157,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(SecurityConstant.TOKEN_PREFIX));
+        assertTrue(response.contains(SecurityConstant.JWT_TOKEN_PREFIX));
     }
 
 }
