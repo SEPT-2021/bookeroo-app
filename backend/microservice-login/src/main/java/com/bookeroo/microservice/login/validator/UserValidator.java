@@ -18,12 +18,9 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         User user = (User) object;
-
         if (user.getPassword().length() < MINIMUM_PASSWORD_LENGTH)
-            errors.rejectValue("password", "Length", String.format("Password must be at least %d characters", MINIMUM_PASSWORD_LENGTH));
-
-        if (!user.getPassword().equals(user.getConfirmPassword()))
-            errors.rejectValue("confirmPassword", "Match", "Passwords must match");
+            errors.rejectValue("password", "Length",
+                    String.format("Password must be at least %d characters", MINIMUM_PASSWORD_LENGTH));
     }
 
 }
