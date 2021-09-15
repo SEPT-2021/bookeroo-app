@@ -21,7 +21,6 @@ class UserServiceTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setConfirmPassword("");
 
         assertEquals(service.saveUser(user).getUsername(), user.getUsername());
     }

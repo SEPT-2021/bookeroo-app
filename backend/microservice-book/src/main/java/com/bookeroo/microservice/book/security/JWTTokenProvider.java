@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.login.security;
+package com.bookeroo.microservice.book.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_EXPIRATION_TIME_MILLIS;
-import static com.bookeroo.microservice.login.security.SecurityConstant.SECRET_KEY;
+import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_EXPIRATION_TIME_MILLIS;
+import static com.bookeroo.microservice.book.security.SecurityConstant.SECRET_KEY;
 
 @Component
 public class JWTTokenProvider {

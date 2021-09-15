@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.login.model;
+package com.bookeroo.microservice.book.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

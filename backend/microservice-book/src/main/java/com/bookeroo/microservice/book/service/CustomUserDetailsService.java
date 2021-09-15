@@ -1,8 +1,8 @@
-package com.bookeroo.microservice.login.service;
+package com.bookeroo.microservice.book.service;
 
-import com.bookeroo.microservice.login.model.CustomUserDetails;
-import com.bookeroo.microservice.login.model.User;
-import com.bookeroo.microservice.login.repository.UserRepository;
+import com.bookeroo.microservice.book.model.CustomUserDetails;
+import com.bookeroo.microservice.book.model.User;
+import com.bookeroo.microservice.book.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

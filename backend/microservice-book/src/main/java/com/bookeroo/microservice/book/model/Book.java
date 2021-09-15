@@ -11,17 +11,11 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @NotBlank(message = "Title cannot be blank")
     private String title;
     @NotBlank(message = "Author cannot be blank")
     private String author;
-
-    /* TODO
-        - pageCount cannot be of primitive type int/Integer to have @NotBlank verification
-        - considering it may be an input field on the frontend
-        - unless field verification is entirely moved to the frontend(?)
-    */
     @NotBlank(message = "Number of pages cannot be zero")
     private String pageCount;
     @NotBlank(message = "ISBN must be valid")
@@ -35,11 +29,11 @@ public class Book {
     public Book() {
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

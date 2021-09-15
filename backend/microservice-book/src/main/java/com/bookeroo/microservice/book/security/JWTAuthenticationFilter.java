@@ -1,6 +1,6 @@
-package com.bookeroo.microservice.login.security;
+package com.bookeroo.microservice.book.security;
 
-import com.bookeroo.microservice.login.service.CustomUserDetailsService;
+import com.bookeroo.microservice.book.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,17 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.bookeroo.microservice.login.security.SecurityConstant.HEADER_KEY;
-import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_TOKEN_PREFIX;
+import static com.bookeroo.microservice.book.security.SecurityConstant.HEADER_KEY;
+import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_TOKEN_PREFIX;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private JWTTokenProvider tokenProvider;
     private CustomUserDetailsService userDetailsService;
-
-    public JWTAuthenticationFilter() {
-    }
 
     @Autowired
     public void setTokenProvider(JWTTokenProvider tokenProvider) {

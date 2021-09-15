@@ -1,6 +1,6 @@
-package com.bookeroo.microservice.login.repository;
+package com.bookeroo.microservice.book.repository;
 
-import com.bookeroo.microservice.login.model.User;
+import com.bookeroo.microservice.book.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
