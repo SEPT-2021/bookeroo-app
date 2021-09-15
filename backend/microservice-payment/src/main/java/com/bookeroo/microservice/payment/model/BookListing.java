@@ -1,17 +1,29 @@
 package com.bookeroo.microservice.payment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BookListing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String isbn;
-    private String sellerUsername;
-    private String description;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn
+    @JsonBackReference
+    private Book book;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn
+    @JsonBackReference
+    private User seller;
     private String value;
     private Date createdAt;
     private Date updatedAt;
@@ -27,28 +39,20 @@ public class BookListing {
         this.id = id;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public Book getBook() {
+        return book;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
-    public String getSellerUsername() {
-        return sellerUsername;
+    public User getSeller() {
+        return seller;
     }
 
-    public void setSellerUsername(String sellerUsername) {
-        this.sellerUsername = sellerUsername;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 
     public String getValue() {
