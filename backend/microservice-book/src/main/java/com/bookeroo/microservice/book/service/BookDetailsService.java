@@ -21,7 +21,7 @@ public class BookDetailsService  {
     }
 
     @Transactional
-    public Book loadBookById(Long id) throws BookNotFoundException {
+    public Book loadBookById(long id) throws BookNotFoundException {
         try{
             return BookRepository.getById(id);
         }

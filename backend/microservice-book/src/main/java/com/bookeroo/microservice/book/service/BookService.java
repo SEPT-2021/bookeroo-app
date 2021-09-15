@@ -23,7 +23,6 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
-        System.out.println(book);
         if (bookRepository.findByIsbn(book.getIsbn()) != null)
             throw new ISBNAlreadyExistsException(String.format("ISBN \"%s\" already exists", book.getIsbn()));
 
@@ -31,7 +30,7 @@ public class BookService {
     }
 
     // TODO extend to further getBy"?" methods as necessary
-    public Book getBook(Long id) {
+    public Book getBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (!book.isPresent())
             throw new BookNotFoundException(String.format("Book with id %s not found", id));
@@ -43,7 +42,7 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public void removeBook(Long id) {
+    public void removeBook(long id) {
         if (!bookRepository.existsById(id))
             throw new BookNotFoundException(String.format("Book with id %s not found", id));
 

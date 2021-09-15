@@ -1,13 +1,12 @@
 package com.bookeroo.microservice.book.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -30,22 +29,25 @@ public class S3Service  {
 
     @Async
     public void uploadFileAsync(String fileName, File file) {
-        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file));
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
-    public String uploadFile(MultipartFile multipartFile) throws IOException {
+    public String uploadFile(MultipartFile multipartFile, String fileName) throws IOException {
         File file = convertMultiPartFileToFile(multipartFile);
-        String uniqueFileName = getUniqueFileName(file.getName());
+        String uniqueFileName = getUniqueFileName(fileName)
+                + "." + StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
         uploadFileAsync(uniqueFileName, file);
         if (!file.delete())
             throw new IOException();
 
-        return uniqueFileName;
+        return amazonS3.getUrl(bucketName, uniqueFileName).toExternalForm();
     }
 
     public String uploadFile(URL fileUrl, String fileName) throws IOException, URISyntaxException {
         BufferedInputStream inputStream = new BufferedInputStream(fileUrl.openStream());
-        File file = new File(fileName.replace(" ", "_"));
+        File file = new File(fileName.replace(" ", "_")
+                + "." + StringUtils.getFilenameExtension(fileUrl.getFile()));
         FileOutputStream outputStream = new FileOutputStream(file);
 
         byte[] buffer = new byte[1024];
@@ -63,7 +65,7 @@ public class S3Service  {
         if (!file.delete())
             throw new IOException();
 
-        return uniqueFileName;
+        return amazonS3.getUrl(bucketName, uniqueFileName).toExternalForm();
     }
 
     public ByteArrayOutputStream downloadFile(String fileUrl) throws IOException {

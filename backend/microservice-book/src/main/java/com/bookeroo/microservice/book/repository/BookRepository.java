@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends CrudRepository<Book, Long> {
 
-    Book getById(Long id);
+    Book getById(long id);
 
-    Optional<Book> findById(Long id);
+    Optional<Book> findById(long id);
 
     Book findByIsbn(String isbn);
 

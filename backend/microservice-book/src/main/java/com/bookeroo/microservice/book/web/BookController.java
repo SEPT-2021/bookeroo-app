@@ -2,12 +2,11 @@ package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
+import com.bookeroo.microservice.book.model.BookFormData;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.S3Service;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
 import com.bookeroo.microservice.book.validator.BookValidator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,21 +40,13 @@ public class BookController {
         this.bookValidator = bookValidator;
     }
 
-    @PostMapping(value = "/add", consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE
-    })
-    public ResponseEntity<?> addNewBook(
-            @RequestPart(value = "book") String bookJson,
-            @RequestPart(value = "cover") MultipartFile cover,
-            BindingResult result) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Book book;
-        try {
-            book = objectMapper.readValue(bookJson, Book.class);
-        } catch (JsonProcessingException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping(value = "/add" )
+    public ResponseEntity<?> addNewBook(@ModelAttribute BookFormData formData, BindingResult result) {
+        Book book = new Book();
+        book.setTitle(formData.getTitle());
+        book.setAuthor(formData.getAuthor());
+        book.setPageCount(formData.getPageCount());
+        book.setIsbn(formData.getIsbn());
         bookValidator.validate(book, result);
 
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
@@ -63,8 +54,12 @@ public class BookController {
             return errorMap;
 
         try {
-            book.setCover(s3Service.uploadFile(cover));
-        } catch (IOException exception) {
+            MultipartFile coverFile = formData.getCoverFile();
+            if (coverFile != null)
+                book.setCover(s3Service.uploadFile(formData.getCoverFile(), formData.getTitle()));
+            else
+                book.setCover(s3Service.uploadFile(new URL(formData.getCoverUrl()), formData.getTitle()));
+        } catch (IOException | URISyntaxException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -123,51 +118,51 @@ public class BookController {
     }
 
     // TODO what follows are temporary testing methods to verify S3 is configured properly
-    @PostMapping("/upload-file")
-    public ResponseEntity<?> uploadImageByFile(@RequestPart(value = "file") MultipartFile file) {
-        try {
-            System.out.println(s3Service.uploadFile(file));
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (BookNotFoundException | IOException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/upload-url")
-    public ResponseEntity<?> uploadImageByUrl(@RequestParam("url") URL url, @RequestParam("name") String name) {
-        try {
-            System.out.println(s3Service.uploadFile(url, name));
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (BookNotFoundException | IOException | URISyntaxException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/download")
-    public ResponseEntity<?> upload(@RequestParam("file") String file) {
-        try {
-            byte[] byteArray = s3Service.downloadFile(file).toByteArray();
-            return ResponseEntity.ok()
-                    .contentType(deduceContentType(file))
-                    .body(byteArray);
-        } catch (BookNotFoundException | IOException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private MediaType deduceContentType(String fileName) {
-        String[] splitByPeriod = fileName.split("\\.");
-        String fileExtension = splitByPeriod[splitByPeriod.length - 1];
-        switch (fileExtension) {
-            case "png":
-                return MediaType.IMAGE_PNG;
-            case "jpg":
-                return MediaType.IMAGE_JPEG;
-            case "gif":
-                return MediaType.IMAGE_GIF;
-            default:
-                return MediaType.APPLICATION_OCTET_STREAM;
-        }
-    }
+//    @PostMapping("/upload-file")
+//    public ResponseEntity<?> uploadImageByFile(@RequestPart(value = "file") MultipartFile file) {
+//        try {
+//            System.out.println(s3Service.uploadFile(file));
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (BookNotFoundException | IOException exception) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @PostMapping("/upload-url")
+//    public ResponseEntity<?> uploadImageByUrl(@RequestParam("url") URL url, @RequestParam("name") String name) {
+//        try {
+//            System.out.println(s3Service.uploadFile(url, name));
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (BookNotFoundException | IOException | URISyntaxException exception) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @GetMapping("/download")
+//    public ResponseEntity<?> upload(@RequestParam("file") String file) {
+//        try {
+//            byte[] byteArray = s3Service.downloadFile(file).toByteArray();
+//            return ResponseEntity.ok()
+//                    .contentType(deduceContentType(file))
+//                    .body(byteArray);
+//        } catch (BookNotFoundException | IOException exception) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    private MediaType deduceContentType(String fileName) {
+//        String[] splitByPeriod = fileName.split("\\.");
+//        String fileExtension = splitByPeriod[splitByPeriod.length - 1];
+//        switch (fileExtension) {
+//            case "png":
+//                return MediaType.IMAGE_PNG;
+//            case "jpg":
+//                return MediaType.IMAGE_JPEG;
+//            case "gif":
+//                return MediaType.IMAGE_GIF;
+//            default:
+//                return MediaType.APPLICATION_OCTET_STREAM;
+//        }
+//    }
 
 }
