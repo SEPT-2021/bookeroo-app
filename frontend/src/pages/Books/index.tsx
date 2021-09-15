@@ -1,86 +1,73 @@
-import React, {useState} from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
 import {
-    Button,
-    Card,
-    CardActionArea, CardActions, CardContent, CardMedia,
-    Grid,
-    GridSize,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow, Typography
+  Badge,
+  Drawer,
+  Grid,
+  IconButton,
+  LinearProgress,
 } from "@material-ui/core";
-import logo from "../../assets/logo.svg";
+import styled from "styled-components";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+// eslint-disable-next-line import/no-cycle
+import Book from "../../Book/Book";
+import { Wrapper } from "../../Book/Book.styles";
 
-interface Book {
-    id: bigint,
-    title: string,
-    author: string,
-    pageCount: string,
-    isbn: string
-}
+export type BookItemType = {
+  id: number;
+  title: string;
+  author: string;
+  pageCount: string;
+  isbn: string;
+  cover: string;
+};
 
-// <TableContainer component={Paper}>
-//     <Table aria-label="simple table">
-//         <TableHead>
-//             <TableRow>
-//                 <TableCell>Title</TableCell>
-//                 <TableCell>Author</TableCell>
-//                 <TableCell>Page Count</TableCell>
-//                 <TableCell>ISBN</TableCell>
-//             </TableRow>
-//         </TableHead>
-//         <TableBody>
-//             {books?.map((book =>
-//                     <TableRow key={book.title}>
-//                         <TableCell>{book.title}</TableCell>
-//                         <TableCell>{book.author}</TableCell>
-//                         <TableCell>{book.pageCount}</TableCell>
-//                         <TableCell>{book.isbn}</TableCell>
-//                     </TableRow>
-//             ))}
-//         </TableBody>
-//     </Table>
-// </TableContainer>
+const StyledButton = styled(IconButton)`
+  position: fixed;
+  z-index: 100;
+  right: 20px;
+  top: 20px;
+`;
 
-export default function Books() {
-    const [books, setBooks] = useState<Array<Book>>();
-    const fetchBooks = async () => {
-        const result = await axios.get(`/api/books/all`);
-        setBooks(result.data);
-    };
+const getBooks = async (): Promise<BookItemType[]> =>
+  (await fetch(`/api/books/all`)).json();
 
-    fetchBooks();
-    return (
-        <div style={{ marginTop: 40, padding: 30 }}>
-            <Grid container justify="center" spacing={8}>
-                {books?.map(book =>
-                    <Grid item key={book.title}>
-                        <Card>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    alt="Bookeroo Logo"
-                                    height="360"
-                                    width="240"
-                                    image={logo}
-                                    title="Bookeroo Logo"
-                                />
-                                <CardContent color="secondary">
-                                    <Typography gutterBottom variant="h5" component="h2">
-                                        {book.title}
-                                    </Typography>
-                                    <Typography component="p">{book.author}</Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
-                )}
-            </Grid>
-        </div>
-    );
-}
+const Books = () => {
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([] as BookItemType[]);
+  const { data, isLoading, error } = useQuery<BookItemType[]>(
+    "books",
+    getBooks
+  );
+
+  const getTotalItems = (items: BookItemType[]) =>
+    items.reduce((ack: number, item) => ack + item.amount, 0);
+  const handleAddToCart = (clickedItem: BookItemType) => null;
+
+  const handleRemoveFromCart = () => null;
+
+  if (isLoading) return <LinearProgress />;
+  if (error) return <div>something wrong</div>;
+
+  return (
+    <Wrapper>
+      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+        Cart goes here
+      </Drawer>
+      <StyledButton onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={getTotalItems(cartItems)} color="error">
+          <AddShoppingCartIcon />
+        </Badge>
+      </StyledButton>
+      <Grid container spacing={3}>
+        {data?.map((item) => (
+          <Grid item key={item.id} xs={12} sm={4}>
+            <Book item={item} handleAddToCart={handleAddToCart} />
+          </Grid>
+        ))}
+      </Grid>
+    </Wrapper>
+  );
+};
+
+export default Books;

@@ -72,3 +72,5 @@ export const getBookByType = makeTypedAPICall<
   },
   unknown
 >((args) => api.get(`api/books/?search=${args.searchTerm}&type=${args.type}`));
+
+export const getAllBooks = makeTypedAPICall(() => api.get(`/api/books/all`));
