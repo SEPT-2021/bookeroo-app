@@ -16,12 +16,6 @@ public class Book {
     private String title;
     @NotBlank(message = "Author cannot be blank")
     private String author;
-
-    /* TODO
-        - pageCount cannot be of primitive type int/Integer to have @NotBlank verification
-        - considering it may be an input field on the frontend
-        - unless field verification is entirely moved to the frontend(?)
-    */
     @NotBlank(message = "Number of pages cannot be zero")
     private String pageCount;
     @NotBlank(message = "ISBN must be valid")
