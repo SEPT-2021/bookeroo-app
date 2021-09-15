@@ -1,11 +1,12 @@
 package com.bookeroo.microservice.login.security;
 
+import java.util.concurrent.TimeUnit;
+
 public class SecurityConstant {
 
-    public static final String SIGN_UP_PATHS = "/api/users/**";
-    public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String SECRET_KEY = "JWTSecretKey";
-    public static final String HEADER_STRING = "Authorization";
-    public static final long EXPIRATION_TIME = 30_000;
+    public static final String SECRET_KEY = "SecretKey";
+    public static final String HEADER_KEY = "Authorization";
+    public static final String JWT_TOKEN_PREFIX = "Bearer ";
+    public static final long JWT_EXPIRATION_TIME_MILLIS = TimeUnit.MINUTES.toMillis(30);
 
 }

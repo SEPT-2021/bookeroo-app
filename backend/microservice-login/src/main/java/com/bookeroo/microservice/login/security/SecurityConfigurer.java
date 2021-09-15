@@ -24,11 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    private JWTAuthenticationEntryPoint unauthorisedHandler;
-
     private CustomUserDetailsService userDetailsService;
-
     private BCryptPasswordEncoder passwordEncoder;
+    private JWTAuthenticationEntryPoint unauthorisedHandler;
 
     @Autowired
     public void setUnauthorisedHandler(JWTAuthenticationEntryPoint unauthorisedHandler) {
@@ -82,7 +80,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-                .antMatchers(SecurityConstant.SIGN_UP_PATHS).permitAll()
+                .antMatchers("/api/users/register").permitAll()
+                .antMatchers("/api/users/login").permitAll()
+                .antMatchers("/api/users/**").hasRole("USER")
+                .antMatchers("/api/admins/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
