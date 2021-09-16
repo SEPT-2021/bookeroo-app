@@ -1,6 +1,7 @@
 import React, { createContext, FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { api, profile, TokenProps } from "../util/api";
+import { api, profile } from "../util/api";
+import { TokenProps } from "../util/types";
 
 export interface User {
   createdAt: string;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -13,13 +13,18 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
-  BookmarkRounded,
+  AddShoppingCart,
+  Book,
+  Delete,
   Favorite,
+  Launch,
   LinkOutlined,
   Share,
 } from "@material-ui/icons";
-import type { Book } from "../static/books";
+import type { Book as BookType } from "../static/books";
 import { BOOK_ANIMATION_TIME } from "../static/books";
+import { BookItemType } from "../util/types";
+import { GlobalContext } from "./GlobalContext";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -31,17 +36,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type BookProps = {
-  book: Book;
+  book: BookItemType;
   checked: boolean;
+  onCartClick: () => void;
 };
 
 export default function Image({
-  book: { imageUrl, title, description },
+  book: { cover: imageUrl, title, description, author, pageCount, price },
   checked,
+  onCartClick,
 }: BookProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const { user } = useContext(GlobalContext);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -51,29 +58,33 @@ export default function Image({
         <CardHeader
           avatar={
             <Avatar aria-label="recipe">
-              <BookmarkRounded />
+              <Book />
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings">
-              <LinkOutlined />
-            </IconButton>
+            user?.roles === "ROLE_ADMIN" && (
+              <IconButton>
+                <Delete />
+              </IconButton>
+            )
           }
-          title={title}
-          subheader="Author Name"
+          title={<b>{title}</b>}
+          subheader={author}
         />
         <CardMedia className={classes.media} image={imageUrl} title={title} />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            A nice book.
+            Page Count: {pageCount}
+            <br />
+            Price: {price}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <Favorite />
+          <IconButton aria-label="add to favorites" onClick={onCartClick}>
+            <AddShoppingCart />
           </IconButton>
           <IconButton aria-label="share">
-            <Share />
+            <Launch />
           </IconButton>
           <IconButton
             onClick={handleExpandClick}

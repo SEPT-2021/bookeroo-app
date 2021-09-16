@@ -4,8 +4,8 @@ import { Button, Grid } from "@material-ui/core";
 import CartItem from "../CartItem/CartItem";
 import { Wrapper } from "./Cart.styles";
 // eslint-disable-next-line import/no-cycle
-import { BookItemType, DataItemType } from "../../pages/Books";
 import Link from "../../util/Link";
+import { BookItemType, DataItemType } from "../../util/types";
 
 type Props = {
   cartItems: BookItemType[];

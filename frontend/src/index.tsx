@@ -41,20 +41,20 @@ ReactDOM.render(
               <Route path="/login">
                 <Login />
               </Route>
-              <Route  path="/search">
-              <BookSearch />
-            </Route>
-            <Route path="/searchType">
-              <BookSearchType />
-            </Route>
-            <Route path="/addBook">
-              <AddBook />
-            </Route>
-            <Route path="/addBookSuccess">
-              <AddBookSuccess />
-            </Route>
-            <Route path="/checkOut">
-              <CheckOut />
+              <Route path="/search">
+                <BookSearch />
+              </Route>
+              <Route path="/searchType">
+                <BookSearchType />
+              </Route>
+              <Route path="/addBook">
+                <AddBook />
+              </Route>
+              <Route path="/addBookSuccess">
+                <AddBookSuccess />
+              </Route>
+              <Route path="/checkOut">
+                <CheckOut />
               </Route>
               <Route path="/allBooks">
                 <Books />
