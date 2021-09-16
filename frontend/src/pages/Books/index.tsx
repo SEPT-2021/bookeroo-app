@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import {
   Badge,
+  Box,
   Drawer,
   Grid,
   IconButton,
@@ -10,6 +11,7 @@ import {
 import styled from "styled-components";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 // eslint-disable-next-line import/no-cycle
+import { ShoppingCart, ShoppingCartOutlined } from "@material-ui/icons";
 import Book from "../../components/Book";
 import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
@@ -17,21 +19,19 @@ import Cart from "../../components/Cart/Cart";
 // eslint-disable-next-line import/no-cycle
 import { getAllBooks } from "../../util/api";
 import { BookItemType } from "../../util/types";
+import BookList from "../../components/BookList";
 
 const StyledButton = styled(IconButton)`
-  position: fixed;
-  z-index: 100;
-  right: 20px;
-  top: 70px;
+  margin-right: 30px;
+  border-radius: 50%;
+  margin-top: 10px;
+  background-color: orange;
 `;
 
 const Books = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as BookItemType[]);
-  const { data, isLoading, error } = useQuery<BookItemType[]>(
-    "books",
-    getAllBooks
-  );
+  const { data, isLoading, error } = useQuery("books", getAllBooks);
 
   const getItems = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -86,18 +86,14 @@ const Books = () => {
           sendToCart={getItems()}
         />
       </Drawer>
-      <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color="error">
-          <AddShoppingCartIcon />
-        </Badge>
-      </StyledButton>
-      <Grid container spacing={4}>
-        {data?.map((item) => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Book item={item} handleAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
-      </Grid>
+      <Box display="flex" justifyContent="flex-end">
+        <StyledButton onClick={() => setCartOpen(true)}>
+          <Badge badgeContent={getTotalItems(cartItems)} color="error">
+            <ShoppingCartOutlined />
+          </Badge>
+        </StyledButton>
+      </Box>
+      <BookList books={data || []} onClick={handleAddToCart} checked />
     </Wrapper>
   );
 };

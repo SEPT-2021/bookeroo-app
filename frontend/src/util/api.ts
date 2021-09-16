@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import type { User } from "../components/GlobalContext";
-import { CartType, TokenProps } from "./types";
+import { BookItemType, CartType, TokenProps } from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
@@ -103,7 +103,7 @@ export const getBookByType = makeTypedAPICall<
   api.get(getRouteURL("books", `?search=${args.searchTerm}&type=${args.type}`))
 );
 
-export const getAllBooks = makeTypedAPICall<any, any>(() =>
+export const getAllBooks = makeTypedAPICall<unknown, BookItemType[]>(() =>
   api.get(getRouteURL("books", "all"))
 );
 
