@@ -1,22 +1,32 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 // eslint-disable-next-line import/no-cycle
 import CartItem from "../CartItem/CartItem";
 import { Wrapper } from "./Cart.styles";
 // eslint-disable-next-line import/no-cycle
-import { BookItemType } from "../../pages/Books";
-import PayPal from "../PayPal/PayPal";
+import { BookItemType, DataItemType } from "../../pages/Books";
+import Link from "../../util/Link";
 
 type Props = {
   cartItems: BookItemType[];
   addToCart: (clickedItem: BookItemType) => void;
   removeFromCart: (id: number) => void;
+  sendToCart: DataItemType[];
 };
 
-const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
+const Cart: React.FC<Props> = ({
+  cartItems,
+  addToCart,
+  removeFromCart,
+  sendToCart,
+}) => {
   const calculateTotal = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
   /* items.reduce((ack: number, item) => ack + item.amount * 110, 0); */
+
+  const setLocalStorageCart = () => {
+    localStorage.setItem("cart", JSON.stringify(sendToCart));
+  };
 
   return (
     <Wrapper>
@@ -31,7 +41,11 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
         />
       ))}
       <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
-      <PayPal />
+      <Grid item>
+        <Link to="/checkout" variant="body2" onClick={setLocalStorageCart}>
+          Checkout
+        </Link>
+      </Grid>
     </Wrapper>
   );
 };

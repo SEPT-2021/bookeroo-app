@@ -16,6 +16,7 @@ import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
+import CheckOut from "./pages/CheckOut";
 import NavBar from "./components/NavBar";
 import { GlobalContextProvider } from "./components/GlobalContext";
 
@@ -40,17 +41,20 @@ ReactDOM.render(
               <Route path="/login">
                 <Login />
               </Route>
-              <Route path="/search">
-                <BookSearch />
-              </Route>
-              <Route path="/searchType">
-                <BookSearchType />
-              </Route>
-              <Route path="/addBook">
-                <AddBook />
-              </Route>
-              <Route path="/addBookSuccess">
-                <AddBookSuccess />
+              <Route  path="/search">
+              <BookSearch />
+            </Route>
+            <Route path="/searchType">
+              <BookSearchType />
+            </Route>
+            <Route path="/addBook">
+              <AddBook />
+            </Route>
+            <Route path="/addBookSuccess">
+              <AddBookSuccess />
+            </Route>
+            <Route path="/checkOut">
+              <CheckOut />
               </Route>
               <Route path="/allBooks">
                 <Books />

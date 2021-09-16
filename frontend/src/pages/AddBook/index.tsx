@@ -32,7 +32,15 @@ function AddBook({ classes }: AddBookProps) {
   console.log(data);
 
   const onSubmit = async () => {
-    mutate({ title, author, isbn, pageCount });
+    mutate({
+      title,
+      author,
+      isbn,
+      pageCount: parseInt(pageCount, 10),
+      coverUrl: "https://picsum.photos/200",
+      description: "Hi",
+      price: 23,
+    });
   };
 
   if (isSuccess) {

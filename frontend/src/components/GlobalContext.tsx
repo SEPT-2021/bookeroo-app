@@ -26,16 +26,17 @@ export const GlobalContext = createContext<GlobalContextType>({} as never);
 
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   const [token, setToken] = useState<string>();
-  const { data: userData, refetch } = useQuery("user", profile);
+  const { data: userData, refetch, remove } = useQuery("user", profile);
   // On token change, update the header and refetch user.
   useEffect(() => {
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${token}`;
       refetch();
     } else {
-      api.defaults.headers.Authorization = undefined;
+      delete api.defaults.headers.Authorization;
+      remove();
     }
-  }, [refetch, token]);
+  }, [refetch, remove, token]);
   // On startup, get token from local storage
   useEffect(() => {
     setToken(localStorage.getItem("token") || undefined);
@@ -44,7 +45,7 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
-        user: userData,
+        user: token ? userData : undefined,
         login: (data) => {
           localStorage.setItem("token", data.jwt as string);
           setToken(data.jwt);

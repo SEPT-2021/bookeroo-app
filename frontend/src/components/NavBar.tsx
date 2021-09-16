@@ -27,13 +27,18 @@ function NavBar({ classes }: NavBarProps) {
     <AppBar className={classes.appbar} elevation={5}>
       <Toolbar className={classes.appbarWrapper}>
         <Box display="flex" flexGrow={1} alignItems="center">
-          <img src={logo} alt="logo" className={classes.navLogo} />
-          <h1 className={classes.colorText}>Bookeroo.</h1>
-          <Link to="/">
-            <Button>Home</Button>
+          <Link to="/" style={{ display: "flex" }}>
+            <img src={logo} alt="logo" className={classes.navLogo} />
+            <h1 className={classes.colorText}>Bookeroo.</h1>
           </Link>
-          <Link to="/add">
+          <Link to="/allBooks">
+            <Button>All Books</Button>
+          </Link>
+          <Link to="/addBook">
             <Button>Add Book</Button>
+          </Link>
+          <Link to="/deleteBook">
+            <Button>Delete Book</Button>
           </Link>
         </Box>
         <Box>
