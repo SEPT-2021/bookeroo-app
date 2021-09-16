@@ -1,8 +1,8 @@
 package com.bookeroo.microservice.login.web;
 
 import com.bookeroo.microservice.login.model.User;
-import com.bookeroo.microservice.login.payload.LoginRequest;
-import com.bookeroo.microservice.login.payload.LoginResponse;
+import com.bookeroo.microservice.login.payload.AuthenticationRequest;
+import com.bookeroo.microservice.login.payload.AuthenticationResponse;
 import com.bookeroo.microservice.login.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -82,7 +82,7 @@ class UserControllerTest {
         User user = setupUser();
         userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
         request.setPassword("testPassword");
 
@@ -97,7 +97,7 @@ class UserControllerTest {
         User user = setupUser();
         userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername("wrongEmail@test.com");
         request.setPassword("testPassword");
 
@@ -112,7 +112,7 @@ class UserControllerTest {
         User user = setupUser();
         userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
         request.setPassword("wrongPassword");
 
@@ -127,7 +127,7 @@ class UserControllerTest {
         User user = setupUser();
         userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
         request.setPassword("testPassword");
 
@@ -137,7 +137,7 @@ class UserControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         System.out.println(json);
-        LoginResponse response = new Gson().fromJson(json, LoginResponse.class);
+        AuthenticationResponse response = new Gson().fromJson(json, AuthenticationResponse.class);
         assertFalse(response.getJwt().isEmpty());
     }
 
