@@ -9,7 +9,7 @@ jobs:
     working_directory: ~/project/backend/microservice-book
     steps:
       - checkout
-       - run:
+      - run:
           name: pwd
           command: pwd
       
