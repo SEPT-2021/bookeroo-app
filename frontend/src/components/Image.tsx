@@ -8,6 +8,7 @@ import {
   Avatar,
   CardActions,
   CardHeader,
+  CircularProgress,
   Collapse,
   IconButton,
 } from "@material-ui/core";
@@ -21,10 +22,12 @@ import {
   LinkOutlined,
   Share,
 } from "@material-ui/icons";
+import { useMutation, useQueryClient } from "react-query";
 import type { Book as BookType } from "../static/books";
 import { BOOK_ANIMATION_TIME } from "../static/books";
 import { BookItemType } from "../util/types";
 import { GlobalContext } from "./GlobalContext";
+import { deleteBookById } from "../util/api";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -42,13 +45,19 @@ type BookProps = {
 };
 
 export default function Image({
-  book: { cover: imageUrl, title, description, author, pageCount, price },
+  book: { cover: imageUrl, id, title, description, author, pageCount, price },
   checked,
   onCartClick,
 }: BookProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { user } = useContext(GlobalContext);
+  const client = useQueryClient();
+  const { mutate: deleteMutate, isLoading } = useMutation(deleteBookById, {
+    onSuccess: (_, __, ___) => {
+      client.invalidateQueries("books");
+    },
+  });
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -63,8 +72,12 @@ export default function Image({
           }
           action={
             user?.roles === "ROLE_ADMIN" && (
-              <IconButton>
-                <Delete />
+              <IconButton onClick={() => deleteMutate({ id: String(id) })}>
+                {isLoading ? (
+                  <CircularProgress size={24} color="secondary" />
+                ) : (
+                  <Delete />
+                )}
               </IconButton>
             )
           }
