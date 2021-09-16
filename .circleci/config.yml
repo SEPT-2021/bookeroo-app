@@ -12,15 +12,6 @@ orbs:
   maven: circleci/maven@1.2.0
   node: circleci/node@4.7.0
 
-jobs:
-  node_install:
-    executor: node
-    steps:
-      - checkout
-      - node/install-packages:
-          app-dir: frontend
-          pkg-manager: yarn
-
 workflows:
   microservice_login:
     jobs:
@@ -36,7 +27,6 @@ workflows:
           test_results_path: backend/microservice-book/target/surefire-reports
   frontend:
     jobs:
-      - node_install
       - node/test:
           app-dir: frontend
           pkg-manager: yarn

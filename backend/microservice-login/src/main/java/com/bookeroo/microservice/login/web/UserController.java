@@ -4,6 +4,7 @@ import com.bookeroo.microservice.login.exception.UserNotFoundException;
 import com.bookeroo.microservice.login.model.User;
 import com.bookeroo.microservice.login.payload.LoginRequest;
 import com.bookeroo.microservice.login.payload.LoginResponse;
+import com.bookeroo.microservice.login.payload.RegistrationResponse;
 import com.bookeroo.microservice.login.security.JWTTokenProvider;
 import com.bookeroo.microservice.login.service.CustomUserDetailsService;
 import com.bookeroo.microservice.login.service.UserService;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/users")
@@ -51,7 +53,9 @@ public class UserController {
         if (errorMap != null)
             return errorMap;
 
-        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
+        user = userService.saveUser(user);
+        String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
+        return new ResponseEntity<>(new RegistrationResponse(user, jwt), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

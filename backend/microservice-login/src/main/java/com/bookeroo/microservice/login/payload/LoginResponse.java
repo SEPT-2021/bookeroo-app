@@ -5,6 +5,9 @@ public class LoginResponse {
     private boolean success;
     private String jwt;
 
+    public LoginResponse() {
+    }
+
     public LoginResponse(boolean success, String jwt) {
         this.success = success;
         this.jwt = jwt;
