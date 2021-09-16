@@ -28,8 +28,14 @@ function Login({ classes }: LoginProps) {
   const onSubmit = () => mutate({ username, password });
   // TODO testing
   // eslint-disable-next-line no-console
-  console.log(data);
+  const ls = localStorage.getItem("token");
+  // eslint-disable-next-line no-console
+  console.log(ls);
+
   if (isSuccess) {
+    localStorage.setItem("success", String(data?.success as boolean));
+    localStorage.setItem("token", data?.token as string);
+
     return <Redirect to="/loginSuccess" />;
   }
 
