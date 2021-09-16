@@ -33,7 +33,7 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
       api.defaults.headers.Authorization = `Bearer ${token}`;
       refetch();
     } else {
-      api.defaults.headers.Authorization = undefined;
+      delete api.defaults.headers.Authorization;
       remove();
     }
   }, [refetch, remove, token]);
