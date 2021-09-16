@@ -14,7 +14,7 @@ function getRouteURL(service: "books" | "users", route: string) {
         throw new Error(`No port for service: ${service}`);
     }
   })();
-  return `${backendUrl}:${port}/${route}`;
+  return `${backendUrl}:${port}/api/${service}/${route}`;
 }
 
 /**
