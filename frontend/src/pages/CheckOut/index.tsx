@@ -20,6 +20,7 @@ function CheckOut({ classes }: CheckOutProps) {
     mutate,
     error,
     isLoading,
+    reset,
   } = useMutation(checkout);
   const getLocal = () => {
     return JSON.parse(localStorage.getItem("cart") as string) as DataItemType[];
@@ -47,7 +48,10 @@ function CheckOut({ classes }: CheckOutProps) {
     mutate(newData);
     console.log(newData);
   };
-  if (checkoutData) console.log(checkoutData);
+  if (checkoutData) {
+    window.open(checkoutData);
+    reset();
+  }
   return (
     <div className={classes.root}>
       <form className={classes.root} noValidate autoComplete="off">
