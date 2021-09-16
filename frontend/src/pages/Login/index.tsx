@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 import { useMutation } from "react-query";
@@ -19,18 +19,18 @@ import Link from "../../util/Link";
 import { loginUser } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
+import { GlobalContext } from "../../components/GlobalContext";
 
 function Login({ classes }: LoginProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const context = useContext(GlobalContext);
   const { isLoading, mutate, error, data, isSuccess } = useMutation(loginUser);
   const onSubmit = () => mutate({ username, password });
-  // TODO testing
-  // eslint-disable-next-line no-console
-  console.log(data);
-  if (isSuccess) {
-    return <Redirect to="/loginSuccess" />;
+
+  if (isSuccess && data) {
+    context.login(data);
+    return <Redirect to="/allBooks" />;
   }
 
   return (
@@ -131,7 +131,10 @@ const styles = (theme: Theme) =>
       flexDirection: "column",
     },
     paper: {
-      margin: theme.spacing(8, 4),
+      margin: theme.spacing(15, 4),
+      [theme.breakpoints.down("sm")]: {
+        margin: theme.spacing(8, 4),
+      },
       display: "flex",
       flexDirection: "column",
       alignItems: "center",

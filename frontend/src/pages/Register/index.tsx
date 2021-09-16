@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 import { useMutation } from "react-query";
@@ -19,6 +19,7 @@ import Link from "../../util/Link";
 import { registerUser } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
+import { GlobalContext } from "../../components/GlobalContext";
 
 function Register({ classes }: RegisterProps) {
   const [username, setUsername] = useState("");
@@ -26,7 +27,9 @@ function Register({ classes }: RegisterProps) {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const context = useContext(GlobalContext);
+  const passwordsMatchingError =
+    password && password !== confirmPassword && "Passwords must match";
   const { data, error, isSuccess, isLoading, mutate } =
     useMutation(registerUser);
 
@@ -35,11 +38,19 @@ function Register({ classes }: RegisterProps) {
   console.log(data);
 
   const onSubmit = async () => {
-    mutate({ username, password, confirmPassword, firstName, lastName });
+    mutate({
+      username,
+      password,
+      firstName,
+      lastName,
+      roles: "ROLE_USER",
+      enabled: true,
+    });
   };
 
-  if (isSuccess) {
-    return <Redirect to="/api/users/registerSuccess" />;
+  if (isSuccess && data) {
+    context.login(data);
+    return <Redirect to="/allBooks" />;
   }
 
   return (
@@ -102,7 +113,13 @@ function Register({ classes }: RegisterProps) {
               onChange={setPassword}
             />
             <FormField
-              errors={error?.response?.data}
+              errors={
+                passwordsMatchingError
+                  ? {
+                      confirmPassword: passwordsMatchingError,
+                    }
+                  : undefined
+              }
               name="confirmPassword"
               label="Confirm Password"
               type="password"
@@ -111,6 +128,7 @@ function Register({ classes }: RegisterProps) {
             />
             <LoadingButton
               loading={isLoading}
+              disabled={!!passwordsMatchingError}
               fullWidth
               variant="contained"
               color="primary"
@@ -154,7 +172,10 @@ const styles = (theme: Theme) =>
       flexDirection: "column",
     },
     paper: {
-      margin: theme.spacing(8, 4),
+      margin: theme.spacing(15, 4),
+      [theme.breakpoints.down("sm")]: {
+        margin: theme.spacing(8, 4),
+      },
       display: "flex",
       flexDirection: "column",
       alignItems: "center",

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -115,6 +116,27 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        User user = (User) object;
+        return id == user.id
+                && enabled == user.enabled
+                && username.equals(user.username)
+                && password.equals(user.password)
+                && firstName.equals(user.firstName)
+                && lastName.equals(user.lastName)
+                && roles.equals(user.roles)
+                && createdAt.equals(user.createdAt)
+                && updatedAt.equals(user.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, firstName, lastName, roles, enabled, createdAt, updatedAt);
     }
 
     @Override

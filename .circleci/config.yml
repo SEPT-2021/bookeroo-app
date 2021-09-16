@@ -1,0 +1,34 @@
+version: 2.1
+
+executors:
+  openjdk:
+    docker:
+      - image: cimg/openjdk:8.0.292
+  node:
+    docker:
+      - image: cimg/node:14.17.6
+
+orbs:
+  maven: circleci/maven@1.2.0
+  node: circleci/node@4.7.0
+
+workflows:
+  microservice_login:
+    jobs:
+      - maven/test:
+          executor: openjdk
+          app_src_directory: backend/microservice-login
+          test_results_path: backend/microservice-login/target/surefire-reports
+  microservice_book:
+    jobs:
+      - maven/test:
+          executor: openjdk
+          app_src_directory: backend/microservice-book
+          test_results_path: backend/microservice-book/target/surefire-reports
+  frontend:
+    jobs:
+      - node/test:
+          app-dir: frontend
+          pkg-manager: yarn
+          version: 14.17.6
+          run-command: react-scripts test
