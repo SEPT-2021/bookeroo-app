@@ -1,16 +1,17 @@
 version: 2.1
+
+executors:
+  j8:
+    docker:
+      - image: 'cimg/openjdk:8.0.292'
+
 orbs:
   maven: circleci/maven@1.2.0
-
-jobs:
-  build:
-    docker:
-      - image: cimg/openjdk:8.0.292-browsers
 
 workflows:
     example-workflow:
       jobs:
-        - build
         - maven/test:
+            executor: j8
             app_src_directory: backend/microservice-book
             test_results_path: backend/microservice-book/target/surefire-reports
