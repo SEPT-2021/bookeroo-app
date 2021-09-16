@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
-public class S3Service  {
+public class S3Service {
 
     @Value("${aws.s3.bucket}")
     private String bucketName;

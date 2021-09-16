@@ -1,9 +1,8 @@
 package com.bookeroo.microservice.book.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -16,13 +15,16 @@ public class Book {
     private String title;
     @NotBlank(message = "Author cannot be blank")
     private String author;
-    @NotBlank(message = "Number of pages cannot be zero")
-    private String pageCount;
+    @NotNull(message = "Number of pages cannot be null")
+    private long pageCount;
     @NotBlank(message = "ISBN must be valid")
     private String isbn;
+    @NotNull(message = "Price cannot be null")
+    private double price;
+    @NotBlank(message = "Books are required to have a brief description")
+    private String description;
     @NotBlank(message = "Books must have a cover")
     private String cover;
-
     private Date createdAt;
     private Date updatedAt;
 
@@ -53,11 +55,11 @@ public class Book {
         this.author = author;
     }
 
-    public String getPageCount() {
+    public long getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(String pageCount) {
+    public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -67,6 +69,22 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCover() {
@@ -94,17 +112,16 @@ public class Book {
     }
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.createdAt = new Date();
     }
 
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate() {
         this.updatedAt = new Date();
     }
 
     @Override
-    @JsonIgnore
     public String toString() {
         return String.format("Book {\n" +
                 "\tid: \"%s\",\n" +
@@ -112,7 +129,10 @@ public class Book {
                 "\tauthor: \"%s\"\n" +
                 "\tpageCount: \"%s\"\n" +
                 "\tisbn: \"%s\"\n" +
-                "}", id, title, author, pageCount, isbn);
+                "\tcover: \"%s\"\n" +
+                "\tprice: \"%.2f\"\n" +
+                "\tdescription: \"%s\"\n" +
+                "}", id, title, author, pageCount, isbn, cover, price, description);
     }
 
 }
