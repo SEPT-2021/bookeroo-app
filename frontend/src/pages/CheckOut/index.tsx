@@ -50,6 +50,7 @@ function CheckOut({ classes }: CheckOutProps) {
   };
   if (checkoutData) {
     window.open(checkoutData);
+
     reset();
   }
   return (

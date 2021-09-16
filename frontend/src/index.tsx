@@ -19,6 +19,8 @@ import Books from "./pages/Books";
 import CheckOut from "./pages/CheckOut";
 import NavBar from "./components/NavBar";
 import { GlobalContextProvider } from "./components/GlobalContext";
+import PaymentSuccess from "./pages/Payment/success";
+import PaymentFailed from "./pages/Payment/failed";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +54,12 @@ ReactDOM.render(
               </Route>
               <Route path="/addBookSuccess">
                 <AddBookSuccess />
+              </Route>
+              <Route path="/paymentSuccess">
+                <PaymentSuccess />
+              </Route>
+              <Route path="/paymentFailed">
+                <PaymentFailed />
               </Route>
               <Route path="/checkOut">
                 <CheckOut />
