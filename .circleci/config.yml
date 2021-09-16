@@ -16,7 +16,7 @@ jobs:
             - v1-dependencies-{{ checksum "pom.xml" }}
             - v1-dependencies-
       - attach_workspace:
-          at: ./target
+          at: ~/project/backend/microservice-book/target
       - run: |
             ./mvnw \
             -Dtest=$(for file in $(circleci tests glob "src/test/**/**.java" \
@@ -26,7 +26,7 @@ jobs:
             done | tr -d '\r\n') \
             -e test verify
       - store_test_results:
-          path: target/surefire-reports
+          path: ~/project/backend/microservice-book/target/surefire-reports
 
   build:
     docker:
