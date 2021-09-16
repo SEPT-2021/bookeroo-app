@@ -5,9 +5,10 @@ jobs:
     parallelism: 2
     docker:
       - image: circleci/openjdk:stretch
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
+        # auth:
+        #   username: $DOCKERHUB_USERNAME
+        #   password: $DOCKERHUB_PASSWORD
+    working_directory: ~/project/backend/microservice-book
     steps:
       - checkout
       - restore_cache:
@@ -30,9 +31,10 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:stretch
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
+        # auth:
+        #   username: $DOCKERHUB_USERNAME
+        #   password: $DOCKERHUB_PASSWORD
+    working_directory: ~/project/backend/microservice-book
     steps:
       - checkout
       - restore_cache:
