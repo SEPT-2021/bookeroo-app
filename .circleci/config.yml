@@ -28,6 +28,7 @@ workflows:
             test_results_path: backend/microservice-book/target/surefire-reports
 
     frontend:
+      jobs:
         - node/test:
             app-dir: frontend
             pkg-manager: yarn
