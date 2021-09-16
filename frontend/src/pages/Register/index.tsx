@@ -50,7 +50,7 @@ function Register({ classes }: RegisterProps) {
 
   if (isSuccess && data) {
     context.login(data);
-    return <Redirect to="/registerSuccess" />;
+    return <Redirect to="/allBooks" />;
   }
 
   return (

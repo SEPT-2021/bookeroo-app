@@ -30,7 +30,7 @@ function Login({ classes }: LoginProps) {
 
   if (isSuccess && data) {
     context.login(data);
-    return <Redirect to="/" />;
+    return <Redirect to="/allBooks" />;
   }
 
   return (

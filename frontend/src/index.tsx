@@ -7,9 +7,6 @@ import ReactDOM from "react-dom";
 import theme from "./theme";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import RegisterSuccess from "./pages/Register/RegisterSuccess";
-import RegisterFailed from "./pages/Register/RegisterFailed";
-import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -40,19 +37,9 @@ ReactDOM.render(
               <Route path="/register">
                 <Register />
               </Route>
-              <Route path="/registerSuccess">
-                <RegisterSuccess />
-              </Route>
-              <Route path="/registerFailed">
-                <RegisterFailed />
-              </Route>
               <Route path="/login">
                 <Login />
               </Route>
-              <Route path="/loginSuccess">
-                <LoginSuccess />
-              </Route>
-
               <Route path="/search">
                 <BookSearch />
               </Route>
