@@ -21,7 +21,7 @@ jobs:
 
       - run:
           name: cd check 
-          command: cd backend| ls
+          command: cd backend| ls | pwd
       - run:
           name: current files
           command: ls
