@@ -1,50 +1,41 @@
 import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { Button, withStyles, WithStyles } from "@material-ui/core";
-import { useMutation, useQuery } from "react-query";
-import axios from "axios";
-import { BookItemType } from "../Books";
+import { createStyles, Theme } from "@material-ui/core/styles";
+import { withStyles, WithStyles } from "@material-ui/core";
+import { useMutation } from "react-query";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
+import { checkout } from "../../util/api";
+import { CartType, DataItemType } from "../../util/types";
 
-type ShippingItemType = {
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-};
-
-type ForBackEndType = {
-  book: BookItemType[];
-  shippingAddress: ShippingItemType[];
-};
-
-async function CheckOut({ classes }: CheckOutProps) {
+function CheckOut({ classes }: CheckOutProps) {
   const [addressLine1, setAddressLine1] = useState("");
   const [addressLine2, setAddressLine2] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [data, setData] = useState([] as ForBackEndType[]);
-
+  const [data, setData] = useState<CartType>();
+  const {
+    data: checkoutData,
+    mutate,
+    error,
+    isLoading,
+  } = useMutation(checkout);
   const getLocal = () => {
-    return JSON.parse(localStorage.getItem("cart") as string);
+    return JSON.parse(localStorage.getItem("cart") as string) as DataItemType[];
   };
 
-  const getShippingAddress = () => {
-    const initial = Array<ShippingItemType>();
-    initial.push({ addressLine1, addressLine2, city, state, postalCode });
-    return Array.from(initial);
-  };
+  const getShippingAddress = () => ({
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    postalCode,
+  });
 
-  const makeData = () => {
+  const makeData: () => CartType = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     return {
-      book: getLocal().map((obj: BookItemType) => ({
-        book: obj,
-      })),
+      orderItems: getLocal(),
       shippingAddress: getShippingAddress(),
     };
   };
@@ -53,10 +44,10 @@ async function CheckOut({ classes }: CheckOutProps) {
     setData(makeData());
   };
 
-  const res = await axios.get("api/orders/checkout", { data });
-
+  // const res = await axios.get("api/orders/checkout", { data });
+  if (data) mutate(data);
   // eslint-disable-next-line no-console
-  console.log(res);
+  console.log(checkoutData);
 
   return (
     <div className={classes.root}>

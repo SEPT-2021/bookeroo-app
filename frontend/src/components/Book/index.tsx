@@ -2,8 +2,8 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 // eslint-disable-next-line import/no-cycle
-import { BookItemType } from "../../pages/Books";
 import { Wrapper } from "./Book.styles";
+import { BookItemType } from "../../util/types";
 
 type Props = {
   item: BookItemType;

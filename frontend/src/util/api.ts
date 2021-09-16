@@ -1,25 +1,24 @@
 import axios, { AxiosResponse } from "axios";
 import type { User } from "../components/GlobalContext";
+import { CartType, TokenProps } from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
-function getRouteURL(service: "books" | "users", route: string) {
+function getRouteURL(service: "books" | "users" | "orders", route: string) {
   const port = (() => {
     switch (service) {
       case "users":
         return 8080;
       case "books":
         return 8081;
+      case "orders":
+        return 8082;
       default:
         throw new Error(`No port for service: ${service}`);
     }
   })();
   return `${backendUrl}:${port}/api/${service}/${route}`;
-}
-
-export interface TokenProps {
-  jwt: string;
 }
 
 /**
@@ -110,4 +109,8 @@ export const getAllBooks = makeTypedAPICall<any, any>(() =>
 
 export const profile = makeTypedAPICall<unknown, User>(() =>
   api.get(getRouteURL("users", "profile"))
+);
+
+export const checkout = makeTypedAPICall<CartType, unknown>(() =>
+  axios.get(getRouteURL("orders", "checkout"))
 );

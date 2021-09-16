@@ -14,35 +14,9 @@ import Book from "../../components/Book";
 import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
+// eslint-disable-next-line import/no-cycle
 import { getAllBooks } from "../../util/api";
-
-export type BookItemType = {
-  id: number;
-  title: string;
-  author: string;
-  pageCount: string;
-  isbn: string;
-  description: string;
-  cover: string;
-  price: number;
-  amount: number;
-};
-
-type BookItemTypes = {
-  id: number;
-  title: string;
-  author: string;
-  pageCount: string;
-  isbn: string;
-  description: string;
-  cover: string;
-  price: number;
-};
-
-export type DataItemType = {
-  book: BookItemTypes;
-  quantity: number;
-};
+import { BookItemType } from "../../util/types";
 
 const StyledButton = styled(IconButton)`
   position: fixed;
@@ -66,7 +40,6 @@ const Books = () => {
       quantity: obj.amount,
     }));
   };
-
 
   const getTotalItems = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
