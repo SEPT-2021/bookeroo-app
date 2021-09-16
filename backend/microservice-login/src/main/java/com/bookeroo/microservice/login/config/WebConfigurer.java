@@ -16,12 +16,7 @@ public class WebConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 WebMvcConfigurer.super.addCorsMappings(registry);
-                registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("PUT", "DELETE")
-                        .allowedHeaders(HEADER_KEY)
-                        .exposedHeaders(HEADER_KEY)
-                        .allowCredentials(false).maxAge(3600);
+                registry.addMapping("/**");
             }
         };
     }

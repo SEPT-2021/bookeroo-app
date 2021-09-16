@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import type { User } from "../components/GlobalContext";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
@@ -18,8 +19,7 @@ function getRouteURL(service: "books" | "users", route: string) {
 }
 
 export interface TokenProps {
-  success: boolean;
-  token: string;
+  jwt: string;
 }
 
 /**
@@ -39,14 +39,15 @@ export const registerUser = makeTypedAPICall<
     firstName: string;
     lastName: string;
     password: string;
-    confirmPassword: string;
+    roles: string;
+    enabled: true;
   },
-  unknown
+  TokenProps & { user: User }
 >((args) => api.post(getRouteURL("users", "register"), args));
 
 export const loginUser = makeTypedAPICall<
   { username: string; password: string },
-  TokenProps
+  TokenProps & { user: User }
 >((args) => api.post(getRouteURL("users", "login"), args));
 
 export const addBook = makeTypedAPICall<
@@ -92,4 +93,8 @@ export const getBookByType = makeTypedAPICall<
 
 export const getAllBooks = makeTypedAPICall(() =>
   api.get(getRouteURL("books", "all"))
+);
+
+export const profile = makeTypedAPICall<unknown, User>(() =>
+  api.get(getRouteURL("users", "profile"))
 );
