@@ -22,6 +22,7 @@ jobs:
       # Use mvn clean and package as the standard maven build phase
 
       - run:
+          working_directory: ~/project/backend/microservice-book
           name: current files
           command: ls
       # Then run your tests!
@@ -40,5 +41,7 @@ jobs:
 workflows:
     example-workflow:
       jobs:
+        - build-and-test
         - maven/test:
             app_src_directory: backend/microservice-book 
+            test_results_path: backend/microservice-book/target/surefire-reports 
