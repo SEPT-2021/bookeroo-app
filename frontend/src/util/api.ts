@@ -55,10 +55,23 @@ export const addBook = makeTypedAPICall<
     title: string;
     author: string;
     isbn: string;
-    pageCount: string;
+    coverUrl: string;
+    description: string;
+    price: number;
+    pageCount: number;
   },
   unknown
->((args) => api.post(getRouteURL("books", "add"), args));
+>((args) => {
+  const data = new FormData();
+  Object.entries(args).forEach(([key, value]) => {
+    data.append(key, String(value));
+  });
+  return api.post(getRouteURL("books", "add"), data, {
+    headers: {
+      "Content-Type": `multipart/form-data`,
+    },
+  });
+});
 
 export const findBookById = makeTypedAPICall<
   {
