@@ -96,5 +96,5 @@ export const getAllBooks = makeTypedAPICall(() =>
 );
 
 export const profile = makeTypedAPICall<unknown, User>(() =>
-  api.get(getRouteURL("books", "all"))
+  api.get(getRouteURL("users", "profile"))
 );

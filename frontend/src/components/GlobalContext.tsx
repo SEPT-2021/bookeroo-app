@@ -1,6 +1,6 @@
 import React, { createContext, FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { api, TokenProps } from "../util/api";
+import { api, profile, TokenProps } from "../util/api";
 
 export interface User {
   createdAt: string;
@@ -18,26 +18,40 @@ interface GlobalContextType {
   user?: User;
 
   login(data: TokenProps): void;
+
+  signout(): void;
 }
 
 export const GlobalContext = createContext<GlobalContextType>({} as never);
 
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
-  const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>();
-  const getUser = useQuery("user");
+  const { data: userData, refetch } = useQuery("user", profile);
+  // On token change, update the header and refetch user.
   useEffect(() => {
-    api.defaults.headers.Authorization = localStorage.getItem("token");
-  }, [token]);
-  useEffect(() => {});
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      refetch();
+    } else {
+      api.defaults.headers.Authorization = undefined;
+    }
+  }, [refetch, token]);
+  // On startup, get token from local storage
+  useEffect(() => {
+    setToken(localStorage.getItem("token") || undefined);
+  }, []);
 
   return (
     <GlobalContext.Provider
       value={{
-        user,
+        user: userData,
         login: (data) => {
           localStorage.setItem("token", data.jwt as string);
           setToken(data.jwt);
+        },
+        signout: () => {
+          localStorage.removeItem("token");
+          setToken(undefined);
         },
       }}
     >

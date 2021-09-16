@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 import { useMutation } from "react-query";
@@ -19,6 +19,7 @@ import Link from "../../util/Link";
 import { registerUser } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
+import { GlobalContext } from "../../components/GlobalContext";
 
 function Register({ classes }: RegisterProps) {
   const [username, setUsername] = useState("");
@@ -26,6 +27,7 @@ function Register({ classes }: RegisterProps) {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const context = useContext(GlobalContext);
   const passwordsMatchingError =
     password && password !== confirmPassword && "Passwords must match";
   const { data, error, isSuccess, isLoading, mutate } =
@@ -46,7 +48,8 @@ function Register({ classes }: RegisterProps) {
     });
   };
 
-  if (isSuccess) {
+  if (isSuccess && data) {
+    context.login(data);
     return <Redirect to="/registerSuccess" />;
   }
 
