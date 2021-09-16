@@ -39,7 +39,8 @@ export const registerUser = makeTypedAPICall<
     firstName: string;
     lastName: string;
     password: string;
-    confirmPassword: string;
+    roles: string;
+    enabled: true;
   },
   unknown
 >((args) => api.post(getRouteURL("users", "register"), args));

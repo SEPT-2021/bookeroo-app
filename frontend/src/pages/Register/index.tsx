@@ -35,7 +35,14 @@ function Register({ classes }: RegisterProps) {
   console.log(data);
 
   const onSubmit = async () => {
-    mutate({ username, password, confirmPassword, firstName, lastName });
+    mutate({
+      username,
+      password,
+      firstName,
+      lastName,
+      roles: "ROLE_USER",
+      enabled: true,
+    });
   };
 
   if (isSuccess) {
