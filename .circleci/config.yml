@@ -20,23 +20,6 @@ jobs:
 
       # Checkout the code as the first step.
       # Use mvn clean and package as the standard maven build phase
-      - run:
-          working_directory: ~/project/backend/microservice-book
-          name: current files
-          command: ls
-      # Then run your tests!
-      - run:
-          working_directory: ~/backend/microservice-book
-          name: where am i
-          command: pwd | ls
-
-      - run:
-          name: find pom
-          command: find . pom.xml
-
-      - run:
-          name: find pom
-          command: find . pom.xml
       
       - run:
           name: maven clean/install
