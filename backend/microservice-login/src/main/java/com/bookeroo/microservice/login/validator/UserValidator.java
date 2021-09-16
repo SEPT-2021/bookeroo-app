@@ -1,7 +1,6 @@
 package com.bookeroo.microservice.login.validator;
 
 import com.bookeroo.microservice.login.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

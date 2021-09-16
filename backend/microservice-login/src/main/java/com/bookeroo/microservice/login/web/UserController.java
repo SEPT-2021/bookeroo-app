@@ -10,6 +10,7 @@ import com.bookeroo.microservice.login.service.UserService;
 import com.bookeroo.microservice.login.service.ValidationErrorService;
 import com.bookeroo.microservice.login.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +18,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
+@Validated
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -33,9 +36,12 @@ public class UserController {
     private final JWTTokenProvider tokenProvider;
 
     @Autowired
-    public UserController(UserService userService, CustomUserDetailsService userDetailsService,
-                          UserValidator userValidator, ValidationErrorService validationErrorService,
-                          AuthenticationManager authenticationManager, JWTTokenProvider tokenProvider) {
+    public UserController(UserService userService,
+                          CustomUserDetailsService userDetailsService,
+                          UserValidator userValidator,
+                          ValidationErrorService validationErrorService,
+                          AuthenticationManager authenticationManager,
+                          JWTTokenProvider tokenProvider) {
         this.userService = userService;
         this.userDetailsService = userDetailsService;
         this.userValidator = userValidator;
@@ -51,13 +57,26 @@ public class UserController {
         if (errorMap != null)
             return errorMap;
 
-        user = userService.saveUser(user);
+        try {
+            user = userService.saveUser(user);
+        } catch (DataIntegrityViolationException exception) {
+            if (exception.getMostSpecificCause().getMessage().contains("Duplicate"))
+                return new ResponseEntity<>(
+                        String.format("Username %s already exists", user.getUsername()), HttpStatus.BAD_REQUEST);
+            else {
+                return new ResponseEntity<>(exception.getMostSpecificCause().getCause(), HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
         return new ResponseEntity<>(new AuthenticationResponse(user, jwt), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest, BindingResult result) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest,
+                                              BindingResult result) {
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
