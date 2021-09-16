@@ -26,7 +26,8 @@ function Register({ classes }: RegisterProps) {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const passwordsMatchingError =
+    password && password !== confirmPassword && "Passwords must match";
   const { data, error, isSuccess, isLoading, mutate } =
     useMutation(registerUser);
 
@@ -109,7 +110,13 @@ function Register({ classes }: RegisterProps) {
               onChange={setPassword}
             />
             <FormField
-              errors={error?.response?.data}
+              errors={
+                passwordsMatchingError
+                  ? {
+                      confirmPassword: passwordsMatchingError,
+                    }
+                  : undefined
+              }
               name="confirmPassword"
               label="Confirm Password"
               type="password"
@@ -118,6 +125,7 @@ function Register({ classes }: RegisterProps) {
             />
             <LoadingButton
               loading={isLoading}
+              disabled={!!passwordsMatchingError}
               fullWidth
               variant="contained"
               color="primary"
