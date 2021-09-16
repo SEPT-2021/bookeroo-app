@@ -6,16 +6,28 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { getCapture } from "../../util/api";
 
 function PaymentSuccess({ classes }: PaymentSuccessProps) {
 
 
+  const s = useLocation().search;
+  console.log(s);
 
+  const token = s.substring(s.indexOf("=") + 1, s.lastIndexOf("&"));
+
+  const past = async () => {
+    return getCapture({ token });
+  };
+
+  window.onload = function() {
+    past();
+  };
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={4} md={7} className={classes.steps} >
+      <Grid item xs={12} sm={4} md={7} className={classes.steps}>
         PAYMENT SUCCESS
       </Grid>
     </Grid>
@@ -26,6 +38,8 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       height: "100vh",
+      gridArea: "center",
+      marginTop: "100px",
     },
     steps: {
       "& img": {

@@ -21,6 +21,8 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       height: "100vh",
+      gridArea: "center",
+      marginTop: "100px",
     },
     steps: {
       "& img": {

@@ -115,6 +115,9 @@ export const checkout = makeTypedAPICall<CartType, string>((args) =>
   api.post(getRouteURL("orders", "checkout"), args)
 );
 
-export const getCapture = makeTypedAPICall<any, any>((args) =>
-  api.get(getRouteURL("orders", `capture=${args.token}`), args)
-);
+export const getCapture = makeTypedAPICall<
+  {
+    token: string;
+  },
+  unknown
+>((args) => axios.post(getRouteURL("orders", `capture/${args.token}`)));
