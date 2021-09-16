@@ -2,9 +2,8 @@ package com.bookeroo.microservice.login.web;
 
 import com.bookeroo.microservice.login.exception.UserNotFoundException;
 import com.bookeroo.microservice.login.model.User;
-import com.bookeroo.microservice.login.payload.LoginRequest;
-import com.bookeroo.microservice.login.payload.LoginResponse;
-import com.bookeroo.microservice.login.payload.RegistrationResponse;
+import com.bookeroo.microservice.login.payload.AuthenticationRequest;
+import com.bookeroo.microservice.login.payload.AuthenticationResponse;
 import com.bookeroo.microservice.login.security.JWTTokenProvider;
 import com.bookeroo.microservice.login.service.CustomUserDetailsService;
 import com.bookeroo.microservice.login.service.UserService;
@@ -21,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/users")
@@ -55,21 +53,28 @@ public class UserController {
 
         user = userService.saveUser(user);
         String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
-        return new ResponseEntity<>(new RegistrationResponse(user, jwt), HttpStatus.CREATED);
+        return new ResponseEntity<>(new AuthenticationResponse(user, jwt), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest, BindingResult result) {
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
+                authenticationRequest.getUsername(),
+                authenticationRequest.getPassword()
         ));
-        String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(loginRequest.getUsername()));
-        return new ResponseEntity<>(new LoginResponse(true, jwt), HttpStatus.OK);
+
+        try {
+            String jwt = tokenProvider.generateToken(
+                    userDetailsService.loadUserByUsername(authenticationRequest.getUsername()));
+            return new ResponseEntity<>(new AuthenticationResponse(
+                    userService.getUserByUsername(authenticationRequest.getUsername()), jwt), HttpStatus.OK);
+        } catch (UserNotFoundException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/profile")
@@ -77,7 +82,5 @@ public class UserController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
-
-
 
 }

@@ -2,7 +2,7 @@ package com.bookeroo.microservice.login.payload;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class AuthenticationRequest {
 
     @NotBlank(message = "Username cannot be blank")
     private String username;
@@ -10,10 +10,10 @@ public class LoginRequest {
     @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    public LoginRequest() {
+    public AuthenticationRequest() {
     }
 
-    public LoginRequest(String username, String password) {
+    public AuthenticationRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

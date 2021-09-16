@@ -2,15 +2,15 @@ package com.bookeroo.microservice.login.payload;
 
 import com.bookeroo.microservice.login.model.User;
 
-public class RegistrationResponse {
+public class AuthenticationResponse {
 
     private User user;
     private String jwt;
 
-    public RegistrationResponse() {
+    public AuthenticationResponse() {
     }
 
-    public RegistrationResponse(User user, String jwt) {
+    public AuthenticationResponse(User user, String jwt) {
         this.user = user;
         this.jwt = jwt;
     }
