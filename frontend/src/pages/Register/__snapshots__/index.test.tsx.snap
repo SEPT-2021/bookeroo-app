@@ -75,6 +75,7 @@ exports[`renders register page 1`] = `
           <mock-loadingbutton
             classname="Register-submit-5"
             color="primary"
+            disabled="false"
             fullwidth="true"
             loading="false"
             variant="contained"

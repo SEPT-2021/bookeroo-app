@@ -39,8 +39,8 @@ public class PayPalService {
         ApplicationContext applicationContext = new ApplicationContext()
                 .brandName(BRAND_NAME)
                 .landingPage(LANDING_PAGE)
-                .returnUrl("http://localhost:3000/payment/success")
-                .cancelUrl("http://localhost:3000/")
+                .returnUrl("http://localhost:3000/paymentSuccess")
+                .cancelUrl("http://localhost:3000/paymentFailure")
                 .shippingPreference(SHIPPING_PREFERENCE);
         orderRequest.applicationContext(applicationContext);
 

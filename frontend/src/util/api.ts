@@ -114,3 +114,7 @@ export const profile = makeTypedAPICall<unknown, User>(() =>
 export const checkout = makeTypedAPICall<CartType, string>((args) =>
   api.post(getRouteURL("orders", "checkout"), args)
 );
+
+export const getCapture = makeTypedAPICall<any, any>((args) =>
+  api.get(getRouteURL("orders", `capture=${args.token}`), args)
+);
