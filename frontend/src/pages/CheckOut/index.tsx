@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Button, withStyles, WithStyles } from "@material-ui/core";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
 import { BookItemType } from "../Books";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
@@ -15,22 +17,21 @@ type ShippingItemType = {
 };
 
 type ForBackEndType = {
-  orderItems: [];
-  book: BookItemType;
-  shippingAddress: ShippingItemType;
+  book: BookItemType[];
+  shippingAddress: ShippingItemType[];
 };
 
-function CheckOut({ classes }: CheckOutProps) {
+async function CheckOut({ classes }: CheckOutProps) {
   const [addressLine1, setAddressLine1] = useState("");
   const [addressLine2, setAddressLine2] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [data, setData] = useState([] as ForBackEndType[]);
 
   const getLocal = () => {
     return JSON.parse(localStorage.getItem("cart") as string);
   };
-  
 
   const getShippingAddress = () => {
     const initial = Array<ShippingItemType>();
@@ -41,17 +42,21 @@ function CheckOut({ classes }: CheckOutProps) {
   const makeData = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     return {
-      ...getLocal().map((obj: BookItemType) => ({
-        book: obj
-
-      })
-    ,};
+      book: getLocal().map((obj: BookItemType) => ({
+        book: obj,
+      })),
+      shippingAddress: getShippingAddress(),
+    };
   };
 
   const onSubmit = () => {
-    makeData();
-    console.log(makeData());
+    setData(makeData());
   };
+
+  const res = await axios.get("api/orders/checkout", { data });
+
+  // eslint-disable-next-line no-console
+  console.log(res);
 
   return (
     <div className={classes.root}>
@@ -110,10 +115,10 @@ const styles = (theme: Theme) => {
     root: {
       "& .MuiTextField-root": {
         margin: theme.spacing(1),
-        width: "25ch"
-      }
+        width: "25ch",
+      },
     },
-    button: {}
+    button: {},
   });
 };
 
