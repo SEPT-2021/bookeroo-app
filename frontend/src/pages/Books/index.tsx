@@ -10,10 +10,11 @@ import {
 import styled from "styled-components";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 // eslint-disable-next-line import/no-cycle
-import Book from "../../components/Book/Book";
+import Book from "../../components/Book";
 import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
+import { getAllBooks } from "../../util/api";
 
 export type BookItemType = {
   id: number;
@@ -50,15 +51,12 @@ const StyledButton = styled(IconButton)`
   top: 20px;
 `;
 
-const getBooks = async (): Promise<BookItemType[]> =>
-  (await fetch(`/api/books/all`)).json();
-
 const Books = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as BookItemType[]);
   const { data, isLoading, error } = useQuery<BookItemType[]>(
     "books",
-    getBooks
+    getAllBooks
   );
 
   const getItems = () => {

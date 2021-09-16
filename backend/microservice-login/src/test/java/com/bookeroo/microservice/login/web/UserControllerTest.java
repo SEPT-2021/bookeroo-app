@@ -1,10 +1,12 @@
 package com.bookeroo.microservice.login.web;
 
 import com.bookeroo.microservice.login.model.User;
-import com.bookeroo.microservice.login.payload.LoginRequest;
-import com.bookeroo.microservice.login.security.SecurityConstant;
+import com.bookeroo.microservice.login.payload.AuthenticationRequest;
+import com.bookeroo.microservice.login.payload.AuthenticationResponse;
 import com.bookeroo.microservice.login.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,16 +30,22 @@ class UserControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    UserService service;
+    UserService userService;
 
-    @Test
-    void givenUser_whenRegistered_thenReturnStatusCreated() throws Exception {
+    User setupUser() {
         User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
+        user.setUsername(RandomString.make(8) + "@test.com");
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
+        user.setEnabled(true);
+        user.setRoles("ROLE_USER");
+        return user;
+    }
+
+    @Test
+    void givenUser_whenRegistered_thenReturnStatusCreated() throws Exception {
+        User user = setupUser();
 
         mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -46,50 +55,35 @@ class UserControllerTest {
 
     @Test
     void givenUser_whenRegistered_thenReturnUserAsResponseBody() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setPassword("testPassword");
+        User user = setupUser();
 
         String response = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains("testUsername@test.com"));
+        assertTrue(response.contains(user.getUsername()));
     }
 
     @Test
     void givenUser_whenRegistrationDetailsIncorrect_thenReturn() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setPassword("testPassword");
+        User user = setupUser();
 
         String response = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains("testUsername@test.com"));
+        assertTrue(response.contains(user.getUsername()));
     }
 
     @Test
     void givenCredentials_whenAuthenticated_thenReturnStatusOk() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setPassword("testPassword");
-        service.saveUser(user);
+        User user = setupUser();
+        userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
-        request.setUsername("testUsername@test.com");
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUsername(user.getUsername());
         request.setPassword("testPassword");
 
         mockMvc.perform(post("/api/users/login")
@@ -100,15 +94,10 @@ class UserControllerTest {
 
     @Test
     void givenCredentials_whenEmailIncorrect_thenReturnUnauthorised() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setPassword("testPassword");
-        service.saveUser(user);
+        User user = setupUser();
+        userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
+        AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername("wrongEmail@test.com");
         request.setPassword("testPassword");
 
@@ -120,16 +109,11 @@ class UserControllerTest {
 
     @Test
     void givenCredentials_whenPasswordIncorrect_thenReturnUnauthorised() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setPassword("testPassword");
-        service.saveUser(user);
+        User user = setupUser();
+        userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
-        request.setUsername("testUsername@test.com");
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUsername(user.getUsername());
         request.setPassword("wrongPassword");
 
         mockMvc.perform(post("/api/users/login")
@@ -140,24 +124,21 @@ class UserControllerTest {
 
     @Test
     void givenCredentials_whenAuthenticated_thenReturnJWTToken() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername@test.com");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setPassword("testPassword");
-        service.saveUser(user);
+        User user = setupUser();
+        userService.saveUser(user);
 
-        LoginRequest request = new LoginRequest();
-        request.setUsername("testUsername@test.com");
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUsername(user.getUsername());
         request.setPassword("testPassword");
 
-        String response = mockMvc.perform(post("/api/users/login")
+        String json = mockMvc.perform(post("/api/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(SecurityConstant.JWT_TOKEN_PREFIX));
+        System.out.println(json);
+        AuthenticationResponse response = new Gson().fromJson(json, AuthenticationResponse.class);
+        assertFalse(response.getJwt().isEmpty());
     }
 
 }
