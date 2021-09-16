@@ -44,7 +44,7 @@ function AddBook({ classes }: AddBookProps) {
   };
 
   if (isSuccess) {
-    return <Redirect to="/addBookSuccess" />;
+    return <Redirect to="/allBooks" />;
   }
 
   return (
