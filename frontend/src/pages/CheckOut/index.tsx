@@ -42,15 +42,12 @@ function CheckOut({ classes }: CheckOutProps) {
   };
 
   const onSubmit = () => {
-    setData(makeData());
-    /* mutate({ data }); */
+    const newData = makeData();
+    setData(newData);
+    mutate(newData);
+    console.log(newData);
   };
-
-  // const res = await axios.get("api/orders/checkout", { data });
-  if (data) mutate(data);
-  // eslint-disable-next-line no-console
-  console.log(checkoutData);
-
+  if (checkoutData) console.log(checkoutData);
   return (
     <div className={classes.root}>
       <form className={classes.root} noValidate autoComplete="off">
