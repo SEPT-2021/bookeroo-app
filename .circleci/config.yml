@@ -12,6 +12,14 @@ orbs:
   maven: circleci/maven@1.2.0
   node: circleci/node@4.7.0
 
+jobs:
+  node_install:
+    executor: node
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+
 workflows:
   microservice_login:
     jobs:
@@ -19,18 +27,16 @@ workflows:
           executor: openjdk
           app_src_directory: backend/microservice-login
           test_results_path: backend/microservice-login/target/surefire-reports
-
   microservice_book:
     jobs:
       - maven/test:
           executor: openjdk
           app_src_directory: backend/microservice-book
           test_results_path: backend/microservice-book/target/surefire-reports
-
   frontend:
     jobs:
+      - node_install
       - node/test:
-          executor: node
           app-dir: frontend
           pkg-manager: yarn
           version: 14.17.6
