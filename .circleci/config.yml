@@ -19,6 +19,10 @@ jobs:
       # Checkout the code as the first step.
       # Use mvn clean and package as the standard maven build phase
       - run:
+          name: change dir
+          command: cd backend 
+
+      - run:
           name: current files
           command: ls
       # Then run your tests!
