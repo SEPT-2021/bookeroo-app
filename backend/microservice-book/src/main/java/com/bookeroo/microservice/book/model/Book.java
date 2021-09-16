@@ -3,6 +3,7 @@ package com.bookeroo.microservice.book.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -22,6 +23,7 @@ public class Book {
     @NotNull(message = "Price cannot be null")
     private double price;
     @NotBlank(message = "Books are required to have a brief description")
+    @Size(max = 4095)
     private String description;
     @NotBlank(message = "Books must have a cover")
     private String cover;
