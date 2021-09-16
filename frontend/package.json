@@ -34,7 +34,6 @@
     "test": "react-scripts test",
     "test:ci": "cross-env CI=true yarn test"
   },
-  "proxy": "http://localhost:8081",
   "browserslist": {
     "production": [
       ">0.2%",

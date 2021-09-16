@@ -1,6 +1,22 @@
 import axios, { AxiosResponse } from "axios";
 
 const api = axios.create({});
+const backendUrl = process.env.REACT_APP_BACKEND;
+
+function getRouteURL(service: "books" | "users", route: string) {
+  const port = (() => {
+    switch (service) {
+      case "users":
+        return 8080;
+      case "books":
+        return 8081;
+      default:
+        throw new Error(`No port for service: ${service}`);
+    }
+  })();
+  return `${backendUrl}:${port}/${route}`;
+}
+
 /**
  * A generic powered API wrapper, allowing us to inject types into our requests
  * Currently doesn't support injecting types into the error state,
@@ -27,12 +43,15 @@ export const registerUser = makeTypedAPICall<
     confirmPassword: string;
   },
   unknown
->((args) => api.post("/api/users/register", args));
+>((args) => {
+  console.log(process.env);
+  return api.post(getRouteURL("users", "register"), args);
+});
 
 export const loginUser = makeTypedAPICall<
   { username: string; password: string },
   TokenProps
->((args) => api.post("/api/users/login", args));
+>((args) => api.post(getRouteURL("users", "login"), args));
 
 export const addBook = makeTypedAPICall<
   {
@@ -42,28 +61,28 @@ export const addBook = makeTypedAPICall<
     pageCount: string;
   },
   unknown
->((args) => api.post("api/books/add", args));
+>((args) => api.post(getRouteURL("books", "add"), args));
 
 export const findBookById = makeTypedAPICall<
   {
     id: string;
   },
   unknown
->((args) => api.get(`api/books/${args.id}`));
+>((args) => api.get(getRouteURL("books", args.id)));
 
 export const deleteBookById = makeTypedAPICall<
   {
     id: string;
   },
   unknown
->((args) => api.delete(`api/books/${args.id}`));
+>((args) => api.delete(getRouteURL("books", args.id)));
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {
     searchTerm: string;
   },
   unknown
->((args) => api.get(`api/books/?search=${args.searchTerm}`));
+>((args) => api.get(getRouteURL("books", `?search=${args.searchTerm}`)));
 
 export const getBookByType = makeTypedAPICall<
   {
@@ -71,6 +90,10 @@ export const getBookByType = makeTypedAPICall<
     type: string;
   },
   unknown
->((args) => api.get(`api/books/?search=${args.searchTerm}&type=${args.type}`));
+>((args) =>
+  api.get(getRouteURL("books", `?search=${args.searchTerm}&type=${args.type}`))
+);
 
-export const getAllBooks = makeTypedAPICall(() => api.get(`/api/books/all`));
+export const getAllBooks = makeTypedAPICall(() =>
+  api.get(getRouteURL("books", "all"))
+);
