@@ -1,5 +1,5 @@
 import React from "react";
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import { Box, CssBaseline, ThemeProvider } from "@material-ui/core";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
@@ -19,6 +19,7 @@ import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
+import NavBar from "./components/NavBar";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ ReactDOM.render(
       <ReactQueryDevtools />
       <ThemeProvider theme={theme}>
         <BrowserRouter>
+          <NavBar />
           <Switch>
             <Route path="/" exact>
               <HomePage />

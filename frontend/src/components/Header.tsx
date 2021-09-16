@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
 import logo from "../assets/logo.svg";
 import NavBarDropDown from "./NavBarDropDown";
+import NavBar from "./NavBar";
 
 function Header({ classes }: HeaderProps) {
   const [checked, setChecked] = useState(false);
@@ -22,19 +23,6 @@ function Header({ classes }: HeaderProps) {
   }, []);
   return (
     <div className={classes.root} id="header">
-      <AppBar className={classes.appbar} elevation={5}>
-        <Toolbar className={classes.appbarWrapper}>
-          <Box display="flex" flexGrow={1} alignItems="center">
-            <img src={logo} alt="logo" className={classes.navLogo} />
-            <h1 className={classes.colorText}>Bookeroo.</h1>
-          </Box>
-          <Box className={classes.buttons}>
-            <IconButton>
-              <NavBarDropDown />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
       <Collapse
         in={checked}
         {...(checked ? { timeout: 1000 } : {})}
@@ -65,23 +53,14 @@ const styles = (theme: Theme) =>
       height: "100vh",
       fontFamily: "Arial Rounded MT Bold",
     },
-    appbar: {
-      background: "white",
-    },
-    appbarWrapper: {
-      width: "80%",
-      margin: "0 auto",
-    },
-    appbarTitle: {
-      flexGrow: 1,
+    colorText: {
+      color: "#5DA2D5",
     },
     icon: {
       color: "#F78888",
       fontSize: "2rem",
     },
-    colorText: {
-      color: "#5DA2D5",
-    },
+
     container: {
       textAlign: "center",
     },
@@ -92,16 +71,6 @@ const styles = (theme: Theme) =>
     goDown: {
       color: "#A8D0E6",
       fontSize: "4rem",
-    },
-    navLogo: {
-      marginRight: theme.spacing(3),
-      width: 60,
-      height: 60,
-    },
-    buttons: {
-      "& button": {
-        margin: theme.spacing(0, 1),
-      },
     },
   });
 
