@@ -14,6 +14,7 @@
     <name>microservice-book</name>
     <description>microservice-book</description>
     <properties>
+
         <java.version>1.8</java.version>
     </properties>
 
@@ -72,6 +73,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <spring.config.name>microservice-book</spring.config.name>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
