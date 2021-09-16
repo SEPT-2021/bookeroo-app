@@ -111,6 +111,6 @@ export const profile = makeTypedAPICall<unknown, User>(() =>
   api.get(getRouteURL("users", "profile"))
 );
 
-export const checkout = makeTypedAPICall<CartType, unknown>(() =>
+export const checkout = makeTypedAPICall<CartType, any>(() =>
   axios.get(getRouteURL("orders", "checkout"))
 );
