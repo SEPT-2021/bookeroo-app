@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
   AddShoppingCart,
   Book,
+  Delete,
   Favorite,
   Launch,
   LinkOutlined,
@@ -23,6 +24,7 @@ import {
 import type { Book as BookType } from "../static/books";
 import { BOOK_ANIMATION_TIME } from "../static/books";
 import { BookItemType } from "../util/types";
+import { GlobalContext } from "./GlobalContext";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -46,7 +48,7 @@ export default function Image({
 }: BookProps) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const { user } = useContext(GlobalContext);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -58,6 +60,13 @@ export default function Image({
             <Avatar aria-label="recipe">
               <Book />
             </Avatar>
+          }
+          action={
+            user?.roles === "ROLE_ADMIN" && (
+              <IconButton>
+                <Delete />
+              </IconButton>
+            )
           }
           title={<b>{title}</b>}
           subheader={author}
