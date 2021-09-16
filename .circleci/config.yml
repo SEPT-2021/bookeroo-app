@@ -12,7 +12,7 @@ jobs:
     # Be sure to update the Docker image tag below to openjdk version of your application.
     # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/openjdk
     docker:
-      - image: cimg/openjdk:13.0
+      - image: circleci/openjdk:8.0.292-browsers
 
     working_directory: ~/project/backend/microservice-book
     steps:
@@ -33,6 +33,14 @@ jobs:
       - run:
           name: find pom
           command: find . pom.xml
+
+      - run:
+          name: find pom
+          command: find . pom.xml
+      
+      - run:
+          name: maven clean/install
+          command: ./mvnw clean install
 
 workflows:
     example-workflow:
