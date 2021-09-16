@@ -37,7 +37,7 @@ public class BookService {
         return book.get();
     }
 
-    public Iterable<Book> getAllBooks() {
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
