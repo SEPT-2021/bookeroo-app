@@ -9,18 +9,22 @@ jobs:
     working_directory: ~/project/backend/microservice-book
     steps:
       - checkout
-       - run:
+      - run:
           name: pwd
           command: pwd
       
       - run:
-          name: mvn clean
-          command: cd ../project/backend/microservice-book && ./mvnw clean
+          name: mvnw clean
+          command: ./mvnw clean
+
+      - run:
+          name: mvnw install
+          command: ./mvnw install
 
 workflows:
     example-workflow:
       jobs:
-        - testforpom
+        - build
         - maven/test:
             app_src_directory: backend/microservice-book 
             test_results_path: backend/microservice-book/target/surefire-reports 
