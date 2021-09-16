@@ -26,6 +26,8 @@ public class PayPalService {
         OrdersCreateRequest request = new OrdersCreateRequest();
         request.prefer("return=representation");
         request.requestBody(buildOrderRequestBody());
+
+
         return payPalClient.execute(request);
     }
 
@@ -44,9 +46,9 @@ public class PayPalService {
                 .description(DESCRIPTION)
                 .amountWithBreakdown(new AmountWithBreakdown()
                         .currencyCode(CURRENCY_CODE)
-                        .value("10.00")
+                        .value("10006.00")
                         .amountBreakdown(new AmountBreakdown()
-                                .itemTotal(new Money().currencyCode(CURRENCY_CODE).value("8.00"))
+                                .itemTotal(new Money().currencyCode(CURRENCY_CODE).value("10004.00"))
                                 .shipping(new Money().currencyCode(CURRENCY_CODE).value("2.00"))))
                 .items(new ArrayList<Item>() {
                     {
@@ -55,7 +57,7 @@ public class PayPalService {
                                 .description("9780192835093")
                                 .unitAmount(new Money()
                                         .currencyCode(CURRENCY_CODE)
-                                        .value("4.00"))
+                                        .value("10000.00"))
                                 .quantity("1")
                                 .category("PHYSICAL_GOODS"));
                         add(new Item()

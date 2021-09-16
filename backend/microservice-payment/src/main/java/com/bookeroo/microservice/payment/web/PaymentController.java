@@ -1,5 +1,6 @@
 package com.bookeroo.microservice.payment.web;
 
+import com.bookeroo.microservice.payment.model.OrderItem;
 import com.bookeroo.microservice.payment.service.PayPalService;
 import com.paypal.http.HttpResponse;
 import com.paypal.http.serializer.Json;
@@ -24,8 +25,8 @@ public class PaymentController {
         this.payPalService = payPalService;
     }
 
-    @GetMapping("/create")
-    public ResponseEntity<?> createOrder() {
+    @GetMapping("/checkout")
+    public ResponseEntity<?> checkoutOrder(@ModelAttribute OrderItem order) {
         try {
             HttpResponse<Order> response = payPalService.createOrder();
             return ResponseEntity
@@ -65,5 +66,47 @@ public class PaymentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @GetMapping("/create")
+//    public ResponseEntity<?> createOrder() {
+//        try {
+//            HttpResponse<Order> response = payPalService.createOrder();
+//            return ResponseEntity
+//                    .status(HttpStatus.valueOf(response.statusCode()))
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(new Json().serialize(response.result()));
+//        } catch (IOException exception) {
+//            exception.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @GetMapping("/get/{id}")
+//    public ResponseEntity<?> getOrder(@PathVariable String id) {
+//        try {
+//            HttpResponse<Order> response = payPalService.getOrder(id);
+//            return ResponseEntity
+//                    .status(HttpStatus.valueOf(response.statusCode()))
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(new Json().serialize(response.result()));
+//        } catch (IOException exception) {
+//            exception.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
+//    @PostMapping("/capture/{id}")
+//    public ResponseEntity<?> captureOrder(@PathVariable String id) {
+//        try {
+//            HttpResponse<Order> response = payPalService.captureOrder(id);
+//            return ResponseEntity
+//                    .status(HttpStatus.valueOf(response.statusCode()))
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(new Json().serialize(response.result()));
+//        } catch (IOException exception) {
+//            exception.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 }
