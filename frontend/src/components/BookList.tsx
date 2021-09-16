@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
 import Image from "./Image";
 import useWindowPosition from "../hook/useWindowPosition";
-import books from "../static/books";
+import { BookItemType } from "../util/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,16 +20,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BookList() {
+export default function BookList({
+  books,
+  checked: argChecked = false,
+  onClick,
+}: {
+  books: BookItemType[];
+  checked?: boolean;
+  onClick: (clicked: BookItemType) => void;
+}) {
   const classes = useStyles();
-  const checked = useWindowPosition("header");
+  const hookChecked = useWindowPosition("header");
+  const checked = argChecked || hookChecked;
 
   return (
     <div className={classes.root} id="book-list">
       <Grid container id="header" alignItems="center" justifyContent="center">
         {books.map((book) => (
           <Grid item md={3} className={classes.gridItem}>
-            <Image book={book} key={book.title} checked={checked} />
+            <Image
+              book={book}
+              key={book.title}
+              checked={checked}
+              onCartClick={() => onClick(book)}
+            />
           </Grid>
         ))}
       </Grid>
