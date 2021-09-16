@@ -27,6 +27,22 @@ export type BookItemType = {
   amount: number;
 };
 
+type BookItemTypes = {
+  id: number;
+  title: string;
+  author: string;
+  pageCount: string;
+  isbn: string;
+  description: string;
+  cover: string;
+  price: number;
+};
+
+export type DataItemType = {
+  book: BookItemTypes;
+  quantity: number;
+};
+
 const StyledButton = styled(IconButton)`
   position: fixed;
   z-index: 100;
@@ -44,6 +60,15 @@ const Books = () => {
     "books",
     getBooks
   );
+
+  const getItems = () => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    return cartItems.map((obj) => ({
+      book: obj,
+      quantity: obj.amount,
+    }));
+  };
+
 
   const getTotalItems = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -87,6 +112,7 @@ const Books = () => {
           cartItems={cartItems}
           addToCart={handleAddToCart}
           removeFromCart={handleRemoveFromCart}
+          sendToCart={getItems()}
         />
       </Drawer>
       <StyledButton onClick={() => setCartOpen(true)}>

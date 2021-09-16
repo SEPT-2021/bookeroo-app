@@ -19,6 +19,7 @@ import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
+import CheckOut from "./pages/CheckOut";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +49,6 @@ ReactDOM.render(
             <Route path="/loginSuccess">
               <LoginSuccess />
             </Route>
-
             <Route path="/search">
               <BookSearch />
             </Route>
@@ -60,6 +60,9 @@ ReactDOM.render(
             </Route>
             <Route path="/addBookSuccess">
               <AddBookSuccess />
+            </Route>
+            <Route path="/checkOut">
+              <CheckOut />
             </Route>
             <Route path="/allBooks">
               <Books />
