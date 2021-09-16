@@ -6,17 +6,33 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
-  border: 1px solid lightblue;
+  border: 1px solid black;
   border-radius: 20px;
   height: 100%;
+
   button {
     border-radius: 0 0 20px 20px;
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    padding: 10px 60px;
+    margin: 10px 0;
+    cursor: pointer;
+
+    &:disabled {
+      color: grey;
+      opacity: 0.7;
+      cursor: default;
+    }
   }
+
   img {
-    max-height: 150px;
-    object-fit: cover;
+    max-height: 450px;
+    object-fit: contain;
     border-radius: 20px 20px 0 0;
+    background-color: #eef;
   }
+
   div {
     font-family: Arial, Helvetica, sans-serif;
     padding: 1rem;

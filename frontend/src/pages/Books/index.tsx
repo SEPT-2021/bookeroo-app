@@ -10,8 +10,10 @@ import {
 import styled from "styled-components";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 // eslint-disable-next-line import/no-cycle
-import Book from "../../Book/Book";
-import { Wrapper } from "../../Book/Book.styles";
+import Book from "../../components/Book/Book";
+import { Wrapper } from "../../components/Book/Book.styles";
+// eslint-disable-next-line import/no-cycle
+import Cart from "../../components/Cart/Cart";
 
 export type BookItemType = {
   id: number;
@@ -19,7 +21,10 @@ export type BookItemType = {
   author: string;
   pageCount: string;
   isbn: string;
+  description: string;
   cover: string;
+  price: number;
+  amount: number;
 };
 
 const StyledButton = styled(IconButton)`
@@ -42,9 +47,35 @@ const Books = () => {
 
   const getTotalItems = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
-  const handleAddToCart = (clickedItem: BookItemType) => null;
 
-  const handleRemoveFromCart = () => null;
+  const handleAddToCart = (clickedItem: BookItemType) => {
+    setCartItems((prev) => {
+      // 1. Is the item already added in the cart?
+      const isItemInCart = prev.find((item) => item.id === clickedItem.id);
+
+      if (isItemInCart) {
+        return prev.map((item) =>
+          item.id === clickedItem.id
+            ? { ...item, amount: item.amount + 1 }
+            : item
+        );
+      }
+      // First time the item is added
+      return [...prev, { ...clickedItem, amount: 1 }];
+    });
+  };
+
+  const handleRemoveFromCart = (id: number) => {
+    setCartItems((prev) =>
+      prev.reduce((ack, item) => {
+        if (item.id === id) {
+          if (item.amount === 1) return ack;
+          return [...ack, { ...item, amount: item.amount - 1 }];
+        }
+        return [...ack, item];
+      }, [] as BookItemType[])
+    );
+  };
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>something wrong</div>;
@@ -52,14 +83,18 @@ const Books = () => {
   return (
     <Wrapper>
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-        Cart goes here
+        <Cart
+          cartItems={cartItems}
+          addToCart={handleAddToCart}
+          removeFromCart={handleRemoveFromCart}
+        />
       </Drawer>
       <StyledButton onClick={() => setCartOpen(true)}>
         <Badge badgeContent={getTotalItems(cartItems)} color="error">
           <AddShoppingCartIcon />
         </Badge>
       </StyledButton>
-      <Grid container spacing={3}>
+      <Grid container spacing={4}>
         {data?.map((item) => (
           <Grid item key={item.id} xs={12} sm={4}>
             <Book item={item} handleAddToCart={handleAddToCart} />

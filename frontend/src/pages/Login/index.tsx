@@ -29,6 +29,7 @@ function Login({ classes }: LoginProps) {
   // TODO testing
   // eslint-disable-next-line no-console
   const ls = localStorage.getItem("token");
+  // eslint-disable-next-line no-console
   console.log(ls);
 
   if (isSuccess) {
@@ -37,8 +38,6 @@ function Login({ classes }: LoginProps) {
 
     return <Redirect to="/loginSuccess" />;
   }
-  console.log(ls);
-
 
   return (
     <Grid container component="main" className={classes.root}>

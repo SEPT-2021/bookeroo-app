@@ -24,6 +24,7 @@ function AddBook({ classes }: AddBookProps) {
   const { data, error, isSuccess, isLoading, mutate } = useMutation(addBook);
 
   const ls = localStorage.getItem("token");
+  // eslint-disable-next-line no-console
   console.log(ls);
 
   // TODO debugging
