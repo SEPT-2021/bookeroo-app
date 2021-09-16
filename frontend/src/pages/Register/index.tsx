@@ -154,7 +154,10 @@ const styles = (theme: Theme) =>
       flexDirection: "column",
     },
     paper: {
-      margin: theme.spacing(8, 4),
+      margin: theme.spacing(15, 4),
+      [theme.breakpoints.down("sm")]: {
+        margin: theme.spacing(8, 4),
+      },
       display: "flex",
       flexDirection: "column",
       alignItems: "center",

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const api = axios.create({});
+export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(service: "books" | "users", route: string) {
@@ -14,7 +14,12 @@ function getRouteURL(service: "books" | "users", route: string) {
         throw new Error(`No port for service: ${service}`);
     }
   })();
-  return `${backendUrl}:${port}/${route}`;
+  return `${backendUrl}:${port}/api/${service}/${route}`;
+}
+
+export interface TokenProps {
+  success: boolean;
+  token: string;
 }
 
 /**
@@ -23,12 +28,6 @@ function getRouteURL(service: "books" | "users", route: string) {
  * see: https://github.com/Microsoft/TypeScript/issues/7588#issuecomment-199079907
  * @param apiCall
  */
-
-interface TokenProps {
-  success: boolean;
-  token: string;
-}
-
 const makeTypedAPICall =
   <In, Out>(apiCall: (args: In) => Promise<AxiosResponse<Out>>) =>
   (args: In) =>
@@ -43,10 +42,7 @@ export const registerUser = makeTypedAPICall<
     confirmPassword: string;
   },
   unknown
->((args) => {
-  console.log(process.env);
-  return api.post(getRouteURL("users", "register"), args);
-});
+>((args) => api.post(getRouteURL("users", "register"), args));
 
 export const loginUser = makeTypedAPICall<
   { username: string; password: string },
