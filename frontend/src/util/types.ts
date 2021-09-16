@@ -10,7 +10,7 @@ export type ShippingItemType = {
   postalCode: string;
 };
 
-type BookItem = {
+export type BookItemType = {
   id: number;
   title: string;
   author: string;
@@ -19,10 +19,11 @@ type BookItem = {
   description: string;
   cover: string;
   price: number;
+  amount: number;
 };
 
 export type DataItemType = {
-  book: BookItem;
+  book: BookItemType;
   quantity: number;
 };
 export type CartType = {
