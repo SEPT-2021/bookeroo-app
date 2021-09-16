@@ -1,5 +1,5 @@
 import React from "react";
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import { Box, CssBaseline, ThemeProvider } from "@material-ui/core";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
@@ -7,9 +7,6 @@ import ReactDOM from "react-dom";
 import theme from "./theme";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import RegisterSuccess from "./pages/Register/RegisterSuccess";
-import RegisterFailed from "./pages/Register/RegisterFailed";
-import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -19,6 +16,8 @@ import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
+import NavBar from "./components/NavBar";
+import { GlobalContextProvider } from "./components/GlobalContext";
 
 const queryClient = new QueryClient();
 
@@ -28,50 +27,43 @@ ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/" exact>
-              <HomePage />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-            <Route path="/registerSuccess">
-              <RegisterSuccess />
-            </Route>
-            <Route path="/registerFailed">
-              <RegisterFailed />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/loginSuccess">
-              <LoginSuccess />
-            </Route>
-
-            <Route path="/search">
-              <BookSearch />
-            </Route>
-            <Route path="/searchType">
-              <BookSearchType />
-            </Route>
-            <Route path="/addBook">
-              <AddBook />
-            </Route>
-            <Route path="/addBookSuccess">
-              <AddBookSuccess />
-            </Route>
-            <Route path="/allBooks">
-              <Books />
-            </Route>
-            <Route path="/deleteBook">
-              <DeleteBook />
-            </Route>
-            <Redirect to="/login" />
-            <Route component={NotFoundPage} />
-            <Redirect to="/" />
-          </Switch>
-        </BrowserRouter>
+        <GlobalContextProvider>
+          <BrowserRouter>
+            <NavBar />
+            <Switch>
+              <Route path="/" exact>
+                <HomePage />
+              </Route>
+              <Route path="/register">
+                <Register />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/search">
+                <BookSearch />
+              </Route>
+              <Route path="/searchType">
+                <BookSearchType />
+              </Route>
+              <Route path="/addBook">
+                <AddBook />
+              </Route>
+              <Route path="/addBookSuccess">
+                <AddBookSuccess />
+              </Route>
+              <Route path="/allBooks">
+                <Books />
+              </Route>
+              <Route path="/deleteBook">
+                <DeleteBook />
+              </Route>
+              <Redirect to="/login" />
+              <Route component={NotFoundPage} />
+              <Redirect to="/" />
+            </Switch>
+          </BrowserRouter>
+        </GlobalContextProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>,

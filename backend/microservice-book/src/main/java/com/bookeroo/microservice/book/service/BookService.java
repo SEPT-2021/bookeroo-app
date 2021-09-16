@@ -37,7 +37,7 @@ public class BookService {
         return book.get();
     }
 
-    public Iterable<Book> getAllBooks() {
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
@@ -66,6 +66,7 @@ public class BookService {
         List<Book> results = new ArrayList<>();
         bookRepository.findByTitleContains(keyword).forEach(results::add);
         bookRepository.findByAuthorContains(keyword).forEach(results::add);
+        bookRepository.findByDescriptionContains(keyword).forEach(results::add);
 
         return results;
     }

@@ -1,18 +1,33 @@
 import axios, { AxiosResponse } from "axios";
+import type { User } from "../components/GlobalContext";
 
-const api = axios.create({});
+export const api = axios.create({});
+const backendUrl = process.env.REACT_APP_BACKEND;
+
+function getRouteURL(service: "books" | "users", route: string) {
+  const port = (() => {
+    switch (service) {
+      case "users":
+        return 8080;
+      case "books":
+        return 8081;
+      default:
+        throw new Error(`No port for service: ${service}`);
+    }
+  })();
+  return `${backendUrl}:${port}/api/${service}/${route}`;
+}
+
+export interface TokenProps {
+  jwt: string;
+}
+
 /**
  * A generic powered API wrapper, allowing us to inject types into our requests
  * Currently doesn't support injecting types into the error state,
  * see: https://github.com/Microsoft/TypeScript/issues/7588#issuecomment-199079907
  * @param apiCall
  */
-
-interface TokenProps {
-  success: boolean;
-  token: string;
-}
-
 const makeTypedAPICall =
   <In, Out>(apiCall: (args: In) => Promise<AxiosResponse<Out>>) =>
   (args: In) =>
@@ -24,15 +39,16 @@ export const registerUser = makeTypedAPICall<
     firstName: string;
     lastName: string;
     password: string;
-    confirmPassword: string;
+    roles: string;
+    enabled: true;
   },
-  unknown
->((args) => api.post("/api/users/register", args));
+  TokenProps & { user: User }
+>((args) => api.post(getRouteURL("users", "register"), args));
 
 export const loginUser = makeTypedAPICall<
   { username: string; password: string },
-  TokenProps
->((args) => api.post("/api/users/login", args));
+  TokenProps & { user: User }
+>((args) => api.post(getRouteURL("users", "login"), args));
 
 export const addBook = makeTypedAPICall<
   {
@@ -42,28 +58,28 @@ export const addBook = makeTypedAPICall<
     pageCount: string;
   },
   unknown
->((args) => api.post("api/books/add", args));
+>((args) => api.post(getRouteURL("books", "add"), args));
 
 export const findBookById = makeTypedAPICall<
   {
     id: string;
   },
   unknown
->((args) => api.get(`api/books/${args.id}`));
+>((args) => api.get(getRouteURL("books", args.id)));
 
 export const deleteBookById = makeTypedAPICall<
   {
     id: string;
   },
   unknown
->((args) => api.delete(`api/books/${args.id}`));
+>((args) => api.delete(getRouteURL("books", args.id)));
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {
     searchTerm: string;
   },
   unknown
->((args) => api.get(`api/books/?search=${args.searchTerm}`));
+>((args) => api.get(getRouteURL("books", `?search=${args.searchTerm}`)));
 
 export const getBookByType = makeTypedAPICall<
   {
@@ -71,6 +87,14 @@ export const getBookByType = makeTypedAPICall<
     type: string;
   },
   unknown
->((args) => api.get(`api/books/?search=${args.searchTerm}&type=${args.type}`));
+>((args) =>
+  api.get(getRouteURL("books", `?search=${args.searchTerm}&type=${args.type}`))
+);
 
-export const getAllBooks = makeTypedAPICall(() => api.get(`/api/books/all`));
+export const getAllBooks = makeTypedAPICall(() =>
+  api.get(getRouteURL("books", "all"))
+);
+
+export const profile = makeTypedAPICall<unknown, User>(() =>
+  api.get(getRouteURL("users", "profile"))
+);
