@@ -42,4 +42,3 @@ workflows:
       jobs:
         - maven/test:
             app_src_directory: backend/microservice-book 
-            command: mvn test 
