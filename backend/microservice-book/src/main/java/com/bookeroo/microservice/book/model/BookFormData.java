@@ -6,8 +6,10 @@ public class BookFormData {
 
     private String title;
     private String author;
-    private String pageCount;
+    private long pageCount;
     private String isbn;
+    private double price;
+    private String description;
     private MultipartFile coverFile;
     private String coverUrl;
 
@@ -30,11 +32,11 @@ public class BookFormData {
         this.author = author;
     }
 
-    public String getPageCount() {
+    public long getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(String pageCount) {
+    public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -44,6 +46,22 @@ public class BookFormData {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public MultipartFile getCoverFile() {

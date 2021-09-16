@@ -34,6 +34,7 @@ module.exports = {
         'react/require-default-props': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'react/no-unescaped-entities': 'off',
+        'react/prop-types': 'off',
         // Other:
         'linebreak-style': 'off',
         'prettier/prettier': [

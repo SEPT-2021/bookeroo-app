@@ -9,7 +9,6 @@ import com.bookeroo.microservice.book.service.ValidationErrorService;
 import com.bookeroo.microservice.book.validator.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +46,8 @@ public class BookController {
         book.setAuthor(formData.getAuthor());
         book.setPageCount(formData.getPageCount());
         book.setIsbn(formData.getIsbn());
+        book.setPrice(formData.getPrice());
+        book.setDescription(formData.getDescription());
         bookValidator.validate(book, result);
 
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
@@ -118,51 +119,51 @@ public class BookController {
     }
 
     // TODO what follows are temporary testing methods to verify S3 is configured properly
-//    @PostMapping("/upload-file")
-//    public ResponseEntity<?> uploadImageByFile(@RequestPart(value = "file") MultipartFile file) {
-//        try {
-//            System.out.println(s3Service.uploadFile(file));
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (BookNotFoundException | IOException exception) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @PostMapping("/upload-url")
-//    public ResponseEntity<?> uploadImageByUrl(@RequestParam("url") URL url, @RequestParam("name") String name) {
-//        try {
-//            System.out.println(s3Service.uploadFile(url, name));
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (BookNotFoundException | IOException | URISyntaxException exception) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @GetMapping("/download")
-//    public ResponseEntity<?> upload(@RequestParam("file") String file) {
-//        try {
-//            byte[] byteArray = s3Service.downloadFile(file).toByteArray();
-//            return ResponseEntity.ok()
-//                    .contentType(deduceContentType(file))
-//                    .body(byteArray);
-//        } catch (BookNotFoundException | IOException exception) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    private MediaType deduceContentType(String fileName) {
-//        String[] splitByPeriod = fileName.split("\\.");
-//        String fileExtension = splitByPeriod[splitByPeriod.length - 1];
-//        switch (fileExtension) {
-//            case "png":
-//                return MediaType.IMAGE_PNG;
-//            case "jpg":
-//                return MediaType.IMAGE_JPEG;
-//            case "gif":
-//                return MediaType.IMAGE_GIF;
-//            default:
-//                return MediaType.APPLICATION_OCTET_STREAM;
-//        }
-//    }
+    /* @PostMapping("/upload-file")
+    public ResponseEntity<?> uploadImageByFile(@RequestPart(value = "file") MultipartFile file, @RequestParam("name") String name) {
+        try {
+            System.out.println(s3Service.uploadFile(file, name));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BookNotFoundException | IOException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/upload-url")
+    public ResponseEntity<?> uploadImageByUrl(@RequestParam("url") URL url, @RequestParam("name") String name) {
+        try {
+            System.out.println(s3Service.uploadFile(url, name));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BookNotFoundException | IOException | URISyntaxException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<?> upload(@RequestParam("file") String file) {
+        try {
+            byte[] byteArray = s3Service.downloadFile(file).toByteArray();
+            return ResponseEntity.ok()
+                    .contentType(deduceContentType(file))
+                    .body(byteArray);
+        } catch (BookNotFoundException | IOException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private MediaType deduceContentType(String fileName) {
+        String[] splitByPeriod = fileName.split("\\.");
+        String fileExtension = splitByPeriod[splitByPeriod.length - 1];
+        switch (fileExtension) {
+            case "png":
+                return MediaType.IMAGE_PNG;
+            case "jpg":
+                return MediaType.IMAGE_JPEG;
+            case "gif":
+                return MediaType.IMAGE_GIF;
+            default:
+                return MediaType.APPLICATION_OCTET_STREAM;
+        }
+    } */
 
 }

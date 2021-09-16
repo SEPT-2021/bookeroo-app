@@ -39,7 +39,7 @@ function Register({ classes }: RegisterProps) {
   };
 
   if (isSuccess) {
-    return <Redirect to="/api/users/registerSuccess" />;
+    return <Redirect to="/registerSuccess" />;
   }
 
   return (
