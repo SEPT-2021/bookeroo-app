@@ -11,6 +11,8 @@ import RegisterSuccess from "./pages/Register/RegisterSuccess";
 import RegisterFailed from "./pages/Register/RegisterFailed";
 import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
 import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
@@ -28,6 +30,9 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Switch>
+            <Route path="/" exact>
+              <HomePage />
+            </Route>
             <Route path="/register">
               <Register />
             </Route>
@@ -43,6 +48,8 @@ ReactDOM.render(
             <Route path="/loginSuccess">
               <LoginSuccess />
             </Route>
+            <Route component={NotFoundPage} />
+            <Redirect to="/" />
             <Route path="/search">
               <BookSearch />
             </Route>
