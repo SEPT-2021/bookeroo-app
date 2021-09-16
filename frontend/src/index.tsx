@@ -12,7 +12,6 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
-import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
 import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
@@ -49,9 +48,6 @@ ReactDOM.render(
               </Route>
               <Route path="/addBook">
                 <AddBook />
-              </Route>
-              <Route path="/addBookSuccess">
-                <AddBookSuccess />
               </Route>
               <Route path="/checkOut">
                 <CheckOut />
