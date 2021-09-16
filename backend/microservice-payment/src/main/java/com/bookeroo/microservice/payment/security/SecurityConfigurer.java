@@ -81,8 +81,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-                .antMatchers("/api/books/**").hasRole(User.Role.ADMIN.name())
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

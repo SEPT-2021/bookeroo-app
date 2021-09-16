@@ -2,18 +2,18 @@ package com.bookeroo.microservice.payment.model;
 
 public class OrderItem {
 
-    private Book books;
+    private Book book;
     private int quantity;
 
     public OrderItem() {
     }
 
-    public Book getBooks() {
-        return books;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBooks(Book books) {
-        this.books = books;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public int getQuantity() {

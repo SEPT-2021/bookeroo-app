@@ -40,7 +40,7 @@ public class BookController {
     }
 
     @PostMapping(value = "/add" )
-    public ResponseEntity<?> addNewBook(@ModelAttribute BookFormData formData, BindingResult result) {
+    public ResponseEntity<?> addNewBook(@ModelAttribute(name = "formData") BookFormData formData, BindingResult result) {
         Book book = new Book();
         book.setTitle(formData.getTitle());
         book.setAuthor(formData.getAuthor());
