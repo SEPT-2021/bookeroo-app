@@ -20,8 +20,8 @@ public class BookValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         Book book = (Book) object;
-
-        if (book.getIsbn().length() < MINIMUM_ISBN_LENGTH)
+        System.out.println(book.getIsbn());
+        if (book.getIsbn()==null|| book.getIsbn().length() < MINIMUM_ISBN_LENGTH)
             errors.rejectValue("isbn", "Length",
                     String.format("ISBN must be at least %d characters", MINIMUM_ISBN_LENGTH));
 
