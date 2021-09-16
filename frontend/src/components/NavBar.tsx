@@ -8,9 +8,11 @@ import {
   Box,
   IconButton,
   AppBar,
+  Button,
 } from "@material-ui/core";
 import logo from "../assets/logo.svg";
 import NavBarDropDown from "./NavBarDropDown";
+import Link from "../util/Link";
 
 function NavBar({ classes }: NavBarProps) {
   return (
@@ -19,11 +21,22 @@ function NavBar({ classes }: NavBarProps) {
         <Box display="flex" flexGrow={1} alignItems="center">
           <img src={logo} alt="logo" className={classes.navLogo} />
           <h1 className={classes.colorText}>Bookeroo.</h1>
+          <Link to="/">
+            <Button>Home</Button>
+          </Link>
+          <Link to="/add">
+            <Button>Add Book</Button>
+          </Link>
         </Box>
-        <Box className={classes.buttons}>
-          <IconButton>
-            <NavBarDropDown />
-          </IconButton>
+        <Box>
+          <Link to="/login">
+            <Button variant="contained">Login</Button>
+          </Link>
+          <Link to="/register">
+            <Button variant="contained" color="primary">
+              Register
+            </Button>
+          </Link>
         </Box>
       </Toolbar>
     </AppBar>
@@ -37,17 +50,15 @@ const styles = (theme: Theme) =>
       width: 60,
       height: 60,
     },
-    buttons: {
-      "& button": {
-        margin: theme.spacing(0, 1),
-      },
-    },
     appbar: {
       background: "white",
     },
     appbarWrapper: {
       width: "80%",
       margin: "0 auto",
+      "& button": {
+        margin: theme.spacing(0, 1),
+      },
     },
     appbarTitle: {
       flexGrow: 1,

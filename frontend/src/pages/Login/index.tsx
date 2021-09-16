@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { LockOutlined } from "@material-ui/icons";
 import { useMutation } from "react-query";
@@ -19,24 +19,18 @@ import Link from "../../util/Link";
 import { loginUser } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
+import { GlobalContext } from "../../components/GlobalContext";
 
 function Login({ classes }: LoginProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const context = useContext(GlobalContext);
   const { isLoading, mutate, error, data, isSuccess } = useMutation(loginUser);
   const onSubmit = () => mutate({ username, password });
-  // TODO testing
-  // eslint-disable-next-line no-console
-  const ls = localStorage.getItem("token");
-  // eslint-disable-next-line no-console
-  console.log(ls);
 
-  if (isSuccess) {
-    localStorage.setItem("success", String(data?.success as boolean));
-    localStorage.setItem("token", data?.token as string);
-
-    return <Redirect to="/loginSuccess" />;
+  if (isSuccess && data) {
+    context.login(data);
+    return <Redirect to="/" />;
   }
 
   return (

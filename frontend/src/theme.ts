@@ -27,6 +27,11 @@ const theme = createTheme({
         textTransform: "none",
         fontWeight: "bold",
       },
+      text: {
+        "& span": {
+          color: "black",
+        },
+      },
     },
   },
 });
