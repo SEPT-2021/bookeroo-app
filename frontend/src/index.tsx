@@ -48,8 +48,7 @@ ReactDOM.render(
             <Route path="/loginSuccess">
               <LoginSuccess />
             </Route>
-            <Route component={NotFoundPage} />
-            <Redirect to="/" />
+
             <Route path="/search">
               <BookSearch />
             </Route>
@@ -69,6 +68,8 @@ ReactDOM.render(
               <DeleteBook />
             </Route>
             <Redirect to="/login" />
+            <Route component={NotFoundPage} />
+            <Redirect to="/" />
           </Switch>
         </BrowserRouter>
       </ThemeProvider>
