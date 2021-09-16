@@ -91,7 +91,7 @@ export const getBookByType = makeTypedAPICall<
   api.get(getRouteURL("books", `?search=${args.searchTerm}&type=${args.type}`))
 );
 
-export const getAllBooks = makeTypedAPICall(() =>
+export const getAllBooks = makeTypedAPICall<any, any>(() =>
   api.get(getRouteURL("books", "all"))
 );
 
