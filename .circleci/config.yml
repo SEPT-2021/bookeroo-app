@@ -1,30 +1,59 @@
 version: 2.1
-orbs:
-  maven: circleci/maven@1.2.0
 
 jobs:
-  build:
+  test:
+    parallelism: 2
     docker:
-      - image: cimg/openjdk:8.0.292-browsers
-    working_directory: ~/project/backend/microservice-book
+      - image: circleci/openjdk:stretch
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - run:
-          name: pwd
-          command: pwd
-      
-      - run:
-          name: mvnw clean
-          command: ./mvnw clean
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies-
+      - attach_workspace:
+          at: ./target
+      - run: |
+            ./mvnw \
+            -Dtest=$(for file in $(circleci tests glob "src/test/**/**.java" \
+            | circleci tests split --split-by=timings); \
+            do basename $file \
+            | sed -e "s/.java/,/"; \
+            done | tr -d '\r\n') \
+            -e test verify
+      - store_test_results:
+          path: target/surefire-reports
 
-      - run:
-          name: mvnw install
-          command: ./mvnw install
+  build:
+    docker:
+      - image: circleci/openjdk:stretch
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies-
+      - run: ./mvnw -Dmaven.test.skip=true package
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - target/
 
 workflows:
-    example-workflow:
-      jobs:
-        - build
-        - maven/test:
-            app_src_directory: backend/microservice-book 
-            test_results_path: backend/microservice-book/target/surefire-reports 
+  version: 2
+  build-then-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
