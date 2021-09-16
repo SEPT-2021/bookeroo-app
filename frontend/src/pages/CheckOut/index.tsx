@@ -14,6 +14,7 @@ function CheckOut({ classes }: CheckOutProps) {
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [data, setData] = useState<CartType>();
+
   const {
     data: checkoutData,
     mutate,
@@ -42,6 +43,7 @@ function CheckOut({ classes }: CheckOutProps) {
 
   const onSubmit = () => {
     setData(makeData());
+    /* mutate({ data }); */
   };
 
   // const res = await axios.get("api/orders/checkout", { data });
@@ -92,9 +94,15 @@ function CheckOut({ classes }: CheckOutProps) {
             onChange={setPostalCode}
             multiline
           />
-          <LoadingButton variant="contained" color="primary" onClick={onSubmit}>
-            Submit
-          </LoadingButton>
+          <div>
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+            >
+              Submit
+            </LoadingButton>
+          </div>
         </div>
       </form>
     </div>
@@ -107,6 +115,8 @@ const styles = (theme: Theme) => {
       "& .MuiTextField-root": {
         margin: theme.spacing(1),
         width: "25ch",
+        gridArea: "center",
+        marginTop: "100px",
       },
     },
     button: {},
