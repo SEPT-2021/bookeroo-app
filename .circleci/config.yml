@@ -9,9 +9,16 @@ orbs:
   maven: circleci/maven@1.2.0
 
 workflows:
-    example-workflow:
+    microservice_book:
       jobs:
         - maven/test:
             executor: j8
             app_src_directory: backend/microservice-book
             test_results_path: backend/microservice-book/target/surefire-reports
+
+    microservice_login:
+      jobs:
+        - maven/test:
+            executor: j8
+            app_src_directory: backend/microservice-login
+            test_results_path: backend/microservice-login/target/surefire-reports
