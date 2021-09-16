@@ -7,6 +7,12 @@ const api = axios.create({});
  * see: https://github.com/Microsoft/TypeScript/issues/7588#issuecomment-199079907
  * @param apiCall
  */
+
+interface TokenProps {
+  success: boolean;
+  token: string;
+}
+
 const makeTypedAPICall =
   <In, Out>(apiCall: (args: In) => Promise<AxiosResponse<Out>>) =>
   (args: In) =>
@@ -25,5 +31,46 @@ export const registerUser = makeTypedAPICall<
 
 export const loginUser = makeTypedAPICall<
   { username: string; password: string },
-  unknown
+  TokenProps
 >((args) => api.post("/api/users/login", args));
+
+export const addBook = makeTypedAPICall<
+  {
+    title: string;
+    author: string;
+    isbn: string;
+    pageCount: string;
+  },
+  unknown
+>((args) => api.post("api/books/add", args));
+
+export const findBookById = makeTypedAPICall<
+  {
+    id: string;
+  },
+  unknown
+>((args) => api.get(`api/books/${args.id}`));
+
+export const deleteBookById = makeTypedAPICall<
+  {
+    id: string;
+  },
+  unknown
+>((args) => api.delete(`api/books/${args.id}`));
+
+export const getBookBySearchTerm = makeTypedAPICall<
+  {
+    searchTerm: string;
+  },
+  unknown
+>((args) => api.get(`api/books/?search=${args.searchTerm}`));
+
+export const getBookByType = makeTypedAPICall<
+  {
+    searchTerm: string;
+    type: string;
+  },
+  unknown
+>((args) => api.get(`api/books/?search=${args.searchTerm}&type=${args.type}`));
+
+export const getAllBooks = makeTypedAPICall(() => api.get(`/api/books/all`));

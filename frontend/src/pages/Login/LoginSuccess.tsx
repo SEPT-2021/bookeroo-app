@@ -10,8 +10,10 @@ import {
 
 function LoginSuccess({ classes }: LoginSuccessProps) {
   return (
-    <Grid className={classes.root}>
-      <h1> LOGIN SUCCESS </h1>
+    <Grid container spacing={2} justify="center">
+      <Grid className={classes.root}>
+        <h1> LOGIN SUCCESS </h1>
+      </Grid>
     </Grid>
   );
 }

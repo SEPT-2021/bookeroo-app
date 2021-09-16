@@ -1,44 +1,61 @@
 package com.bookeroo.microservice.login.security;
 
-import com.bookeroo.microservice.login.model.User;
 import io.jsonwebtoken.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+
+import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_EXPIRATION_TIME_MILLIS;
+import static com.bookeroo.microservice.login.security.SecurityConstant.SECRET_KEY;
 
 @Component
 public class JWTTokenProvider {
 
-    public String generateToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 
-        String userId = Long.toString(user.getId());
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
 
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", (Long.toString(user.getId())));
-        claims.put("username", user.getUsername());
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
+        claims.put("username", userDetails.getUsername());
+        return createToken(claims, userDetails.getUsername());
+    }
 
-        Date now = new Date(System.currentTimeMillis());
-        Date expiryDate = new Date(now.getTime() + SecurityConstant.EXPIRATION_TIME);
-
+    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setSubject(userId)
                 .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRET_KEY)
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME_MILLIS))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         try {
-            Jwts.parser().setSigningKey(SecurityConstant.SECRET_KEY).parseClaimsJws(token);
-            return true;
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
         } catch (SignatureException exception) {
             System.out.println("Invalid JWT signature");
         } catch (MalformedJwtException exception) {
@@ -48,17 +65,10 @@ public class JWTTokenProvider {
         } catch (UnsupportedJwtException exception) {
             System.out.println("Unsupported JWT token");
         } catch (IllegalArgumentException exception) {
-            System.out.println("JWT claims is empty");
+            System.out.println("Empty JWT claims");
         }
 
         return false;
-    }
-
-    public Long getUserIdFromJWT(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SecurityConstant.SECRET_KEY).parseClaimsJws(token).getBody();
-        String id = (String) claims.get("id");
-
-        return Long.parseLong(id);
     }
 
 }

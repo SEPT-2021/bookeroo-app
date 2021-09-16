@@ -13,6 +13,12 @@ import LoginSuccess from "./pages/Login/LoginSuccess";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import BookSearch from "./pages/BookSearch";
+import AddBook from "./pages/AddBook";
+import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
+import DeleteBook from "./pages/DeleteBook";
+import BookSearchType from "./pages/BookSearchType";
+import Books from "./pages/Books";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +50,25 @@ ReactDOM.render(
             </Route>
             <Route component={NotFoundPage} />
             <Redirect to="/" />
+            <Route path="/search">
+              <BookSearch />
+            </Route>
+            <Route path="/searchType">
+              <BookSearchType />
+            </Route>
+            <Route path="/addBook">
+              <AddBook />
+            </Route>
+            <Route path="/addBookSuccess">
+              <AddBookSuccess />
+            </Route>
+            <Route path="/allBooks">
+              <Books />
+            </Route>
+            <Route path="/deleteBook">
+              <DeleteBook />
+            </Route>
+            <Redirect to="/login" />
           </Switch>
         </BrowserRouter>
       </ThemeProvider>
