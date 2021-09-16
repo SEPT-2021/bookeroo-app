@@ -32,11 +32,7 @@ jobs:
 
       - run:
           name: find pom
-          command: find . pom.xml
-
-        
-      # run tests!
-      - run: mvn test
+          command: find .pom.xml
 
 workflows:
     example-workflow:
