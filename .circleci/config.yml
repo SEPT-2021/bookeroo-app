@@ -20,7 +20,7 @@ jobs:
 workflows:
     example-workflow:
       jobs:
-        - testforpom
+        - build
         - maven/test:
             app_src_directory: backend/microservice-book 
             test_results_path: backend/microservice-book/target/surefire-reports 
