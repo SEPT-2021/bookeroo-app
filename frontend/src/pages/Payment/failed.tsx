@@ -10,7 +10,7 @@ import {
 function PaymentFailed({ classes }: PaymentFailedProps) {
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={4} md={7} className={classes.steps} >
+      <Grid item xs={12} sm={4} md={7} className={classes.steps}>
         PAYMENT FAILED
       </Grid>
     </Grid>

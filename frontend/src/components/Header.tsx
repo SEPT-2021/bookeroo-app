@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  AppBar,
-  Box,
   Collapse,
   createStyles,
   IconButton,
-  Theme,
-  Toolbar,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
-import logo from "../assets/logo.svg";
-import NavBarDropDown from "./NavBarDropDown";
-import NavBar from "./NavBar";
 
 function Header({ classes }: HeaderProps) {
   const [checked, setChecked] = useState(false);
@@ -44,7 +37,7 @@ function Header({ classes }: HeaderProps) {
   );
 }
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     root: {
       display: "flex",

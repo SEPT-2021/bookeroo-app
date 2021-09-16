@@ -10,9 +10,8 @@ import { useLocation } from "react-router-dom";
 import { getCapture } from "../../util/api";
 
 function PaymentSuccess({ classes }: PaymentSuccessProps) {
-
-
   const s = useLocation().search;
+  // eslint-disable-next-line no-console
   console.log(s);
 
   const token = s.substring(s.indexOf("=") + 1, s.lastIndexOf("&"));
@@ -21,7 +20,8 @@ function PaymentSuccess({ classes }: PaymentSuccessProps) {
     return getCapture({ token });
   };
 
-  window.onload = function() {
+  // eslint-disable-next-line func-names
+  window.onload = function () {
     past();
   };
 

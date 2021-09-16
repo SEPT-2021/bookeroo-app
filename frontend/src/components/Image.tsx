@@ -54,6 +54,7 @@ export default function Image({
   const { user } = useContext(GlobalContext);
   const client = useQueryClient();
   const { mutate: deleteMutate, isLoading } = useMutation(deleteBookById, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onSuccess: (_, __, ___) => {
       client.invalidateQueries("books");
     },

@@ -13,12 +13,15 @@ function CheckOut({ classes }: CheckOutProps) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setData] = useState<CartType>();
 
   const {
     data: checkoutData,
     mutate,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isLoading,
     reset,
   } = useMutation(checkout);
@@ -46,6 +49,7 @@ function CheckOut({ classes }: CheckOutProps) {
     const newData = makeData();
     setData(newData);
     mutate(newData);
+    // eslint-disable-next-line no-console
     console.log(newData);
   };
   if (checkoutData) {
