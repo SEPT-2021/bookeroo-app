@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,6 +86,8 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
+        user.setEnabled(true);
+        user.setRoles("ROLE_USER");
         service.saveUser(user);
 
         LoginRequest request = new LoginRequest();
@@ -146,6 +148,8 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
+        user.setEnabled(true);
+        user.setRoles("ROLE_USER");
         service.saveUser(user);
 
         LoginRequest request = new LoginRequest();
@@ -157,7 +161,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(SecurityConstant.JWT_TOKEN_PREFIX));
+        assertFalse(response.isEmpty());
     }
 
 }
