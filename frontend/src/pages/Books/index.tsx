@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 // eslint-disable-next-line import/no-cycle
-import Book from "../../components/Book/Book";
+import Book from "../../components/Book";
 import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
