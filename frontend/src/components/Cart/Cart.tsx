@@ -1,9 +1,11 @@
 import React from "react";
+import { Button } from "@material-ui/core";
 // eslint-disable-next-line import/no-cycle
 import CartItem from "../CartItem/CartItem";
 import { Wrapper } from "./Cart.styles";
 // eslint-disable-next-line import/no-cycle
 import { BookItemType } from "../../pages/Books";
+import PayPal from "../PayPal/PayPal";
 
 type Props = {
   cartItems: BookItemType[];
@@ -13,8 +15,8 @@ type Props = {
 
 const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
   const calculateTotal = (items: BookItemType[]) =>
-    /* items.reduce((ack: number, item) => ack + item.amount * item.price, 0); */
-    items.reduce((ack: number, item) => ack + item.amount * 110, 0);
+    items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
+  /* items.reduce((ack: number, item) => ack + item.amount * 110, 0); */
 
   return (
     <Wrapper>
@@ -29,6 +31,7 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
         />
       ))}
       <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
+      <PayPal />
     </Wrapper>
   );
 };
