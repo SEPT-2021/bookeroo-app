@@ -16,6 +16,8 @@ function CheckOut({ classes }: CheckOutProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setData] = useState<CartType>();
 
+  // eslint-disable-next-line no-console
+  console.log(data);
   const {
     data: checkoutData,
     mutate,
@@ -25,6 +27,7 @@ function CheckOut({ classes }: CheckOutProps) {
     isLoading,
     reset,
   } = useMutation(checkout);
+
   const getLocal = () => {
     return JSON.parse(localStorage.getItem("cart") as string) as DataItemType[];
   };
@@ -121,7 +124,6 @@ const styles = (theme: Theme) => {
       "& .MuiTextField-root": {
         margin: theme.spacing(1),
         width: "25ch",
-        gridArea: "center",
         marginTop: "100px",
       },
     },

@@ -53,18 +53,23 @@ export const addBook = makeTypedAPICall<
   {
     title: string;
     author: string;
+    pageCount: string;
     isbn: string;
-    coverUrl: string;
+    price: string;
     description: string;
-    price: number;
-    pageCount: number;
+    coverFile: File | unknown;
   },
   unknown
 >((args) => {
   const data = new FormData();
-  Object.entries(args).forEach(([key, value]) => {
-    data.append(key, String(value));
-  });
+  data.append("title", args.title);
+  data.append("author", args.author);
+  data.append("pageCount", args.pageCount);
+  data.append("isbn", args.isbn);
+  data.append("price", args.price);
+  data.append("description", args.description);
+  data.append("coverFile", args.coverFile as File);
+
   return api.post(getRouteURL("books", "add"), data, {
     headers: {
       "Content-Type": `multipart/form-data`,
