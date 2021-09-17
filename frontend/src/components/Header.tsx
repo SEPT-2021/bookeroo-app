@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Button,
   Collapse,
   createStyles,
   IconButton,
@@ -8,6 +9,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
+import Link from "../util/Link";
 
 function Header({ classes }: HeaderProps) {
   const [checked, setChecked] = useState(false);
@@ -26,7 +28,13 @@ function Header({ classes }: HeaderProps) {
             Welcome to <br />
             <span className={classes.colorText}>Bookeroo.</span>
           </h1>
-          <Scroll to="book-list" smooth>
+          <Link to="/allBooks">
+            <Button variant="contained" color="primary">
+              View our Collection
+            </Button>
+          </Link>
+          <br />
+          <Scroll to="contact" smooth>
             <IconButton>
               <ExpandMoreIcon className={classes.goDown} />
             </IconButton>
