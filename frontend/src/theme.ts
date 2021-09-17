@@ -37,6 +37,11 @@ const theme = createTheme({
           color: "white",
         },
       },
+      text: {
+        "& span": {
+          color: "black",
+        },
+      },
     },
   },
 });

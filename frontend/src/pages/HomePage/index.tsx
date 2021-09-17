@@ -17,7 +17,7 @@ function HomePage({ classes }: HomePageProps) {
   return (
     <div className={classes.root}>
       <Header />
-      <Container style={{ marginBottom: "200px" }} id="contact">
+      <Container style={{ marginBottom: "200px" }} id="contact" maxWidth="sm">
         <Typography
           variant="h6"
           style={{ color: "white", fontWeight: "bolder" }}
