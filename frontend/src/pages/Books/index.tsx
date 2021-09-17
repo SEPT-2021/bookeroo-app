@@ -15,7 +15,7 @@ import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
 // eslint-disable-next-line import/no-cycle
-import { getAllBooks, getBookBySearchTerm } from "../../util/api";
+import { getBookBySearchTerm } from "../../util/api";
 import { BookItemType } from "../../util/types";
 import BookList from "../../components/BookList";
 import SearchBar from "../../components/searchBar";
@@ -31,10 +31,12 @@ const Books = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as BookItemType[]);
   const [search, setSearch] = useState("");
-  const { data, isLoading, error, remove } = useQuery("books", () =>
+  const { data, isLoading, error, refetch } = useQuery("books", () =>
     getBookBySearchTerm({ searchTerm: search })
   );
-  const onSearch = () => remove();
+  const onSearch = () => {
+    refetch();
+  };
   const getItems = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     return cartItems.map((obj) => ({
@@ -101,6 +103,7 @@ const Books = () => {
             </Badge>
           </StyledButton>
         </Box>
+        {!data || (data?.length === 0 && <h3>No books found!</h3>)}
         <BookList books={data || []} onClick={handleAddToCart} checked />
       </Container>
     </Wrapper>

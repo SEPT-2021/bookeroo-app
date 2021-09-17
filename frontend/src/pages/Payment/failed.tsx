@@ -1,14 +1,13 @@
 import React from "react";
 import {
   Button,
-  CircularProgress,
   createStyles,
   Grid,
   Theme,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { Check, Clear } from "@material-ui/icons";
+import { Clear } from "@material-ui/icons";
 import Link from "../../util/Link";
 
 function PaymentFailed({ classes }: PaymentFailedProps) {
