@@ -15,9 +15,10 @@ import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
 // eslint-disable-next-line import/no-cycle
-import { getAllBooks } from "../../util/api";
+import { getAllBooks, getBookBySearchTerm } from "../../util/api";
 import { BookItemType } from "../../util/types";
 import BookList from "../../components/BookList";
+import SearchBar from "../../components/searchBar";
 
 const StyledButton = styled(IconButton)`
   margin-right: 30px;
@@ -29,8 +30,11 @@ const StyledButton = styled(IconButton)`
 const Books = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as BookItemType[]);
-  const { data, isLoading, error } = useQuery("books", getAllBooks);
-
+  const [search, setSearch] = useState("");
+  const { data, isLoading, error, remove } = useQuery("books", () =>
+    getBookBySearchTerm({ searchTerm: search })
+  );
+  const onSearch = () => remove();
   const getItems = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     return cartItems.map((obj) => ({
@@ -85,7 +89,12 @@ const Books = () => {
         />
       </Drawer>
       <Container>
-        <Box display="flex" justifyContent="flex-end">
+        <Box display="flex" justifyContent="space-evenly">
+          <SearchBar
+            searchTerm={search}
+            setSearchTerm={setSearch}
+            search={onSearch}
+          />
           <StyledButton onClick={() => setCartOpen(true)}>
             <Badge badgeContent={getTotalItems(cartItems)} color="error">
               <ShoppingCartOutlined />

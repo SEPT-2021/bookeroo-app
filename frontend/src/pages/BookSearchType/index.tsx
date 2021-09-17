@@ -23,9 +23,6 @@ function BookSearchType({ classes }: BookSearchTypeProps) {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12}>
-        <SearchBar />
-      </Grid>
       <Grid container spacing={2} justify="center">
         <div
           style={{

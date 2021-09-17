@@ -90,8 +90,16 @@ export const getBookBySearchTerm = makeTypedAPICall<
   {
     searchTerm: string;
   },
-  unknown
->((args) => api.get(getRouteURL("books", `?search=${args.searchTerm}`)));
+  BookItemType[]
+>((args) => {
+  const search = new URLSearchParams({});
+  if (args.searchTerm) {
+    search.append("search", args.searchTerm);
+  }
+  return api.get(
+    getRouteURL("books", search.toString() ? `?${search.toString()}` : "")
+  );
+});
 
 export const getBookByType = makeTypedAPICall<
   {

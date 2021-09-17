@@ -22,9 +22,6 @@ function BookSearch({ classes }: BookSearchProps) {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12}>
-        <SearchBar />
-      </Grid>
       <Grid container spacing={2} justify="center">
         <div
           style={{
@@ -65,6 +62,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       height: "100vh",
+      marginTop: "80px",
     },
     steps: {
       "& img": {

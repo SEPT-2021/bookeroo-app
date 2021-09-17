@@ -1,39 +1,22 @@
 import React, { useState } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import {
-  createStyles,
   alpha,
-  Theme,
+  createStyles,
   makeStyles,
+  Theme,
 } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import { useMutation } from "react-query";
 import { getBookBySearchTerm } from "../util/api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        display: "block",
-      },
-    },
     search: {
-      position: "relative",
+      display: "flex",
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: alpha(theme.palette.common.white, 0.15),
+      backgroundColor: theme.palette.grey["100"],
+      marginTop: 15,
       "&:hover": {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
       },
@@ -47,7 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
     searchIcon: {
       padding: theme.spacing(0, 2),
       height: "100%",
-      position: "absolute",
       pointerEvents: "none",
       display: "flex",
       alignItems: "center",
@@ -59,7 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       transition: theme.transitions.create("width"),
       width: "100%",
       [theme.breakpoints.up("sm")]: {
@@ -72,68 +53,44 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SearchBar() {
+export default function SearchBar({
+  searchTerm,
+  setSearchTerm,
+  search,
+}: {
+  searchTerm: string;
+  setSearchTerm: (val: string) => void;
+  search(): void;
+}) {
   const classes = useStyles();
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data, error, isSuccess, isLoading, mutate } =
-    useMutation(getBookBySearchTerm);
-
-  if (isSuccess) {
-    // eslint-disable-next-line no-console
-    console.log("SEARCH WORKS");
-    // eslint-disable-next-line no-console
-    console.log(data);
-  }
 
   const handleKeyPress = async (event: { key: string }) => {
     if (event.key === "Enter") {
-      mutate({ searchTerm });
+      search();
     }
   };
 
-  const onInputChange = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Bookeroo
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              type="search"
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              value={searchTerm}
-              onChange={onInputChange}
-              onKeyPress={handleKeyPress}
-            />
-          </div>
-        </Toolbar>
-      </AppBar>
+    <div className={classes.search}>
+      <div className={classes.searchIcon}>
+        <SearchIcon />
+      </div>
+      <InputBase
+        type="search"
+        placeholder="Search…"
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput,
+        }}
+        inputProps={{ "aria-label": "search" }}
+        value={searchTerm}
+        onChange={onInputChange}
+        onKeyPress={handleKeyPress}
+      />
     </div>
   );
 }

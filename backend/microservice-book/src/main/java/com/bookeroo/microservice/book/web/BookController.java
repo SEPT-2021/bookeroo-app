@@ -39,7 +39,7 @@ public class BookController {
         this.bookValidator = bookValidator;
     }
 
-    @PostMapping(value = "/add" )
+    @PostMapping(value = "/add")
     public ResponseEntity<?> addNewBook(@ModelAttribute(name = "formData") BookFormData formData, BindingResult result) {
         Book book = new Book();
         book.setTitle(formData.getTitle());
@@ -95,6 +95,8 @@ public class BookController {
     public ResponseEntity<Iterable<Book>> searchForBook(
             @RequestParam("search") String value,
             @RequestParam(name = "type", required = false) String type) {
+        if (type == null && value == null)
+            return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
         Iterable<Book> searchResults = null;
         if (type != null) {
             switch (type) {
