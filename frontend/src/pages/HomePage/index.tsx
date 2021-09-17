@@ -2,9 +2,7 @@ import React from "react";
 import { createStyles, withStyles, WithStyles } from "@material-ui/core";
 import Header from "../../components/Header";
 import backgroundImage from "../../assets/books/backgroundBook2.png";
-import BooksToBuy from "../../components/BookList";
 import Footer from "../../components/Footer";
-import books from "../../static/books";
 
 function HomePage({ classes }: HomePageProps) {
   return (

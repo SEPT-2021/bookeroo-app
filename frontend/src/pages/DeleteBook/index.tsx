@@ -7,6 +7,9 @@ import { deleteBookById } from "../../util/api";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
 
+/**
+ * @deprecated
+ */
 function DeleteBook({ classes }: DeleteBookProps) {
   const [id, setId] = useState("");
 

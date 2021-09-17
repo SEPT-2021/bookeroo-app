@@ -4,15 +4,12 @@ import {
   Badge,
   Box,
   Drawer,
-  Grid,
   IconButton,
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 // eslint-disable-next-line import/no-cycle
-import { ShoppingCart, ShoppingCartOutlined } from "@material-ui/icons";
-import Book from "../../components/Book";
+import { ShoppingCartOutlined } from "@material-ui/icons";
 import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
