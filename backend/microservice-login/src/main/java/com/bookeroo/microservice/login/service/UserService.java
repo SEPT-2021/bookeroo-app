@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -22,8 +23,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User saveUser(User user) {
+    public User saveUser(@Valid User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
         return userRepository.save(user);
     }
 
@@ -60,7 +62,7 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRolesNotContaining("ROLE_ADMIN");
+        return userRepository.findAllByRolesNotContaining(User.Role.ADMIN.name());
     }
 
 }

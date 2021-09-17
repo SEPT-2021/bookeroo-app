@@ -1,6 +1,8 @@
 package com.bookeroo.microservice.login.web;
 
+import com.bookeroo.microservice.login.exception.UserFieldValidationException;
 import com.bookeroo.microservice.login.exception.UserNotFoundException;
+import com.bookeroo.microservice.login.exception.UsernameAlreadyExistsException;
 import com.bookeroo.microservice.login.model.User;
 import com.bookeroo.microservice.login.payload.AuthenticationRequest;
 import com.bookeroo.microservice.login.payload.AuthenticationResponse;
@@ -10,7 +12,6 @@ import com.bookeroo.microservice.login.service.UserService;
 import com.bookeroo.microservice.login.service.ValidationErrorService;
 import com.bookeroo.microservice.login.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,15 +58,12 @@ public class UserController {
 
         try {
             user = userService.saveUser(user);
-        } catch (DataIntegrityViolationException exception) {
-            if (exception.getMostSpecificCause().getMessage().contains("Duplicate"))
-                return new ResponseEntity<>(
-                        String.format("Username %s already exists", user.getUsername()), HttpStatus.BAD_REQUEST);
-            else {
-                return new ResponseEntity<>(exception.getMostSpecificCause().getCause(), HttpStatus.BAD_REQUEST);
-            }
         } catch (Exception exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+            if (exception.getMessage().contains("UK"))
+                throw new UsernameAlreadyExistsException(
+                        String.format("Username %s already exists", user.getUsername()));
+            else
+                throw new UserFieldValidationException(exception.getMessage());
         }
 
         String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));

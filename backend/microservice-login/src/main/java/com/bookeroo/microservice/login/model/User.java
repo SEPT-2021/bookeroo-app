@@ -3,9 +3,9 @@ package com.bookeroo.microservice.login.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -24,10 +24,16 @@ public class User {
     private String firstName;
     @NotBlank(message = "Lastname cannot be blank")
     private String lastName;
+    @NotBlank(message = "User needs to have one or more roles of format ROLE_{label}")
     private String roles;
+    @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
     private Date createdAt;
     private Date updatedAt;
+
+    public enum Role {
+        USER, ADMIN
+    }
 
     public User() {
     }

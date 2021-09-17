@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_EXPIRATION_TIME_MILLIS;
-import static com.bookeroo.microservice.book.security.SecurityConstant.SECRET_KEY;
+import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SECRET_KEY;
 
 @Component
 public class JWTTokenProvider {
@@ -29,7 +29,7 @@ public class JWTTokenProvider {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(JWT_SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     private boolean isTokenExpired(String token) {
@@ -48,7 +48,7 @@ public class JWTTokenProvider {
                 .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME_MILLIS))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET_KEY)
                 .compact();
     }
 

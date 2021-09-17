@@ -2,13 +2,21 @@ package com.bookeroo.microservice.book.model;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+
 public class BookFormData {
 
+    @NotNull(message = "Title must not be null")
     private String title;
+    @NotNull(message = "Author must not be null")
     private String author;
+    @NotNull(message = "Page count must not be null")
     private long pageCount;
+    @NotNull(message = "ISBN must not be null")
     private String isbn;
+    @NotNull(message = "Price must not be null")
     private double price;
+    @NotNull(message = "Description must not be null")
     private String description;
     private MultipartFile coverFile;
     private String coverUrl;

@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.login.exception;
+package com.bookeroo.microservice.book.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +12,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public final ResponseEntity<?> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception){
-        UsernameAlreadyExistsResponse exceptionResponse = new UsernameAlreadyExistsResponse(exception.getMessage());
+    public final ResponseEntity<?> handleInvalidFormData(BookFormDataValidationException exception){
+        BookFormDataValidationResponse exceptionResponse = new BookFormDataValidationResponse(exception.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public final ResponseEntity<?> handleInvalidField(UserFieldValidationException exception){
-        UserFieldValidationResponse exceptionResponse = new UserFieldValidationResponse(exception.getMessage());
+    public final ResponseEntity<?> handleIsbnExists(ISBNAlreadyExistsException exception){
+        BookFormDataValidationResponse exceptionResponse = new BookFormDataValidationResponse(exception.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 

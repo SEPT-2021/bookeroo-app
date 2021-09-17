@@ -2,6 +2,7 @@ package com.bookeroo.microservice.login.service;
 
 import com.bookeroo.microservice.login.exception.UserNotFoundException;
 import com.bookeroo.microservice.login.model.User;
+import com.bookeroo.microservice.login.repository.UserRepository;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ class UserServiceTest {
 
     @Autowired
     UserService service;
+
+    @Autowired
+    UserRepository repository;
 
     User setupUser() {
         User user = new User();
@@ -87,6 +91,14 @@ class UserServiceTest {
         service.saveUser(admin);
 
         assertFalse(service.getAllNonAdminUsers().contains(admin));
+    }
+
+    @Test
+    void givenUserFieldEmpty_whenUserSaved_throwsException() {
+        User user = setupUser();
+        user.setLastName("");
+
+        assertThrows(Exception.class, () -> repository.save(user));
     }
 
 }

@@ -23,12 +23,11 @@ public class BookService {
 
     public Book saveBook(Book book) {
         if (bookRepository.findByIsbn(book.getIsbn()) != null)
-            throw new ISBNAlreadyExistsException(String.format("ISBN \"%s\" already exists", book.getIsbn()));
+            throw new ISBNAlreadyExistsException(String.format("ISBN %s already exists", book.getIsbn()));
 
         return bookRepository.save(book);
     }
 
-    // TODO extend to further getBy"?" methods as necessary
     public Book getBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (!book.isPresent())

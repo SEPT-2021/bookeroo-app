@@ -48,11 +48,6 @@ public class PaymentController {
                     approveLink = link;
             }
 
-//            return ResponseEntity
-//                    .status(HttpStatus.valueOf(response.statusCode()))
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .body(new Json().serialize(response.result()));
-
             assert approveLink != null;
             return new ResponseEntity<>(approveLink.href(), HttpStatus.OK);
         } catch (Exception exception) {

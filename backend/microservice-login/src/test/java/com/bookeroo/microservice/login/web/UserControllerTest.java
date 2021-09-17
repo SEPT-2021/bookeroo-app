@@ -66,15 +66,13 @@ class UserControllerTest {
     }
 
     @Test
-    void givenUser_whenRegistrationDetailsIncorrect_thenReturn() throws Exception {
+    void givenUser_whenRegistrationDetailsIncorrect_thenReturnError() throws Exception {
         User user = setupUser();
-
-        String response = mockMvc.perform(post("/api/users/register")
+        user.setLastName("");
+        mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
-                .andReturn().getResponse().getContentAsString();
-
-        assertTrue(response.contains(user.getUsername()));
+                .andExpect(status().isBadRequest());
     }
 
     @Test
