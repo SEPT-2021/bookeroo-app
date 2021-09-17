@@ -70,6 +70,9 @@ export default function SearchBar({
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    if (!e.target.value) {
+      setTimeout(search, 200);
+    }
   };
 
   return (
