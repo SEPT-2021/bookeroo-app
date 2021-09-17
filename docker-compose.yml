@@ -4,7 +4,7 @@ services:
         container_name: microservice-login
         build:
             context: ./backend/microservice-login
-            dockerfile: Dockerfile
+            dockerfile: ../template.Dockerfile
         image: bookeroo/micrservice-login:latest
         ports:
             - 8080:8080
@@ -12,7 +12,7 @@ services:
         container_name: microservice-book
         build:
             context: ./backend/microservice-book
-            dockerfile: Dockerfile
+            dockerfile: ../template.Dockerfile
         image: bookeroo/micrservice-book:latest
         ports:
             - 8081:8081
@@ -20,7 +20,7 @@ services:
         container_name: microservice-payment
         build:
             context: ./backend/microservice-payment
-            dockerfile: Dockerfile
+            dockerfile: ../template.Dockerfile
         image: bookeroo/micrservice-payment:latest
         ports:
             - 8082:8082
