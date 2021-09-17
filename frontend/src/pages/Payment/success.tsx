@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  Button,
+  CircularProgress,
   createStyles,
   Grid,
   Theme,
@@ -7,28 +9,43 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { useLocation } from "react-router-dom";
-import { getCapture } from "../../util/api";
+import { useMutation } from "react-query";
+import { Check, Clear } from "@material-ui/icons";
+import { paymentCapture } from "../../util/api";
+import Link from "../../util/Link";
 
 function PaymentSuccess({ classes }: PaymentSuccessProps) {
-  const s = useLocation().search;
-  // eslint-disable-next-line no-console
-  console.log(s);
-
-  const token = s.substring(s.indexOf("=") + 1, s.lastIndexOf("&"));
-
-  const past = async () => {
-    return getCapture({ token });
-  };
-
-  // eslint-disable-next-line func-names
-  window.onload = function () {
-    past();
-  };
+  const loc = useLocation();
+  const { mutate, isLoading, isError } = useMutation(paymentCapture);
+  const token = new URLSearchParams(loc.search).get("token");
+  useEffect(() => {
+    if (token) mutate({ token });
+  }, [mutate, token]);
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={4} md={7} className={classes.steps}>
-        PAYMENT SUCCESS
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "100vh" }}
+      >
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            {isError || !token ? <Clear /> : <Check />}
+
+            <h1>Payment {isError || !token ? "Fail!" : "Success!"}</h1>
+            <Link to="/allBooks">
+              <Button variant="contained" color="primary">
+                Keep Browsing
+              </Button>
+            </Link>
+          </>
+        )}
       </Grid>
     </Grid>
   );
