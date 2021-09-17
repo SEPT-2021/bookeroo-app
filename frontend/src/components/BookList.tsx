@@ -37,7 +37,7 @@ export default function BookList({
     <div className={classes.root} id="book-list">
       <Grid container id="header" alignItems="center" justifyContent="center">
         {books.map((book) => (
-          <Grid item md={3} className={classes.gridItem}>
+          <Grid item md={3} sm={6} xs={12} className={classes.gridItem}>
             <Image
               book={book}
               key={book.title}
