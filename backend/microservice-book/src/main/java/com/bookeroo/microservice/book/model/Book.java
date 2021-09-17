@@ -23,9 +23,10 @@ public class Book {
     @NotNull(message = "Price cannot be null")
     private double price;
     @NotBlank(message = "Books are required to have a brief description")
-    @Size(max = 4095)
+    @Size(max = 8191)
     private String description;
     @NotBlank(message = "Books must have a cover")
+    @Size(max = 1023)
     private String cover;
     private Date createdAt;
     private Date updatedAt;
