@@ -2,12 +2,13 @@ package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.exception.BookFormDataValidationException;
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
+import com.bookeroo.microservice.book.exception.S3UploadFailureException;
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.BookFormData;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.S3Service;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
-import com.bookeroo.microservice.book.validator.BookValidator;
+import com.bookeroo.microservice.book.validator.BookFormDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URL;
 
 @RestController
@@ -26,34 +28,34 @@ public class BookController {
     private final BookService bookService;
     private final S3Service s3Service;
     private final ValidationErrorService validationErrorService;
-    private final BookValidator bookValidator;
+    private final BookFormDataValidator bookFormDataValidator;
 
     @Autowired
     public BookController(
             BookService bookService,
             S3Service s3Service,
             ValidationErrorService validationErrorService,
-            BookValidator bookValidator) {
+            BookFormDataValidator bookFormDataValidator) {
         this.bookService = bookService;
         this.s3Service = s3Service;
         this.validationErrorService = validationErrorService;
-        this.bookValidator = bookValidator;
+        this.bookFormDataValidator = bookFormDataValidator;
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> addNewBook(@Valid @ModelAttribute BookFormData formData, BindingResult result) {
-        Book book = new Book();
-        book.setTitle(formData.getTitle());
-        book.setAuthor(formData.getAuthor());
-        book.setPageCount(formData.getPageCount());
-        book.setIsbn(formData.getIsbn());
-        book.setPrice(formData.getPrice());
-        book.setDescription(formData.getDescription());
-        bookValidator.validate(book, result);
-
+        bookFormDataValidator.validate(formData, result);
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
+
+        Book book = new Book();
+        book.setTitle(formData.getTitle());
+        book.setAuthor(formData.getAuthor());
+        book.setPageCount(Long.parseLong(formData.getPageCount()));
+        book.setIsbn(formData.getIsbn());
+        book.setPrice(Double.parseDouble(formData.getPrice()));
+        book.setDescription(formData.getDescription());
 
         try {
             MultipartFile coverFile = formData.getCoverFile();
@@ -66,6 +68,8 @@ public class BookController {
         } catch (ConstraintViolationException exception) {
             throw new BookFormDataValidationException(
                     exception.getConstraintViolations().iterator().next().getMessage());
+        } catch (IOException exception) {
+            throw new S3UploadFailureException(exception.getMessage());
         } catch (Exception exception) {
             throw new BookFormDataValidationException(exception.getMessage());
         }

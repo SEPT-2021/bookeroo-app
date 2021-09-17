@@ -18,7 +18,7 @@ public class Book {
     private String author;
     @NotNull(message = "Number of pages cannot be null")
     private long pageCount;
-    @NotBlank(message = "ISBN must be valid")
+    @NotBlank(message = "ISBN cannot be blank")
     private String isbn;
     @NotNull(message = "Price cannot be null")
     private double price;

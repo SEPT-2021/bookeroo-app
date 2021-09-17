@@ -1,7 +1,6 @@
 package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.model.Book;
-import com.bookeroo.microservice.book.model.BookFormData;
 import com.bookeroo.microservice.book.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
@@ -9,13 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 
-import static com.bookeroo.microservice.book.validator.BookValidator.MINIMUM_ISBN_LENGTH;
+import static com.bookeroo.microservice.book.validator.BookFormDataValidator.MINIMUM_ISBN_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc

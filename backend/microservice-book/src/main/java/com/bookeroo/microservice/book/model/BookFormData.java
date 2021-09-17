@@ -2,21 +2,22 @@ package com.bookeroo.microservice.book.model;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class BookFormData {
 
-    @NotNull(message = "Title must not be null")
+    @NotBlank(message = "Title must not be blank")
     private String title;
-    @NotNull(message = "Author must not be null")
+    @NotBlank(message = "Author must not be blank")
     private String author;
-    @NotNull(message = "Page count must not be null")
-    private long pageCount;
-    @NotNull(message = "ISBN must not be null")
+    @NotBlank(message = "Page count must not be empty")
+    private String pageCount;
+    @NotBlank(message = "ISBN must not be blank")
     private String isbn;
-    @NotNull(message = "Price must not be null")
-    private double price;
-    @NotNull(message = "Description must not be null")
+    @NotBlank(message = "Price must not not be empty")
+    private String price;
+    @NotBlank(message = "Books are required to have a brief description")
     private String description;
     private MultipartFile coverFile;
     private String coverUrl;
@@ -40,11 +41,11 @@ public class BookFormData {
         this.author = author;
     }
 
-    public long getPageCount() {
+    public String getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(long pageCount) {
+    public void setPageCount(String pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -56,11 +57,11 @@ public class BookFormData {
         this.isbn = isbn;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
