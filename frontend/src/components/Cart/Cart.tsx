@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 // eslint-disable-next-line import/no-cycle
 import CartItem from "../CartItem/CartItem";
 import { Wrapper } from "./Cart.styles";

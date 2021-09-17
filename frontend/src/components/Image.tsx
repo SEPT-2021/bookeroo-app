@@ -13,17 +13,8 @@ import {
   IconButton,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {
-  AddShoppingCart,
-  Book,
-  Delete,
-  Favorite,
-  Launch,
-  LinkOutlined,
-  Share,
-} from "@material-ui/icons";
+import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
-import type { Book as BookType } from "../static/books";
 import { BOOK_ANIMATION_TIME } from "../static/books";
 import { BookItemType } from "../util/types";
 import { GlobalContext } from "./GlobalContext";

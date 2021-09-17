@@ -2,7 +2,7 @@ import React from "react";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
 import theme from "./theme";
 import Login from "./pages/Login";
@@ -12,7 +12,6 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
-import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
 import CheckOut from "./pages/CheckOut";
@@ -64,12 +63,7 @@ ReactDOM.render(
               <Route path="/allBooks">
                 <Books />
               </Route>
-              <Route path="/deleteBook">
-                <DeleteBook />
-              </Route>
-              <Redirect to="/login" />
               <Route component={NotFoundPage} />
-              <Redirect to="/" />
             </Switch>
           </BrowserRouter>
         </GlobalContextProvider>
