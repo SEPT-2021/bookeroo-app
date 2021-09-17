@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import {
   Badge,
   Box,
+  Container,
   Drawer,
   IconButton,
   LinearProgress,
@@ -83,14 +84,16 @@ const Books = () => {
           sendToCart={getItems()}
         />
       </Drawer>
-      <Box display="flex" justifyContent="flex-end">
-        <StyledButton onClick={() => setCartOpen(true)}>
-          <Badge badgeContent={getTotalItems(cartItems)} color="error">
-            <ShoppingCartOutlined />
-          </Badge>
-        </StyledButton>
-      </Box>
-      <BookList books={data || []} onClick={handleAddToCart} checked />
+      <Container>
+        <Box display="flex" justifyContent="flex-end">
+          <StyledButton onClick={() => setCartOpen(true)}>
+            <Badge badgeContent={getTotalItems(cartItems)} color="error">
+              <ShoppingCartOutlined />
+            </Badge>
+          </StyledButton>
+        </Box>
+        <BookList books={data || []} onClick={handleAddToCart} checked />
+      </Container>
     </Wrapper>
   );
 };
