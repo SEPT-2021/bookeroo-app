@@ -67,9 +67,7 @@ ReactDOM.render(
               <Route path="/deleteBook">
                 <DeleteBook />
               </Route>
-              <Redirect to="/login" />
               <Route component={NotFoundPage} />
-              <Redirect to="/" />
             </Switch>
           </BrowserRouter>
         </GlobalContextProvider>
