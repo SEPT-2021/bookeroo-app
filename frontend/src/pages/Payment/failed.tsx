@@ -1,17 +1,35 @@
 import React from "react";
 import {
+  Button,
+  CircularProgress,
   createStyles,
   Grid,
   Theme,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
+import { Check, Clear } from "@material-ui/icons";
+import Link from "../../util/Link";
 
 function PaymentFailed({ classes }: PaymentFailedProps) {
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={4} md={7} className={classes.steps}>
-        PAYMENT FAILED
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "100vh" }}
+      >
+        <Clear />
+        <h1>Payment Processing Failed!</h1>
+        <h4>Try again some other time?</h4>
+        <Link to="/allBooks">
+          <Button variant="contained" color="primary">
+            Keep Browsing
+          </Button>
+        </Link>
       </Grid>
     </Grid>
   );
