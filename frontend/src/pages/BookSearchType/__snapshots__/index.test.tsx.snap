@@ -17,7 +17,7 @@ exports[`BookSearchType matches snapshot render BookSearchType 1`] = `
           novalidate=""
         >
           <div
-            class="MuiBox-root MuiBox-root-8"
+            class="MuiBox-root MuiBox-root-13"
           >
             <div
               class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
