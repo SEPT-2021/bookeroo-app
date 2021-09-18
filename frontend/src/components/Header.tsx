@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
+import TextLoop from "react-text-loop";
 import Link from "../util/Link";
 
 function Header({ classes }: HeaderProps) {
@@ -26,7 +27,15 @@ function Header({ classes }: HeaderProps) {
         <div className={classes.container}>
           <h1 className={classes.title}>
             Welcome to <br />
-            <span className={classes.colorText}>Bookeroo.</span>
+            <span className={classes.colorText}>Bookeroo</span>
+            <TextLoop
+              interval={1000}
+              fade
+              springConfig={{ stiffness: 200, damping: 5 }}
+            >
+              <span> . </span>
+              <span> ! </span>
+            </TextLoop>
           </h1>
           <Link to="/allBooks">
             <Button variant="contained" color="primary">
