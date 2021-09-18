@@ -21,7 +21,7 @@ function BookSearch({ classes }: BookSearchProps) {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid container spacing={2} justify="center">
+      <Grid container spacing={2} justifyContent="center">
         <div
           style={{
             display: "flex",
