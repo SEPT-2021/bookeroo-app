@@ -80,7 +80,7 @@ function AddBook({ classes }: AddBookProps) {
   }; */
 
   return (
-    <Grid container component="main" className={classes.root} justify="center">
+    <Grid container component="main" className={classes.root} justifyContent="center">
       <div className={classes.paper}>
         <Avatar className={classes.avatar} />
         <Typography component="h1" variant="h5">
