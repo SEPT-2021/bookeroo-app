@@ -22,7 +22,7 @@ describe("Button render matches snapshot", () => {
 });
 
 describe("NotFoundPage matches snapshot", () => {
-  test("render snapshot", () => {
+  test("render NotFoundPage", () => {
     const { container } = render(
       <QueryClientProvider client={new QueryClient()}>
         <NotFoundPage />

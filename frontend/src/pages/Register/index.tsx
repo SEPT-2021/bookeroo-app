@@ -33,10 +33,6 @@ function Register({ classes }: RegisterProps) {
   const { data, error, isSuccess, isLoading, mutate } =
     useMutation(registerUser);
 
-  // TODO debugging
-  // eslint-disable-next-line no-console
-  console.log(data);
-
   const onSubmit = async () => {
     mutate({
       username,
