@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -63,9 +64,8 @@ public class BookService {
 
     public List<Book> searchBookByKeyword(String keyword) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByTitleContains(keyword).forEach(results::add);
-        bookRepository.findByAuthorContains(keyword).forEach(results::add);
-        bookRepository.findByDescriptionContains(keyword).forEach(results::add);
+        bookRepository.findByTitleContainsOrAuthorContainsOrDescriptionContains(
+                keyword, keyword, keyword).forEach(results::add);
 
         return results;
     }
