@@ -1,20 +1,16 @@
 package com.bookeroo.microservice.book.service;
 
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
-import com.bookeroo.microservice.book.exception.ISBNAlreadyExistsException;
 import com.bookeroo.microservice.book.model.Book;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.bookeroo.microservice.book.validator.BookFormDataValidator.MINIMUM_ISBN_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @SpringBootTest
 public class BookServiceTests {
@@ -52,10 +48,9 @@ public class BookServiceTests {
     @Test
     void givenBooksPresent_whenAllBooksFetched_returnBooks() {
         Book book1 = setupBook();
-        book1 = bookService.saveBook(book1);
-
+        bookService.saveBook(book1);
         Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        bookService.saveBook(book2);
 
         assertFalse(bookService.getAllBooks().isEmpty());
     }
