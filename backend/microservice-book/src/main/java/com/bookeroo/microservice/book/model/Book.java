@@ -140,9 +140,7 @@ public class Book {
                 && author.equals(book.author)
                 && isbn.equals(book.isbn)
                 && description.equals(book.description)
-                && cover.equals(book.cover)
-                && createdAt.equals(book.createdAt)
-                && updatedAt.equals(book.updatedAt);
+                && cover.equals(book.cover);
     }
 
     @Override
