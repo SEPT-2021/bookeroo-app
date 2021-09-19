@@ -1,7 +1,6 @@
 package com.bookeroo.microservice.payment.web;
 
 import com.bookeroo.microservice.payment.model.CartCheckout;
-import com.bookeroo.microservice.payment.model.ShippingAddress;
 import com.bookeroo.microservice.payment.model.User;
 import com.bookeroo.microservice.payment.repository.UserRepository;
 import com.bookeroo.microservice.payment.security.JWTTokenProvider;
@@ -10,7 +9,6 @@ import com.bookeroo.microservice.payment.service.ValidationErrorService;
 import com.bookeroo.microservice.payment.validator.ShippingAddressValidator;
 import com.paypal.http.HttpResponse;
 import com.paypal.http.serializer.Json;
-import com.paypal.orders.AddressPortable;
 import com.paypal.orders.LinkDescription;
 import com.paypal.orders.Order;
 import org.springframework.beans.factory.annotation.Autowired;
