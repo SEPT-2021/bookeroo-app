@@ -15,9 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.bookeroo.microservice.login.security.SecurityConstant.HEADER_KEY;
-import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_TOKEN_PREFIX;
+import static com.bookeroo.microservice.login.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_SCHEME;
 
+/**
+ * Custom authentication filter extending from {@link OncePerRequestFilter}.
+ */
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
@@ -40,14 +43,16 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HEADER_KEY);
+        String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
         String username = null, jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith(JWT_TOKEN_PREFIX)) {
-            jwt = authorizationHeader.substring(JWT_TOKEN_PREFIX.length());
+        // Validate token structure
+        if (authorizationHeader != null && authorizationHeader.startsWith(JWT_SCHEME)) {
+            jwt = authorizationHeader.substring(JWT_SCHEME.length());
             username = tokenProvider.extractUsername(jwt);
         }
 
+        // Validate token claims
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (tokenProvider.validateToken(jwt, userDetails)) {

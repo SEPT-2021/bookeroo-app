@@ -7,12 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * JPA repository for the {@link User} entity.
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    User getById(long id);
-
-    User findById(long id);
 
     User getByUsername(String username);
 

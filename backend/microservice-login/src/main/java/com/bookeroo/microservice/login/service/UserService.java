@@ -11,6 +11,9 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Service layer for the {@link User} JPA entity.
+ */
 @Service
 public class UserService {
 

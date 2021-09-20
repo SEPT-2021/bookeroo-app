@@ -1,5 +1,8 @@
 package com.bookeroo.microservice.payment.model;
 
+/**
+ * An individual unit of order item.
+ */
 public class OrderItem {
 
     private Book book;

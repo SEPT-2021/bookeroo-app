@@ -1,19 +1,22 @@
 package com.bookeroo.microservice.login.exception;
 
+/**
+ * Response body presented when {@link UserFieldValidationException} is thrown.
+ */
 public class UserFieldValidationResponse {
 
-    private String field;
+    private String what;
 
-    public UserFieldValidationResponse(String field) {
-        this.field = field;
+    public UserFieldValidationResponse(String what) {
+        this.what = what;
     }
 
-    public String getField() {
-        return field;
+    public String getWhat() {
+        return what;
     }
 
-    public void setField(String field) {
-        this.field = field;
+    public void setWhat(String what) {
+        this.what = what;
     }
 
 }

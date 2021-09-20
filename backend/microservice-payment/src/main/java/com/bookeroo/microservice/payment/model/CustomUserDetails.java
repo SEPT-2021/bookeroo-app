@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the {@link UserDetails} for configuring Spring Security.
+ */
 public class CustomUserDetails implements UserDetails {
 
     private final String username;

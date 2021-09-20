@@ -15,6 +15,9 @@ import java.util.List;
 
 import static com.bookeroo.microservice.payment.config.PaymentConstants.*;
 
+/**
+ * Service layer for {@link PayPalHttpClient}.
+ */
 @Service
 public class PayPalService {
 
@@ -39,8 +42,8 @@ public class PayPalService {
         ApplicationContext applicationContext = new ApplicationContext()
                 .brandName(BRAND_NAME)
                 .landingPage(LANDING_PAGE)
-                .returnUrl("http://localhost:3000/paymentSuccess")
-                .cancelUrl("http://localhost:3000/paymentFailure")
+                .returnUrl(RETURN_URL)
+                .cancelUrl(CANCEL_URL)
                 .shippingPreference(SHIPPING_PREFERENCE);
         orderRequest.applicationContext(applicationContext);
 

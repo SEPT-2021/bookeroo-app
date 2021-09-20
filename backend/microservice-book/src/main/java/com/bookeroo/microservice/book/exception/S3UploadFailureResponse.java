@@ -1,5 +1,8 @@
 package com.bookeroo.microservice.book.exception;
 
+/**
+ * Response body presented when {@link S3UploadFailureException} is thrown.
+ */
 public class S3UploadFailureResponse {
 
     private String cover;

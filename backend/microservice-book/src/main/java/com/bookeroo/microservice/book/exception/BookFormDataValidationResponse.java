@@ -1,5 +1,8 @@
 package com.bookeroo.microservice.book.exception;
 
+/**
+ * Response body presented when {@link BookFormDataValidationException} is thrown.
+ */
 public class BookFormDataValidationResponse {
 
     private String author;

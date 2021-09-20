@@ -2,6 +2,9 @@ package com.bookeroo.microservice.payment.model;
 
 import java.util.List;
 
+/**
+ * Cart checkout data model, contains information required to check out an order.
+ */
 public class CartCheckout {
 
     private List<OrderItem> orderItems;

@@ -8,10 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * JPA repository for the {@link Book} entity.
+ */
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-
-    Book getById(long id);
 
     Optional<Book> findById(long id);
 
@@ -20,8 +21,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Iterable<Book> findByTitleContains(String keyword);
 
     Iterable<Book> findByAuthorContains(String keyword);
-
-    Iterable<Book> findByDescriptionContains(String keyword);
 
     Iterable<Book> findByTitleContainsOrAuthorContainsOrDescriptionContains(
             String title, String author, String description);

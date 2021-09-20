@@ -6,6 +6,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+/**
+ * Book JPA entity to represent the book data model.
+ */
 @Entity
 public class Book {
 
@@ -18,14 +21,15 @@ public class Book {
     private String author;
     @NotNull(message = "Number of pages cannot be null")
     private long pageCount;
-    @NotBlank(message = "ISBN must be valid")
+    @NotBlank(message = "ISBN cannot be blank")
     private String isbn;
     @NotNull(message = "Price cannot be null")
     private double price;
     @NotBlank(message = "Books are required to have a brief description")
-    @Size(max = 4095)
+    @Size(max = 8191)
     private String description;
     @NotBlank(message = "Books must have a cover")
+    @Size(max = 1023)
     private String cover;
     private Date createdAt;
     private Date updatedAt;
@@ -121,6 +125,24 @@ public class Book {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = new Date();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object)
+            return true;
+        if (object == null || getClass() != object.getClass())
+            return false;
+
+        Book book = (Book) object;
+        return id == book.id
+                && pageCount == book.pageCount
+                && Double.compare(book.price, price) == 0
+                && title.equals(book.title)
+                && author.equals(book.author)
+                && isbn.equals(book.isbn)
+                && description.equals(book.description)
+                && cover.equals(book.cover);
     }
 
     @Override

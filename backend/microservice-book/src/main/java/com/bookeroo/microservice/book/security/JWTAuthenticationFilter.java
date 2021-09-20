@@ -18,11 +18,17 @@ import java.io.IOException;
 import static com.bookeroo.microservice.book.security.SecurityConstant.AUTHORIZATION_HEADER;
 import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEME;
 
+/**
+ * Custom authentication filter extending from {@link OncePerRequestFilter}.
+ */
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private JWTTokenProvider tokenProvider;
     private CustomUserDetailsService userDetailsService;
+
+    public JWTAuthenticationFilter() {
+    }
 
     @Autowired
     public void setTokenProvider(JWTTokenProvider tokenProvider) {
@@ -40,11 +46,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
         String username = null, jwt = null;
 
+        // Validate token structure
         if (authorizationHeader != null && authorizationHeader.startsWith(JWT_SCHEME)) {
             jwt = authorizationHeader.substring(JWT_SCHEME.length());
             username = tokenProvider.extractUsername(jwt);
         }
 
+        // Validate token claims
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (tokenProvider.validateToken(jwt, userDetails)) {

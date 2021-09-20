@@ -3,8 +3,10 @@ package com.bookeroo.microservice.book.model;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
+/**
+ * Book form data model, used to map to the form data JSON request body.
+ */
 public class BookFormData {
 
     @NotBlank(message = "Title must not be blank")

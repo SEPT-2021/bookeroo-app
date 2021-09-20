@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configures the PayPal client using the credentials from the application.properties file.
+ */
 @Configuration
 public class PayPalConfigurer {
 

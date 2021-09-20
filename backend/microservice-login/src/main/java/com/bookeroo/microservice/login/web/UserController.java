@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * REST Controller to hold the microservice's user endpoint implementations.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

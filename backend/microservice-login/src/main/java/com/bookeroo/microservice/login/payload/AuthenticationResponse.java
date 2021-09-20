@@ -2,6 +2,9 @@ package com.bookeroo.microservice.login.payload;
 
 import com.bookeroo.microservice.login.model.User;
 
+/**
+ * Response body presented based on authentication result.
+ */
 public class AuthenticationResponse {
 
     private User user;

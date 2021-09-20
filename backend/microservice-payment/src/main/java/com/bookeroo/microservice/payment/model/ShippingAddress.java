@@ -1,5 +1,8 @@
 package com.bookeroo.microservice.payment.model;
 
+/**
+ * Shipping address data model, contains information to ship orders to.
+ */
 public class ShippingAddress {
 
     private String addressLine1;

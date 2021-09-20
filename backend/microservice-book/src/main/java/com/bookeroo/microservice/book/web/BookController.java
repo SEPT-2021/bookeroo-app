@@ -21,6 +21,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * REST Controller to hold the microservice's endpoint implementations.
+ */
 @RestController
 @RequestMapping("/api/books")
 public class BookController {

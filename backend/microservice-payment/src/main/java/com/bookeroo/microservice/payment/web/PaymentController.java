@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static com.bookeroo.microservice.payment.security.SecurityConstant.HEADER_KEY;
-import static com.bookeroo.microservice.payment.security.SecurityConstant.JWT_TOKEN_PREFIX;
+import static com.bookeroo.microservice.payment.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.payment.security.SecurityConstant.JWT_SCHEME;
 
+/**
+ * Controller to hold the microservice's endpoint implementations.
+ */
 @Controller
 @RequestMapping("/api/orders")
 public class PaymentController {
@@ -49,7 +52,7 @@ public class PaymentController {
 
     @PostMapping("/checkout")
     public ResponseEntity<?> checkoutOrder(
-            @RequestHeader(HEADER_KEY) String tokenHeader,
+            @RequestHeader(AUTHORIZATION_HEADER) String tokenHeader,
             @RequestBody CartCheckout cartCheckout,
             BindingResult result) {
         try {
@@ -58,7 +61,7 @@ public class PaymentController {
             if (errorMap != null)
                 return errorMap;
 
-            String jwt = tokenHeader.substring(JWT_TOKEN_PREFIX.length());
+            String jwt = tokenHeader.substring(JWT_SCHEME.length());
             User user = userRepository.getByUsername(jwtTokenProvider.extractUsername(jwt));
             HttpResponse<Order> response = payPalService.createOrder(user, cartCheckout);
             LinkDescription approveLink = null;

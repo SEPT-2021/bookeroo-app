@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Implementation of the {@link Validator} for the {@link User} data model validation.
+ */
 @Component
 public class UserValidator implements Validator {
 

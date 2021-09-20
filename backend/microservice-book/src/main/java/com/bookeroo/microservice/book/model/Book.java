@@ -5,8 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Objects;
 
+/**
+ * Book JPA entity to represent the book data model.
+ */
 @Entity
 public class Book {
 

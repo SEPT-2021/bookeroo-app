@@ -2,6 +2,9 @@ package com.bookeroo.microservice.login.payload;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Authentication request data model, used to map to the authentication request JSON body.
+ */
 public class AuthenticationRequest {
 
     @NotBlank(message = "Username cannot be blank")
