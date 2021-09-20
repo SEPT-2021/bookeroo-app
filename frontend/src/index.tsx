@@ -54,7 +54,7 @@ ReactDOM.render(
               <Route path="/paymentSuccess">
                 <PaymentSuccess />
               </Route>
-              <Route path="/paymentFailed">
+              <Route path="/paymentFailure/">
                 <PaymentFailed />
               </Route>
               <Route path="/checkOut">

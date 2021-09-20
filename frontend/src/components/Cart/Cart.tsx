@@ -1,11 +1,15 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-// eslint-disable-next-line import/no-cycle
+import styled from "styled-components";
 import CartItem from "../CartItem/CartItem";
-import { Wrapper } from "./Cart.styles";
-// eslint-disable-next-line import/no-cycle
 import Link from "../../util/Link";
 import { BookItemType, DataItemType } from "../../util/types";
+
+const Wrapper = styled.aside`
+  font-family: Arial, Helvetica, sans-serif;
+  width: 500px;
+  padding: 20px;
+`;
 
 type Props = {
   cartItems: BookItemType[];
@@ -22,7 +26,6 @@ const Cart: React.FC<Props> = ({
 }) => {
   const calculateTotal = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
-  /* items.reduce((ack: number, item) => ack + item.amount * 110, 0); */
 
   const setLocalStorageCart = () => {
     localStorage.setItem("cart", JSON.stringify(sendToCart));

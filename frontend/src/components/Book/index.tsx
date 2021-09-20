@@ -1,9 +1,12 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-// eslint-disable-next-line import/no-cycle
-import { Wrapper } from "./Book.styles";
+import styled from "styled-components";
 import { BookItemType } from "../../util/types";
+
+export const Wrapper = styled.div`
+  margin-top: 80px;
+`;
 
 type Props = {
   item: BookItemType;

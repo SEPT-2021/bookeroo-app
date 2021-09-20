@@ -9,16 +9,13 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
-// eslint-disable-next-line import/no-cycle
 import { ShoppingCartOutlined } from "@material-ui/icons";
-import { Wrapper } from "../../components/Book/Book.styles";
-// eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
-// eslint-disable-next-line import/no-cycle
 import { getBookBySearchTerm } from "../../util/api";
 import { BookItemType } from "../../util/types";
 import BookList from "../../components/BookList";
 import SearchBar from "../../components/searchBar";
+import { Wrapper } from "../../components/Book";
 
 const StyledButton = styled(IconButton)`
   margin-right: 30px;
