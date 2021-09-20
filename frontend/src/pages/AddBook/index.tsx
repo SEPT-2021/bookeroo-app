@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useMutation } from "react-query";
 import {
@@ -38,8 +38,7 @@ function AddBook({ classes }: AddBookProps) {
     setPrice("");
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data, error, isSuccess, isLoading, mutate } = useMutation(addBook);
+  const { error, isSuccess, isLoading, mutate } = useMutation(addBook);
 
   const onSubmit = async () => {
     mutate({
@@ -66,21 +65,19 @@ function AddBook({ classes }: AddBookProps) {
 
   const changeIsCoverFilePickedState = () => setIsCoverFilePicked(true);
 
-  const uploadCoverFile = async (event: any) => {
+  const uploadCoverFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target || !event.target.files) return;
     await setCoverFile(event.target.files[0]);
     await makeData();
   };
 
-  /* const uploadCoverFile = (
-    event: React.MouseEvent<HTMLInputElement, MouseEvent>
-  ) => {
-    const element = event.target as HTMLInputElement;
-    element.value = "";
-    console.log(element.files);
-  }; */
-
   return (
-    <Grid container component="main" className={classes.root} justifyContent="center">
+    <Grid
+      container
+      component="main"
+      className={classes.root}
+      justifyContent="center"
+    >
       <div className={classes.paper}>
         <Avatar className={classes.avatar} />
         <Typography component="h1" variant="h5">
