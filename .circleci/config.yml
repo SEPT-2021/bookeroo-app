@@ -1,0 +1,56 @@
+version: 2.1
+
+executors:
+  openjdk:
+    docker:
+      - image: cimg/openjdk:8.0.292
+  node:
+    docker:
+      - image: cimg/node:14.17.6
+
+orbs:
+  maven: circleci/maven@1.2.0
+  node: circleci/node@4.7.0
+
+workflows:
+  microservice_login:
+    jobs:
+      - maven/test:
+          name: Test Login Microservice
+          executor: openjdk
+          app_src_directory: backend/microservice-login
+          test_results_path: backend/microservice-login/target/surefire-reports
+  microservice_book:
+    jobs:
+      - maven/test:
+          name: Test Book Microservice
+          executor: openjdk
+          app_src_directory: backend/microservice-book
+          test_results_path: backend/microservice-book/target/surefire-reports
+  microservice_payment:
+    jobs:
+      - maven/test:
+          name: Test Payment Microservice
+          executor: openjdk
+          app_src_directory: backend/microservice-payment
+          test_results_path: backend/microservice-payment/target/surefire-reports
+  frontend:
+    jobs:
+      - node/run:
+          name: Lint Frontend
+          app-dir: frontend
+          pkg-manager: yarn
+          version: 14.17.6
+          yarn-run: lint
+      - node/run:
+          name: Test Frontend
+          app-dir: frontend
+          pkg-manager: yarn
+          version: 14.17.6
+          yarn-run: test
+      - node/run:
+          name: Build Frontend
+          app-dir: frontend
+          pkg-manager: yarn
+          version: 14.17.6
+          yarn-run: build

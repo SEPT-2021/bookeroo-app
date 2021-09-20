@@ -1,0 +1,34 @@
+version: '2'
+services:
+    microservice-login:
+        container_name: microservice-login
+        build:
+            context: ./backend/microservice-login
+            dockerfile: ../template.Dockerfile
+        image: bookeroo/micrservice-login:latest
+        ports:
+            - 8080:8080
+    microservice-book:
+        container_name: microservice-book
+        build:
+            context: ./backend/microservice-book
+            dockerfile: ../template.Dockerfile
+        image: bookeroo/micrservice-book:latest
+        ports:
+            - 8081:8081
+    microservice-payment:
+        container_name: microservice-payment
+        build:
+            context: ./backend/microservice-payment
+            dockerfile: ../template.Dockerfile
+        image: bookeroo/micrservice-payment:latest
+        ports:
+            - 8082:8082
+    frontend:
+        container_name: frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        image: bookeroo/frontend:latest
+        ports:
+            - 3000:3000
