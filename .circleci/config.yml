@@ -33,8 +33,18 @@ workflows:
           test_results_path: backend/microservice-payment/target/surefire-reports
   frontend:
     jobs:
-      - node/test:
+      - node/run:
           app-dir: frontend
           pkg-manager: yarn
           version: 14.17.6
-          run-command: react-scripts test
+          yarn-run: yarn lint
+      - node/run:
+          app-dir: frontend
+          pkg-manager: yarn
+          version: 14.17.6
+          yarn-run: yarn test
+      - node/run:
+          app-dir: frontend
+          pkg-manager: yarn
+          version: 14.17.6
+          yarn-run: yarn build
