@@ -38,18 +38,21 @@ workflows:
     jobs:
       - node/run:
           name: Lint Frontend
+          executor: node
           app-dir: frontend
           pkg-manager: yarn
           version: 14.17.6
           yarn-run: yarn lint
       - node/run:
           name: Test Frontend
+          executor: node
           app-dir: frontend
           pkg-manager: yarn
           version: 14.17.6
           yarn-run: yarn test
       - node/run:
           name: Build Frontend
+          executor: node
           app-dir: frontend
           pkg-manager: yarn
           version: 14.17.6
