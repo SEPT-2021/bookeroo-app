@@ -69,7 +69,7 @@ public class BookService {
         bookRepository.findByTitleContainsOrAuthorContainsOrDescriptionContains(
                 keyword, keyword, keyword).forEach(results::add);
 
-        return results.stream().distinct().collect(Collectors.toList());
+        return results;
     }
 
 }
