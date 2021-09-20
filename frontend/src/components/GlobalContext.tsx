@@ -1,6 +1,7 @@
 import React, { createContext, FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { api, profile, TokenProps } from "../util/api";
+import { api, profile } from "../util/api";
+import { TokenProps } from "../util/types";
 
 export interface User {
   createdAt: string;
@@ -26,7 +27,12 @@ export const GlobalContext = createContext<GlobalContextType>({} as never);
 
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   const [token, setToken] = useState<string>();
-  const { data: userData, refetch, remove } = useQuery("user", profile);
+  const {
+    data: userData,
+    refetch,
+    remove,
+    isError,
+  } = useQuery("user", profile);
   // On token change, update the header and refetch user.
   useEffect(() => {
     if (token) {
@@ -41,7 +47,16 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   useEffect(() => {
     setToken(localStorage.getItem("token") || undefined);
   }, []);
-
+  const signout = () => {
+    localStorage.removeItem("token");
+    setToken(undefined);
+  };
+  // Clear token if error
+  useEffect(() => {
+    if (isError) {
+      signout();
+    }
+  }, [isError]);
   return (
     <GlobalContext.Provider
       value={{
@@ -50,10 +65,7 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
           localStorage.setItem("token", data.jwt as string);
           setToken(data.jwt);
         },
-        signout: () => {
-          localStorage.removeItem("token");
-          setToken(undefined);
-        },
+        signout,
       }}
     >
       {children}

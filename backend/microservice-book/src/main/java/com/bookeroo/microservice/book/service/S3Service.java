@@ -1,7 +1,10 @@
 package com.bookeroo.microservice.book.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -10,11 +13,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Service layer for the {@link AmazonS3} client.
+ */
 @Service
 public class S3Service {
 
@@ -44,9 +49,9 @@ public class S3Service {
         return amazonS3.getUrl(bucketName, uniqueFileName).toExternalForm();
     }
 
-    public String uploadFile(URL fileUrl, String fileName) throws IOException, URISyntaxException {
+    public String uploadFile(URL fileUrl, String fileName) throws IOException {
         BufferedInputStream inputStream = new BufferedInputStream(fileUrl.openStream());
-        File file = new File(fileName.replace(" ", "_")
+        File file = new File(getCleanFileName(fileName)
                 + "." + StringUtils.getFilenameExtension(fileUrl.getFile()));
         FileOutputStream outputStream = new FileOutputStream(file);
 
@@ -92,6 +97,20 @@ public class S3Service {
 
     private String getUniqueFileName(String fileName) {
         return LocalDateTime.now() + "_" + fileName;
+    }
+
+    public String getCleanFileName(String fileName) {
+        String replacement = "_";
+        return fileName
+                .replace("\\", replacement)
+                .replace("/", replacement)
+                .replace(":", replacement)
+                .replace("*", replacement)
+                .replace("?", replacement)
+                .replace("\"", replacement)
+                .replace("<", replacement)
+                .replace(">", replacement)
+                .replace("|", replacement);
     }
 
 }

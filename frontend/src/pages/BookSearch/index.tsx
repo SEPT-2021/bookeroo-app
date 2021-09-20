@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { createStyles, Theme } from "@material-ui/core/styles";
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { useMutation } from "react-query";
-import SearchBar from "../../components/searchBar";
 import { findBookById } from "../../util/api";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
@@ -22,10 +21,7 @@ function BookSearch({ classes }: BookSearchProps) {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12}>
-        <SearchBar />
-      </Grid>
-      <Grid container spacing={2} justify="center">
+      <Grid container spacing={2} justifyContent="center">
         <div
           style={{
             display: "flex",
@@ -65,6 +61,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       height: "100vh",
+      marginTop: "80px",
     },
     steps: {
       "& img": {

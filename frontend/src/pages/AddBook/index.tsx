@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useMutation } from "react-query";
 import {
@@ -16,39 +16,68 @@ import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
 
 function AddBook({ classes }: AddBookProps) {
+  const bookSelection = false;
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [isbn, setIsbn] = useState("");
   const [pageCount, setPageCount] = useState("");
+  const [coverFile, setCoverFile] = useState<File>();
+  const [isCoverFilePicked, setIsCoverFilePicked] = useState(bookSelection);
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
 
-  const { data, error, isSuccess, isLoading, mutate } = useMutation(addBook);
+  // WIP
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const clearState = () => {
+    setTitle("");
+    setAuthor("");
+    setAuthor("");
+    setPageCount("");
+    setIsCoverFilePicked(bookSelection);
+    setDescription("");
+    setPrice("");
+  };
 
-  const ls = localStorage.getItem("token");
-  // eslint-disable-next-line no-console
-  console.log(ls);
-
-  // TODO debugging
-  // eslint-disable-next-line no-console
-  console.log(data);
+  const { error, isSuccess, isLoading, mutate } = useMutation(addBook);
 
   const onSubmit = async () => {
     mutate({
       title,
       author,
       isbn,
-      pageCount: parseInt(pageCount, 10),
-      coverUrl: "https://picsum.photos/200",
-      description: "Hi",
-      price: 23,
+      pageCount,
+      coverFile,
+      description,
+      price,
     });
   };
 
   if (isSuccess) {
-    return <Redirect to="/addBookSuccess" />;
+    return <Redirect to="/allBooks" />;
   }
 
+  const makeData = async () => {
+    if (isCoverFilePicked) {
+      const formData = new FormData();
+      formData.append("image", coverFile as File);
+    }
+  };
+
+  const changeIsCoverFilePickedState = () => setIsCoverFilePicked(true);
+
+  const uploadCoverFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target || !event.target.files) return;
+    await setCoverFile(event.target.files[0]);
+    await makeData();
+  };
+
   return (
-    <Grid container component="main" className={classes.root} justify="center">
+    <Grid
+      container
+      component="main"
+      className={classes.root}
+      justifyContent="center"
+    >
       <div className={classes.paper}>
         <Avatar className={classes.avatar} />
         <Typography component="h1" variant="h5">
@@ -83,6 +112,31 @@ function AddBook({ classes }: AddBookProps) {
             autoComplete="pageCount"
             onChange={setPageCount}
           />
+          <FormField
+            errors={error?.response?.data}
+            name="price"
+            label="Price"
+            autoComplete="price"
+            onChange={setPrice}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="description"
+            label="Description"
+            autoComplete="description"
+            onChange={setDescription}
+          />
+          <div>
+            <form encType="multipart/form-data" action="">
+              <input
+                type="file"
+                name="file"
+                onChange={uploadCoverFile}
+                onClick={changeIsCoverFilePickedState}
+              />
+            </form>
+          </div>
+
           <LoadingButton
             loading={isLoading}
             fullWidth
@@ -111,6 +165,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       height: "100vh",
+      marginTop: "50px",
     },
     steps: {
       "& img": {

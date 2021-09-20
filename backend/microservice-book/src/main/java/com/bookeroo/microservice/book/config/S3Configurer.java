@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configures Amazon S3 client to allow REST calls on the bucket.
+ */
 @Configuration
 public class S3Configurer {
 
@@ -21,6 +24,7 @@ public class S3Configurer {
 
     @Bean
     public AmazonS3 amazonS3() {
+        // Create Amazon S3 client from credential provided in the application.properties file
         final BasicAWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
         return AmazonS3ClientBuilder
                 .standard()

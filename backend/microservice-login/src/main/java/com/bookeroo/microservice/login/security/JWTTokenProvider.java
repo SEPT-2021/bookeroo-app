@@ -10,8 +10,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_EXPIRATION_TIME_MILLIS;
-import static com.bookeroo.microservice.login.security.SecurityConstant.SECRET_KEY;
+import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_SECRET_KEY;
 
+/**
+ * Utility class to handle JWT token related operations.
+ */
 @Component
 public class JWTTokenProvider {
 
@@ -29,7 +32,7 @@ public class JWTTokenProvider {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(JWT_SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     private boolean isTokenExpired(String token) {
@@ -37,23 +40,26 @@ public class JWTTokenProvider {
     }
 
     public String generateToken(UserDetails userDetails) {
+        // Generate a new JWT token
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
         return createToken(claims, userDetails.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
+        // Build JWT token using the provided claims
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME_MILLIS))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET_KEY)
                 .compact();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
+            // Validate token claims and expiration
             String username = extractUsername(token);
             return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
         } catch (SignatureException exception) {

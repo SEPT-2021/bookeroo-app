@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Implementation of the {@link UserDetailsService} for Spring Security.
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

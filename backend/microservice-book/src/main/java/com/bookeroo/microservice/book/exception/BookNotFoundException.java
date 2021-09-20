@@ -3,7 +3,10 @@ package com.bookeroo.microservice.book.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+/**
+ * Thrown when a book is not found.
+ */
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class BookNotFoundException extends RuntimeException {
 
     public BookNotFoundException(String message) {

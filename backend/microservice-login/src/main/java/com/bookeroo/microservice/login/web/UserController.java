@@ -1,6 +1,8 @@
 package com.bookeroo.microservice.login.web;
 
+import com.bookeroo.microservice.login.exception.UserFieldValidationException;
 import com.bookeroo.microservice.login.exception.UserNotFoundException;
+import com.bookeroo.microservice.login.exception.UsernameAlreadyExistsException;
 import com.bookeroo.microservice.login.model.User;
 import com.bookeroo.microservice.login.payload.AuthenticationRequest;
 import com.bookeroo.microservice.login.payload.AuthenticationResponse;
@@ -21,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * REST Controller to hold the microservice's user endpoint implementations.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -33,9 +38,12 @@ public class UserController {
     private final JWTTokenProvider tokenProvider;
 
     @Autowired
-    public UserController(UserService userService, CustomUserDetailsService userDetailsService,
-                          UserValidator userValidator, ValidationErrorService validationErrorService,
-                          AuthenticationManager authenticationManager, JWTTokenProvider tokenProvider) {
+    public UserController(UserService userService,
+                          CustomUserDetailsService userDetailsService,
+                          UserValidator userValidator,
+                          ValidationErrorService validationErrorService,
+                          AuthenticationManager authenticationManager,
+                          JWTTokenProvider tokenProvider) {
         this.userService = userService;
         this.userDetailsService = userDetailsService;
         this.userValidator = userValidator;
@@ -51,13 +59,23 @@ public class UserController {
         if (errorMap != null)
             return errorMap;
 
-        user = userService.saveUser(user);
+        try {
+            user = userService.saveUser(user);
+        } catch (Exception exception) {
+            if (exception.getMessage().contains("UK"))
+                throw new UsernameAlreadyExistsException(
+                        String.format("Username %s already exists", user.getUsername()));
+            else
+                throw new UserFieldValidationException(exception.getMessage());
+        }
+
         String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
         return new ResponseEntity<>(new AuthenticationResponse(user, jwt), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest, BindingResult result) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest,
+                                              BindingResult result) {
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;

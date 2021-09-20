@@ -27,6 +27,16 @@ const theme = createTheme({
         textTransform: "none",
         fontWeight: "bold",
       },
+      contained: {
+        "& span": {
+          color: "black",
+        },
+      },
+      containedPrimary: {
+        "& span": {
+          color: "white",
+        },
+      },
       text: {
         "& span": {
           color: "black",

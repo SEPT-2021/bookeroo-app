@@ -37,9 +37,6 @@ function NavBar({ classes }: NavBarProps) {
           <Link to="/addBook">
             <Button>Add Book</Button>
           </Link>
-          <Link to="/deleteBook">
-            <Button>Delete Book</Button>
-          </Link>
         </Box>
         <Box>
           {user ? (

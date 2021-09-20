@@ -1,11 +1,13 @@
 package com.bookeroo.microservice.login.validator;
 
 import com.bookeroo.microservice.login.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Implementation of the {@link Validator} for the {@link User} data model validation.
+ */
 @Component
 public class UserValidator implements Validator {
 
@@ -22,6 +24,9 @@ public class UserValidator implements Validator {
         if (user.getPassword().length() < MINIMUM_PASSWORD_LENGTH)
             errors.rejectValue("password", "Length",
                     String.format("Password must be at least %d characters", MINIMUM_PASSWORD_LENGTH));
+
+        if (user.getRoles().contains(User.Role.ADMIN.name()))
+            errors.rejectValue("roles", "Value", "User role cannot be ADMIN");
     }
 
 }

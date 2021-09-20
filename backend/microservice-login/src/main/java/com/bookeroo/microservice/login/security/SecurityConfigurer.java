@@ -15,6 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configures Spring Security filters to secure the endpoints.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -82,7 +85,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.js").permitAll()
                 .antMatchers("/api/users/register").permitAll()
                 .antMatchers("/api/users/login").permitAll()
-                .antMatchers("/api/users/**").hasRole("USER")
+                .antMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/admins/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 

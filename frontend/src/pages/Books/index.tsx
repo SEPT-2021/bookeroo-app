@@ -2,46 +2,48 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import {
   Badge,
+  Box,
+  Container,
   Drawer,
-  Grid,
   IconButton,
   LinearProgress,
 } from "@material-ui/core";
 import styled from "styled-components";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 // eslint-disable-next-line import/no-cycle
-import Book from "../../components/Book";
+import { ShoppingCartOutlined } from "@material-ui/icons";
 import { Wrapper } from "../../components/Book/Book.styles";
 // eslint-disable-next-line import/no-cycle
 import Cart from "../../components/Cart/Cart";
-import { getAllBooks } from "../../util/api";
-
-export type BookItemType = {
-  id: number;
-  title: string;
-  author: string;
-  pageCount: string;
-  isbn: string;
-  description: string;
-  cover: string;
-  price: number;
-  amount: number;
-};
+// eslint-disable-next-line import/no-cycle
+import { getBookBySearchTerm } from "../../util/api";
+import { BookItemType } from "../../util/types";
+import BookList from "../../components/BookList";
+import SearchBar from "../../components/searchBar";
 
 const StyledButton = styled(IconButton)`
-  position: fixed;
-  z-index: 100;
-  right: 20px;
-  top: 20px;
+  margin-right: 30px;
+  border-radius: 50%;
+  margin-top: 10px;
+  background-color: orange;
 `;
 
 const Books = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as BookItemType[]);
-  const { data, isLoading, error } = useQuery<BookItemType[]>(
-    "books",
-    getAllBooks
+  const [search, setSearch] = useState("");
+  const { data, isLoading, error, refetch } = useQuery("books", () =>
+    getBookBySearchTerm({ searchTerm: search })
   );
+  const onSearch = () => {
+    refetch();
+  };
+  const getItems = () => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    return cartItems.map((obj) => ({
+      book: obj,
+      quantity: obj.amount,
+    }));
+  };
 
   const getTotalItems = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -85,20 +87,25 @@ const Books = () => {
           cartItems={cartItems}
           addToCart={handleAddToCart}
           removeFromCart={handleRemoveFromCart}
+          sendToCart={getItems()}
         />
       </Drawer>
-      <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color="error">
-          <AddShoppingCartIcon />
-        </Badge>
-      </StyledButton>
-      <Grid container spacing={4}>
-        {data?.map((item) => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Book item={item} handleAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
-      </Grid>
+      <Container>
+        <Box display="flex" justifyContent="space-evenly">
+          <SearchBar
+            searchTerm={search}
+            setSearchTerm={setSearch}
+            search={onSearch}
+          />
+          <StyledButton onClick={() => setCartOpen(true)}>
+            <Badge badgeContent={getTotalItems(cartItems)} color="error">
+              <ShoppingCartOutlined />
+            </Badge>
+          </StyledButton>
+        </Box>
+        {!data || (data?.length === 0 && <h3>No books found!</h3>)}
+        <BookList books={data || []} onClick={handleAddToCart} checked />
+      </Container>
     </Wrapper>
   );
 };

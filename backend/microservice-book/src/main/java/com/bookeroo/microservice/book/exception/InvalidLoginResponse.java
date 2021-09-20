@@ -1,5 +1,8 @@
 package com.bookeroo.microservice.book.exception;
 
+/**
+ * Response body presented when authentication is invalid.
+ */
 public class InvalidLoginResponse {
 
     private String username;

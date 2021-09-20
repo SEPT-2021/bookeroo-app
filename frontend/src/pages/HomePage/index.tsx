@@ -1,15 +1,39 @@
 import React from "react";
-import { createStyles, withStyles, WithStyles } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  createStyles,
+  Typography,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core";
 import Header from "../../components/Header";
 import backgroundImage from "../../assets/books/backgroundBook2.png";
-import BooksToBuy from "../../components/BookList";
 import Footer from "../../components/Footer";
+import FormField from "../../util/FormField";
 
 function HomePage({ classes }: HomePageProps) {
   return (
     <div className={classes.root}>
       <Header />
-      <BooksToBuy />
+      <Container style={{ marginBottom: "200px" }} id="contact" maxWidth="sm">
+        <Typography
+          variant="h6"
+          style={{ color: "white", fontWeight: "bolder" }}
+        >
+          Sign up for our Newsletter
+        </Typography>
+        <FormField
+          name="email"
+          placeholder="Email"
+          style={{ backgroundColor: "white" }}
+        >
+          Email
+        </FormField>
+        <Button variant="contained" color="primary">
+          Submit
+        </Button>
+      </Container>
       <Footer />
     </div>
   );

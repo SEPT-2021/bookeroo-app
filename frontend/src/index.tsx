@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, CssBaseline, ThemeProvider } from "@material-ui/core";
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ReactDOM from "react-dom";
 import theme from "./theme";
 import Login from "./pages/Login";
@@ -12,12 +12,13 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
-import AddBookSuccess from "./pages/AddBook/AddBookSuccess";
-import DeleteBook from "./pages/DeleteBook";
 import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
+import CheckOut from "./pages/CheckOut";
 import NavBar from "./components/NavBar";
 import { GlobalContextProvider } from "./components/GlobalContext";
+import PaymentSuccess from "./pages/Payment/success";
+import PaymentFailed from "./pages/Payment/failed";
 
 const queryClient = new QueryClient();
 
@@ -49,18 +50,20 @@ ReactDOM.render(
               <Route path="/addBook">
                 <AddBook />
               </Route>
-              <Route path="/addBookSuccess">
-                <AddBookSuccess />
+
+              <Route path="/paymentSuccess">
+                <PaymentSuccess />
+              </Route>
+              <Route path="/paymentFailed">
+                <PaymentFailed />
+              </Route>
+              <Route path="/checkOut">
+                <CheckOut />
               </Route>
               <Route path="/allBooks">
                 <Books />
               </Route>
-              <Route path="/deleteBook">
-                <DeleteBook />
-              </Route>
-              <Redirect to="/login" />
               <Route component={NotFoundPage} />
-              <Redirect to="/" />
             </Switch>
           </BrowserRouter>
         </GlobalContextProvider>

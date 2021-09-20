@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST Controller to hold the microservice's admin endpoint implementations.
+ */
 @RestController
 @RequestMapping("/api/admins")
 public class AdminController {

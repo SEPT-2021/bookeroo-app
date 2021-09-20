@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service layer for the {@link Book} JPA entity.
+ */
 @Service
 public class BookService {
 
@@ -23,12 +26,11 @@ public class BookService {
 
     public Book saveBook(Book book) {
         if (bookRepository.findByIsbn(book.getIsbn()) != null)
-            throw new ISBNAlreadyExistsException(String.format("ISBN \"%s\" already exists", book.getIsbn()));
+            throw new ISBNAlreadyExistsException(String.format("ISBN %s already exists", book.getIsbn()));
 
         return bookRepository.save(book);
     }
 
-    // TODO extend to further getBy"?" methods as necessary
     public Book getBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (!book.isPresent())
@@ -64,9 +66,8 @@ public class BookService {
 
     public List<Book> searchBookByKeyword(String keyword) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByTitleContains(keyword).forEach(results::add);
-        bookRepository.findByAuthorContains(keyword).forEach(results::add);
-        bookRepository.findByDescriptionContains(keyword).forEach(results::add);
+        bookRepository.findByTitleContainsOrAuthorContainsOrDescriptionContains(
+                keyword, keyword, keyword).forEach(results::add);
 
         return results;
     }

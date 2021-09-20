@@ -5,19 +5,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.bookeroo.microservice.login.security.SecurityConstant.HEADER_KEY;
-
+/**
+ * Configures Spring Web to allow certain CORS mappings.
+ */
 @Configuration
 public class WebConfigurer {
 
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
+        // Configure CORS mappings to allow frontend interaction
         return new WebMvcConfigurer() {
+
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 WebMvcConfigurer.super.addCorsMappings(registry);
-                registry.addMapping("/**");
+                registry.addMapping("/**")
+                        .allowedOrigins("*").allowedMethods("GET", "POST","PUT", "DELETE");
             }
+
         };
     }
 }

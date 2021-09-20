@@ -5,15 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.Objects;
 
+/**
+ * User JPA entity to represent the user data model.
+ */
 @Entity
 public class User {
-
-    public enum Role {
-        USER, ADMIN
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +27,16 @@ public class User {
     private String firstName;
     @NotBlank(message = "Lastname cannot be blank")
     private String lastName;
+    @NotBlank(message = "User needs to have one or more roles of format ROLE_{label}")
     private String roles;
+    @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
     private Date createdAt;
     private Date updatedAt;
+
+    public enum Role {
+        USER, ADMIN
+    }
 
     public User() {
     }
@@ -52,6 +57,14 @@ public class User {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -66,14 +79,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getRoles() {
@@ -92,16 +97,6 @@ public class User {
         this.enabled = enabled;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = new Date();
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -118,25 +113,14 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        User user = (User) object;
-        return id == user.id
-                && enabled == user.enabled
-                && username.equals(user.username)
-                && password.equals(user.password)
-                && firstName.equals(user.firstName)
-                && lastName.equals(user.lastName)
-                && roles.equals(user.roles)
-                && createdAt.equals(user.createdAt)
-                && updatedAt.equals(user.updatedAt);
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, firstName, lastName, roles, enabled, createdAt, updatedAt);
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
     }
 
     @Override
