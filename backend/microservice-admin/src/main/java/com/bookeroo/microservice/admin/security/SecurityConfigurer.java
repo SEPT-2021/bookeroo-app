@@ -1,6 +1,7 @@
-package com.bookeroo.microservice.login.security;
+package com.bookeroo.microservice.admin.security;
 
-import com.bookeroo.microservice.login.service.CustomUserDetailsService;
+import com.bookeroo.microservice.admin.model.User;
+import com.bookeroo.microservice.admin.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -83,9 +84,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-                .antMatchers("/api/users/register").permitAll()
-                .antMatchers("/api/users/login").permitAll()
-                .antMatchers("/api/users/**").authenticated()
+                // TODO .antMatchers("/api/admins/**").hasRole(User.Role.ADMIN.name())
+                .antMatchers("/api/admins/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
