@@ -36,21 +36,6 @@ public class BookFormDataValidator implements Validator {
             errors.rejectValue("isbn", "Value", "ISBN must not contain anything other than 0-9");
 
         try {
-            double price = Double.parseDouble(book.getPrice());
-
-            if (price < MINIMUM_BOOK_PRICE)
-                errors.rejectValue("price", "Value",
-                        String.format("Price must be at least %.2f AUD", MINIMUM_BOOK_PRICE));
-
-            if (price > MAXIMUM_BOOK_PRICE)
-                errors.rejectValue("price", "Value",
-                        String.format("Price must be less than %.2f AUD", MAXIMUM_BOOK_PRICE));
-        } catch (NumberFormatException exception) {
-            errors.rejectValue("price", "Value",
-                    "Price must be a number");
-        }
-
-        try {
             if (Long.parseLong(book.getPageCount()) < MINIMUM_PAGE_COUNT)
                 errors.rejectValue("pageCount", "Value",
                         String.format("Page count must be at least %d", MINIMUM_PAGE_COUNT));

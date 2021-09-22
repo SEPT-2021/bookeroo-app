@@ -17,8 +17,6 @@ public class BookFormData {
     private String pageCount;
     @NotBlank(message = "ISBN must not be blank")
     private String isbn;
-    @NotBlank(message = "Price must not not be empty")
-    private String price;
     @NotBlank(message = "Books are required to have a brief description")
     private String description;
     private MultipartFile coverFile;
@@ -57,14 +55,6 @@ public class BookFormData {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 
     public String getDescription() {

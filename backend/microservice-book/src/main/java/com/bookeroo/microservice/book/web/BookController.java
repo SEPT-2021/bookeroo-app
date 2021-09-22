@@ -57,7 +57,6 @@ public class BookController {
         book.setAuthor(formData.getAuthor());
         book.setPageCount(Long.parseLong(formData.getPageCount()));
         book.setIsbn(formData.getIsbn());
-        book.setPrice(Double.parseDouble(formData.getPrice()));
         book.setDescription(formData.getDescription());
 
         try {

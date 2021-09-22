@@ -24,7 +24,6 @@ public class BookServiceTests {
         book.setAuthor("testAuthor");
         book.setPageCount(100);
         book.setIsbn(RandomString.make(MINIMUM_ISBN_LENGTH));
-        book.setPrice(100.0);
         book.setDescription("testDescription");
         book.setCover("https://picsum.photos/200");
         return book;

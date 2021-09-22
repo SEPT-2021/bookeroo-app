@@ -23,8 +23,6 @@ public class Book {
     private long pageCount;
     @NotBlank(message = "ISBN cannot be blank")
     private String isbn;
-    @NotNull(message = "Price cannot be null")
-    private double price;
     @NotBlank(message = "Books are required to have a brief description")
     @Size(max = 8191)
     private String description;
@@ -75,14 +73,6 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getDescription() {
@@ -137,7 +127,6 @@ public class Book {
         Book book = (Book) object;
         return id == book.id
                 && pageCount == book.pageCount
-                && Double.compare(book.price, price) == 0
                 && title.equals(book.title)
                 && author.equals(book.author)
                 && isbn.equals(book.isbn)
@@ -154,9 +143,8 @@ public class Book {
                 "\tpageCount: \"%s\"\n" +
                 "\tisbn: \"%s\"\n" +
                 "\tcover: \"%s\"\n" +
-                "\tprice: \"%.2f\"\n" +
                 "\tdescription: \"%s\"\n" +
-                "}", id, title, author, pageCount, isbn, cover, price, description);
+                "}", id, title, author, pageCount, isbn, cover, description);
     }
 
 }
