@@ -56,7 +56,8 @@ public class PaymentController {
             @RequestBody CartCheckout cartCheckout,
             BindingResult result) {
         try {
-            shippingAddressValidator.validate(cartCheckout.getShippingAddress(), result);
+            // TODO wait for frontend to implement validation error responses
+            // shippingAddressValidator.validate(cartCheckout.getShippingAddress(), result);
             ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
             if (errorMap != null)
                 return errorMap;
