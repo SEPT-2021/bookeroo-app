@@ -85,7 +85,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js").permitAll()
                 // TODO .antMatchers("/api/admins/**").hasRole(User.Role.ADMIN.name())
-                .antMatchers("/api/admins/**").permitAll()
+                .antMatchers("/api/admins/**").hasRole(User.Role.ADMIN.name())
+                // .antMatchers("/api/admins/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
