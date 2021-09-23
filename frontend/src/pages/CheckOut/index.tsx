@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createStyles, Theme } from "@material-ui/core/styles";
-import { withStyles, WithStyles } from "@material-ui/core";
+import { Grid, withStyles, WithStyles } from "@material-ui/core";
 import { useMutation } from "react-query";
 import FormField from "../../util/FormField";
 import LoadingButton from "../../util/LoadingButton";
@@ -16,8 +16,6 @@ function CheckOut({ classes }: CheckOutProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setData] = useState<CartType>();
 
-  // eslint-disable-next-line no-console
-  console.log(data);
   const {
     data: checkoutData,
     mutate,
@@ -63,17 +61,30 @@ function CheckOut({ classes }: CheckOutProps) {
   return (
     <div className={classes.root}>
       <form className={classes.root} noValidate autoComplete="off">
-        <div>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="flex-start"
+          spacing={1}
+        >
+          <Grid container spacing={1}>
+            <Grid  item sm={2}/>
+            <Grid item sm={6}>
+            <FormField
+              required
+              errors={error?.response?.data}
+              name="shippingAddress.addressLine1"
+              label="Address Line 1"
+              placeholder="Address Line 1"
+              onChange={setAddressLine1}
+              multiline
+            />
+            </Grid>
+          </Grid>
           <FormField
-            required
-            name="addressLine1"
-            label="Address Line 1"
-            placeholder="Address Line 1"
-            onChange={setAddressLine1}
-            multiline
-          />
-          <FormField
-            name="addressLine2"
+            errors={error?.response?.data}
+            name="shippingAddress.addressLine2"
             label="Address Line 2"
             placeholder="Address Line 2"
             onChange={setAddressLine2}
@@ -81,7 +92,8 @@ function CheckOut({ classes }: CheckOutProps) {
           />
           <FormField
             required
-            name="city"
+            errors={error?.response?.data}
+            name="shippingAddress.city"
             label="City"
             placeholder="City"
             onChange={setCity}
@@ -89,7 +101,8 @@ function CheckOut({ classes }: CheckOutProps) {
           />
           <FormField
             required
-            name="state"
+            errors={error?.response?.data}
+            name="shippingAddress.state"
             label="State"
             placeholder="State"
             onChange={setState}
@@ -97,7 +110,8 @@ function CheckOut({ classes }: CheckOutProps) {
           />
           <FormField
             required
-            name="postalCode"
+            errors={error?.response?.data}
+            name="shippingAddress.postalCode"
             label="Postal Code"
             placeholder="Postal Code"
             onChange={setPostalCode}
@@ -112,7 +126,7 @@ function CheckOut({ classes }: CheckOutProps) {
               Submit
             </LoadingButton>
           </div>
-        </div>
+        </Grid>
       </form>
     </div>
   );
