@@ -34,6 +34,13 @@ workflows:
           executor: openjdk
           app_src_directory: backend/microservice-payment
           test_results_path: backend/microservice-payment/target/surefire-reports
+  microservice_seller:
+    jobs:
+      - maven/test:
+          name: Test Seller Microservice
+          executor: openjdk
+          app_src_directory: backend/microservice-seller
+          test_results_path: backend/microservice-seller/target/surefire-reports
   frontend:
     jobs:
       - node/run:

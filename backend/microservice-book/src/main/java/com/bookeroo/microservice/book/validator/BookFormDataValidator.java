@@ -12,8 +12,6 @@ import org.springframework.validation.Validator;
 public class BookFormDataValidator implements Validator {
 
     public static final int MINIMUM_ISBN_LENGTH = 13;
-    public static final double MINIMUM_BOOK_PRICE = 0.01;
-    public static final double MAXIMUM_BOOK_PRICE = 10000.00;
     public static final int MINIMUM_PAGE_COUNT = 1;
 
     @Override

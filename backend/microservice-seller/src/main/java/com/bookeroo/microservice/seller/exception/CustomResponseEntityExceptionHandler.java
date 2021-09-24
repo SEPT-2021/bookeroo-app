@@ -26,4 +26,16 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<?> handleBookNotFound(BookNotFoundException exception) {
+        BookNotFoundResponse exceptionResponse = new BookNotFoundResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<?> handleIsbnNotFound(IsbnNotFoundException exception) {
+        IsbnNotFoundResponse exceptionResponse = new IsbnNotFoundResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
 }
