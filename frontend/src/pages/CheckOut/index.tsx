@@ -19,7 +19,6 @@ function CheckOut({ classes }: CheckOutProps) {
   const {
     data: checkoutData,
     mutate,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isLoading,

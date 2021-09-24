@@ -28,7 +28,6 @@ function Login({ classes }: LoginProps) {
   const { isLoading, mutate, error, data, isSuccess } = useMutation(loginUser);
   const onSubmit = () => mutate({ username, password });
 
-
   if (isSuccess && data) {
     context.login(data);
     return <Redirect to="/allBooks" />;

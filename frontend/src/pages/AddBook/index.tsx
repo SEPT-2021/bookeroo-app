@@ -133,7 +133,7 @@ function AddBook({ classes }: AddBookProps) {
                 name="file"
                 onChange={uploadCoverFile}
                 onClick={changeIsCoverFilePickedState}
-            />
+              />
             </form>
           </div>
 
