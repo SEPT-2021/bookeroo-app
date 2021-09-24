@@ -1,11 +1,14 @@
 import axios, { AxiosResponse } from "axios";
 import type { User } from "../components/GlobalContext";
-import { BookItemType, CartType, TokenProps } from "./types";
+import { BookItemType, CartType, TokenProps, UserType } from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
-function getRouteURL(service: "books" | "users" | "orders", route: string) {
+function getRouteURL(
+  service: "books" | "users" | "orders" | "admins",
+  route: string
+) {
   const port = (() => {
     switch (service) {
       case "users":
@@ -14,6 +17,8 @@ function getRouteURL(service: "books" | "users" | "orders", route: string) {
         return 8081;
       case "orders":
         return 8082;
+      case "admins":
+        return 8083;
       default:
         throw new Error(`No port for service: ${service}`);
     }
@@ -133,3 +138,10 @@ export const paymentCapture = makeTypedAPICall<
   },
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
+
+export const getAllUsers = makeTypedAPICall<
+  unknown,
+  {
+    users: UserType;
+  }
+>(() => api.get(getRouteURL("admins", "inspect-users")));
