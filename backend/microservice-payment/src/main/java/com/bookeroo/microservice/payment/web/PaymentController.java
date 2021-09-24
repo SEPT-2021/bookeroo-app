@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 import static com.bookeroo.microservice.payment.security.SecurityConstant.AUTHORIZATION_HEADER;
@@ -52,10 +53,13 @@ public class PaymentController {
 
     @PostMapping("/checkout")
     public ResponseEntity<?> checkoutOrder(
-            @RequestHeader(AUTHORIZATION_HEADER) String tokenHeader,
-            @RequestBody CartCheckout cartCheckout,
+            @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
+            @Valid @RequestBody CartCheckout cartCheckout,
             BindingResult result) {
         try {
+            if (tokenHeader == null)
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
             shippingAddressValidator.validate(cartCheckout.getShippingAddress(), result);
             ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
             if (errorMap != null)

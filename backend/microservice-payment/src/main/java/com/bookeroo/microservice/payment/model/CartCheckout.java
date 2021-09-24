@@ -1,5 +1,6 @@
 package com.bookeroo.microservice.payment.model;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -8,6 +9,7 @@ import java.util.List;
 public class CartCheckout {
 
     private List<OrderItem> orderItems;
+    @Valid
     private ShippingAddress shippingAddress;
 
     public CartCheckout() {
