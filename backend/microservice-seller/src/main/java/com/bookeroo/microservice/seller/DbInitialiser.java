@@ -18,15 +18,19 @@ public class DbInitialiser {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Value("#{new Boolean('${db.initialise}')}")
     private boolean postConstruct;
 
     @Autowired
-    public DbInitialiser(BookRepository bookRepository, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public DbInitialiser(BookRepository bookRepository, UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
