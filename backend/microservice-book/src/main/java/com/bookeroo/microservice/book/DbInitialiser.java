@@ -30,6 +30,7 @@ public class DbInitialiser {
             book.setTitle("randomTitle");
             book.setAuthor("randomAuthor");
             book.setPageCount(100);
+            book.setPrice(10.0);
             book.setIsbn("1234567891011");
             book.setDescription("randomDescription");
             book.setCover("https://picsum.photos/200");
@@ -45,6 +46,7 @@ public class DbInitialiser {
         book.setTitle("randomTitle");
         book.setAuthor("randomAuthor");
         book.setPageCount(new Random().nextInt(1000));
+        book.setPrice(10.0);
         book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9000_000_000_000L) + 1000_000_000_000L));
         book.setDescription("randomDescription");
         book.setCover("https://picsum.photos/200");
