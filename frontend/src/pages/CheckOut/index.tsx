@@ -68,17 +68,17 @@ function CheckOut({ classes }: CheckOutProps) {
           spacing={1}
         >
           <Grid container spacing={1}>
-            <Grid  item sm={2}/>
+            <Grid item sm={2} />
             <Grid item sm={6}>
-            <FormField
-              required
-              errors={error?.response?.data}
-              name="shippingAddress.addressLine1"
-              label="Address Line 1"
-              placeholder="Address Line 1"
-              onChange={setAddressLine1}
-              multiline
-            />
+              <FormField
+                required
+                errors={error?.response?.data}
+                name="shippingAddress.addressLine1"
+                label="Address Line 1"
+                placeholder="Address Line 1"
+                onChange={setAddressLine1}
+                multiline
+              />
             </Grid>
           </Grid>
           <FormField

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import type { User } from "../components/GlobalContext";
-import { BookItemType, CartType, TokenProps, UserType } from "./types";
+import { BookItemType, CartType, TokenProps } from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
@@ -139,9 +139,21 @@ export const paymentCapture = makeTypedAPICall<
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
 
-export const getAllUsers = makeTypedAPICall<
-  unknown,
-  {
-    users: UserType;
-  }
->(() => api.get(getRouteURL("admins", "inspect-users")));
+export const getAllUsers = makeTypedAPICall<unknown, undefined>(() =>
+  api.get(getRouteURL("admins", "inspect-users"))
+);
+
+export const banUserByID = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `ban-users/${args.userId}`)));
+
+export const unbanUserByID = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `unban-users/${args.userId}`)));
+
+export const deleteUserByID = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.delete(getRouteURL("admins", `delete-users/${args.userId}`)));

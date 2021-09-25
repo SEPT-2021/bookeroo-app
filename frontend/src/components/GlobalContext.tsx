@@ -4,15 +4,15 @@ import { api, profile } from "../util/api";
 import { TokenProps } from "../util/types";
 
 export interface User {
-  createdAt: string;
-  enabled: boolean;
-  firstName: string;
   id: number;
-  lastName: string;
-  password: string;
-  roles: "ROLE_USER" | "ROLE_ADMIN";
-  updatedAt: string | null;
   username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  roles: "ROLE_USER" | "ROLE_ADMIN";
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 interface GlobalContextType {

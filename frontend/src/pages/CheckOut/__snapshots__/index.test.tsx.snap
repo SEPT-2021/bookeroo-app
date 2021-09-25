@@ -10,55 +10,68 @@ exports[`CheckOut matches snapshot render CheckOut 1`] = `
       class="CheckOut-root-1"
       novalidate=""
     >
-      <div>
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-flex-start"
+      >
         <div
-          class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
+          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1"
         >
-          <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
-            data-shrink="false"
-          >
-            Address Line 1
-            <span
-              aria-hidden="true"
-              class="MuiFormLabel-asterisk MuiInputLabel-asterisk"
-            >
-               
-              *
-            </span>
-          </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-multiline MuiOutlinedInput-multiline"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-2"
+          />
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-6"
           >
-            <textarea
-              aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="addressLine1"
-              placeholder="Address Line 1"
-              required=""
-              rows="1"
-              style="height: 0px; overflow: hidden;"
-            />
-            <textarea
-              aria-hidden="true"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              readonly=""
-              style="visibility: hidden; position: absolute; overflow: hidden; height: 0px; top: 0px; left: 0px; transform: translateZ(0); width: 100%;"
-              tabindex="-1"
-            />
-            <fieldset
-              aria-hidden="true"
-              class="PrivateNotchedOutline-root-3 MuiOutlinedInput-notchedOutline"
+            <div
+              class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
             >
-              <legend
-                class="PrivateNotchedOutline-legendLabelled-5"
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
+                data-shrink="false"
               >
-                <span>
-                  Address Line 1
-                   *
+                Address Line 1
+                <span
+                  aria-hidden="true"
+                  class="MuiFormLabel-asterisk MuiInputLabel-asterisk"
+                >
+                   
+                  *
                 </span>
-              </legend>
-            </fieldset>
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-multiline MuiOutlinedInput-multiline"
+              >
+                <textarea
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
+                  name="shippingAddress.addressLine1"
+                  placeholder="Address Line 1"
+                  required=""
+                  rows="1"
+                  style="height: 0px; overflow: hidden;"
+                />
+                <textarea
+                  aria-hidden="true"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
+                  readonly=""
+                  style="visibility: hidden; position: absolute; overflow: hidden; height: 0px; top: 0px; left: 0px; transform: translateZ(0); width: 100%;"
+                  tabindex="-1"
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="PrivateNotchedOutline-root-3 MuiOutlinedInput-notchedOutline"
+                >
+                  <legend
+                    class="PrivateNotchedOutline-legendLabelled-5"
+                  >
+                    <span>
+                      Address Line 1
+                       *
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
           </div>
         </div>
         <div
@@ -83,7 +96,7 @@ exports[`CheckOut matches snapshot render CheckOut 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="addressLine2"
+              name="shippingAddress.addressLine2"
               placeholder="Address Line 2"
               required=""
               rows="1"
@@ -133,7 +146,7 @@ exports[`CheckOut matches snapshot render CheckOut 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="city"
+              name="shippingAddress.city"
               placeholder="City"
               required=""
               rows="1"
@@ -183,7 +196,7 @@ exports[`CheckOut matches snapshot render CheckOut 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="state"
+              name="shippingAddress.state"
               placeholder="State"
               required=""
               rows="1"
@@ -233,7 +246,7 @@ exports[`CheckOut matches snapshot render CheckOut 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="postalCode"
+              name="shippingAddress.postalCode"
               placeholder="Postal Code"
               required=""
               rows="1"
@@ -380,55 +393,68 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
       class="CheckOut-root-1"
       novalidate=""
     >
-      <div>
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-flex-start"
+      >
         <div
-          class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
+          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1"
         >
-          <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
-            data-shrink="false"
-          >
-            Address Line 1
-            <span
-              aria-hidden="true"
-              class="MuiFormLabel-asterisk MuiInputLabel-asterisk"
-            >
-               
-              *
-            </span>
-          </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-multiline MuiOutlinedInput-multiline"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-2"
+          />
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-6"
           >
-            <textarea
-              aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="addressLine1"
-              placeholder="Address Line 1"
-              required=""
-              rows="1"
-              style="height: 0px; overflow: hidden;"
-            />
-            <textarea
-              aria-hidden="true"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              readonly=""
-              style="visibility: hidden; position: absolute; overflow: hidden; height: 0px; top: 0px; left: 0px; transform: translateZ(0); width: 100%;"
-              tabindex="-1"
-            />
-            <fieldset
-              aria-hidden="true"
-              class="PrivateNotchedOutline-root-3 MuiOutlinedInput-notchedOutline"
+            <div
+              class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
             >
-              <legend
-                class="PrivateNotchedOutline-legendLabelled-5"
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
+                data-shrink="false"
               >
-                <span>
-                  Address Line 1
-                   *
+                Address Line 1
+                <span
+                  aria-hidden="true"
+                  class="MuiFormLabel-asterisk MuiInputLabel-asterisk"
+                >
+                   
+                  *
                 </span>
-              </legend>
-            </fieldset>
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-multiline MuiOutlinedInput-multiline"
+              >
+                <textarea
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
+                  name="shippingAddress.addressLine1"
+                  placeholder="Address Line 1"
+                  required=""
+                  rows="1"
+                  style="height: 0px; overflow: hidden;"
+                />
+                <textarea
+                  aria-hidden="true"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
+                  readonly=""
+                  style="visibility: hidden; position: absolute; overflow: hidden; height: 0px; top: 0px; left: 0px; transform: translateZ(0); width: 100%;"
+                  tabindex="-1"
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="PrivateNotchedOutline-root-3 MuiOutlinedInput-notchedOutline"
+                >
+                  <legend
+                    class="PrivateNotchedOutline-legendLabelled-5"
+                  >
+                    <span>
+                      Address Line 1
+                       *
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
           </div>
         </div>
         <div
@@ -453,7 +479,7 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="addressLine2"
+              name="shippingAddress.addressLine2"
               placeholder="Address Line 2"
               required=""
               rows="1"
@@ -503,7 +529,7 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="city"
+              name="shippingAddress.city"
               placeholder="City"
               required=""
               rows="1"
@@ -553,7 +579,7 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="state"
+              name="shippingAddress.state"
               placeholder="State"
               required=""
               rows="1"
@@ -603,7 +629,7 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
             <textarea
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline"
-              name="postalCode"
+              name="shippingAddress.postalCode"
               placeholder="Postal Code"
               required=""
               rows="1"

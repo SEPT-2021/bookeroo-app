@@ -30,15 +30,3 @@ export type CartType = {
   orderItems: DataItemType[];
   shippingAddress: ShippingItemType;
 };
-
-export type UserType = {
-  id: number;
-  username: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  enabled: boolean;
-  created: Date;
-  updated: Date;
-};
