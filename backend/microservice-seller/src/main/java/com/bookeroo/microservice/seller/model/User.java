@@ -34,6 +34,11 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private SellerDetails sellerDetails;
+
+
     public enum Role {
         USER, ADMIN, SELLER
     }
@@ -111,6 +116,14 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public SellerDetails getSellerDetails() {
+        return sellerDetails;
+    }
+
+    public void setSellerDetails(SellerDetails sellerDetails) {
+        this.sellerDetails = sellerDetails;
     }
 
     @PrePersist

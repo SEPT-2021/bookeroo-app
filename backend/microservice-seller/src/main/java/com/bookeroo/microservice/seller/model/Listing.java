@@ -13,12 +13,10 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String price;
-
     @ManyToOne
     @JoinColumn(name = "book_id")
     @NotNull(message = "Book cannot be null")
     private Book book;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @NotNull(message = "Seller cannot be null")

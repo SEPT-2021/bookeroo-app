@@ -2,12 +2,11 @@ package com.bookeroo.microservice.seller.web;
 
 import com.bookeroo.microservice.seller.model.Listing;
 import com.bookeroo.microservice.seller.model.ListingFormData;
+import com.bookeroo.microservice.seller.model.SellerDetails;
 import com.bookeroo.microservice.seller.security.JWTTokenProvider;
-import com.bookeroo.microservice.seller.service.BookService;
-import com.bookeroo.microservice.seller.service.ListingService;
-import com.bookeroo.microservice.seller.service.UserService;
-import com.bookeroo.microservice.seller.service.ValidationErrorService;
+import com.bookeroo.microservice.seller.service.*;
 import com.bookeroo.microservice.seller.validator.ListingFormDataValidator;
+import com.bookeroo.microservice.seller.validator.SellerDetailsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +26,8 @@ public class SellerController {
     private final BookService bookService;
     private final ListingService listingService;
     private final ListingFormDataValidator listingFormDataValidator;
+    private final SellerDetailsService sellerDetailsService;
+    private final SellerDetailsValidator sellerDetailsValidator;
     private final ValidationErrorService validationErrorService;
     private final JWTTokenProvider jwtTokenProvider;
 
@@ -35,14 +36,32 @@ public class SellerController {
                             BookService bookService,
                             ListingService listingService,
                             ListingFormDataValidator listingFormDataValidator,
+                            SellerDetailsService sellerDetailsService,
+                            SellerDetailsValidator sellerDetailsValidator,
                             ValidationErrorService validationErrorService,
                             JWTTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.bookService = bookService;
         this.listingService = listingService;
         this.listingFormDataValidator = listingFormDataValidator;
+        this.sellerDetailsService = sellerDetailsService;
+        this.sellerDetailsValidator = sellerDetailsValidator;
         this.validationErrorService = validationErrorService;
         this.jwtTokenProvider = jwtTokenProvider;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerSeller(@RequestHeader(AUTHORIZATION_HEADER) String tokenHeader,
+                                            @RequestBody SellerDetails sellerDetails,
+                                            BindingResult result) {
+        String jwt = tokenHeader.substring(JWT_SCHEME.length());
+        sellerDetailsValidator.validate(sellerDetails, result);
+        ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
+        if (errorMap != null)
+            return errorMap;
+
+        sellerDetails.setUser(userService.getUserByUsername(jwtTokenProvider.extractUsername(jwt)));
+        return new ResponseEntity<>(sellerDetailsService.saveSellerDetails(sellerDetails), HttpStatus.OK);
     }
 
     @PostMapping("/add-listing")

@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 @Component
 public class ListingFormDataValidator implements Validator {
 
-    public static final int MINIMUM_ISBN_LENGTH = 13;
+    public static final int ISBN_LENGTH = 13;
     public static final double MINIMUM_BOOK_PRICE = 0.01;
     public static final double MAXIMUM_BOOK_PRICE = 10000.00;
 
@@ -24,9 +24,9 @@ public class ListingFormDataValidator implements Validator {
     public void validate(Object object, Errors errors) {
         ListingFormData data = (ListingFormData) object;
 
-        if (data.getIsbn() != null && data.getIsbn().length() < MINIMUM_ISBN_LENGTH)
+        if (data.getIsbn() != null && data.getIsbn().length() != ISBN_LENGTH)
             errors.rejectValue("isbn", "Length",
-                    String.format("ISBN must be at least %d digits", MINIMUM_ISBN_LENGTH));
+                    String.format("ISBN must be exactly %d digits", ISBN_LENGTH));
 
         if (data.getIsbn() != null && !data.getIsbn().chars().allMatch(Character::isDigit))
             errors.rejectValue("isbn", "Value", "ISBN must not contain anything other than 0-9");
