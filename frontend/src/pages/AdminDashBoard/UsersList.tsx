@@ -3,6 +3,7 @@ import {
   Avatar,
   CircularProgress,
   Container,
+  FormControlLabel,
   IconButton,
   List,
   ListItem,
@@ -14,10 +15,43 @@ import {
 import { Delete, Person } from "@material-ui/icons";
 import { useMutation } from "react-query";
 import FormGroup from "@mui/material/FormGroup";
-import { Button } from "@mui/material";
+import { styled, Switch } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { banUserByID, getAllUsers, unbanUserByID } from "../../util/api";
+import { banUnBanUser, getAllUsers } from "../../util/api";
 import { User } from "../../components/GlobalContext";
+
+const OnOffSwitch = styled(Switch)(({ theme }) => ({
+  padding: 8,
+  "& .MuiSwitch-track": {
+    borderRadius: 22 / 2,
+    "&:before, &:after": {
+      content: '""',
+      position: "absolute",
+      top: "50%",
+      transform: "translateY(-50%)",
+      width: 16,
+      height: 16,
+    },
+    "&:before": {
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
+        theme.palette.getContrastText(theme.palette.primary.main)
+      )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
+      left: 12,
+    },
+    "&:after": {
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
+        theme.palette.getContrastText(theme.palette.primary.main)
+      )}" d="M19,13H5V11H19V13Z" /></svg>')`,
+      right: 12,
+    },
+  },
+  "& .MuiSwitch-thumb": {
+    boxShadow: "none",
+    width: 16,
+    height: 16,
+    margin: 2,
+  },
+}));
 
 function UserRow({
   user,
@@ -28,47 +62,12 @@ function UserRow({
   loading?: boolean;
   onDelete: () => void;
 }) {
-  const refreshPage = async () => {
-    await window.location.reload();
-  };
+  const [switchChecked, setSwitchChecked] = useState<boolean>(user.enabled);
 
-  const { mutate: banMutate, isSuccess: banIsSuccess } =
-    useMutation(banUserByID);
-  const banUser = async (userId: number) => {
-    banMutate({ userId });
-    if (banIsSuccess) {
-      await refreshPage();
-    }
-  };
+  const { mutate: unBanMutate } = useMutation(banUnBanUser);
 
-  const { mutate: unBanMutate, isSuccess: unbanIsSuccess } =
-    useMutation(unbanUserByID);
   const unbanUser = async (userId: number) => {
     unBanMutate({ userId });
-    if (unbanIsSuccess) {
-      await refreshPage();
-    }
-  };
-
-  const handleEnabled = async () => {
-    await banUser(user.id);
-  };
-
-  const handledDisabled = async () => {
-    await unbanUser(user.id);
-  };
-
-  const renderButton = () => {
-    return (
-      <Stack direction="row" spacing={2}>
-        <Button variant="contained" color="error" onClick={handledDisabled}>
-          Banned
-        </Button>
-        <Button variant="contained" color="success" onClick={handleEnabled}>
-          Un-Ban
-        </Button>
-      </Stack>
-    );
   };
 
   return (
@@ -85,13 +84,32 @@ function UserRow({
             <Typography variant="body2">
               {user.username} - {user.roles}
             </Typography>
-            <Typography variant="body2">
-              Enabled Status: {String(user.enabled)}
-            </Typography>
           </>
         }
       />
-      <FormGroup>{renderButton()}</FormGroup>
+      <div style={{ marginRight: 16 }}>
+        <FormGroup aria-label="position" row>
+          <Stack direction="row" spacing={3}>
+            <FormGroup aria-label="position" row>
+              <FormControlLabel
+                labelPlacement="start"
+                label="Account Status"
+                control={
+                  <OnOffSwitch
+                    checked={switchChecked}
+                    onChange={() => {
+                      unbanUser(user.id).then(() =>
+                        setSwitchChecked(!switchChecked)
+                      );
+                    }}
+                  />
+                }
+              />
+            </FormGroup>
+          </Stack>
+        </FormGroup>
+      </div>
+
       <ListItemSecondaryAction>
         <IconButton onClick={onDelete}>
           {loading ? (

@@ -143,15 +143,10 @@ export const getAllUsers = makeTypedAPICall<unknown, undefined>(() =>
   api.get(getRouteURL("admins", "inspect-users"))
 );
 
-export const banUserByID = makeTypedAPICall<
+export const banUnBanUser = makeTypedAPICall<
   { userId: number | undefined },
   unknown
->((args) => api.post(getRouteURL("admins", `ban-users/${args.userId}`)));
-
-export const unbanUserByID = makeTypedAPICall<
-  { userId: number | undefined },
-  unknown
->((args) => api.post(getRouteURL("admins", `unban-users/${args.userId}`)));
+>((args) => api.post(getRouteURL("admins", `toggle-ban/${args.userId}`)));
 
 export const deleteUserByID = makeTypedAPICall<
   { userId: number | undefined },
