@@ -99,9 +99,9 @@ function HomePage({ classes }: HomePageProps) {
           Sign up for our Newsletter
         </Typography>
         <FormField
+          errors={error?.response?.data}
           name="email"
           autoComplete="email"
-          label="Email"
           placeholder="Email"
           style={{ backgroundColor: "white" }}
           onChange={setEmail}
