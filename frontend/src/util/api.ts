@@ -5,10 +5,15 @@ import { BookItemType, CartType, TokenProps } from "./types";
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
-function getRouteURL(service: "books" | "users" | "orders", route: string) {
+function getRouteURL(
+  service: "books" | "users" | "orders" | "newsletter",
+  route: string
+) {
   const port = (() => {
     switch (service) {
       case "users":
+        return 8080;
+      case "newsletter":
         return 8080;
       case "books":
         return 8081;
@@ -133,3 +138,7 @@ export const paymentCapture = makeTypedAPICall<
   },
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
+
+export const registerNewsletter = makeTypedAPICall<unknown, unknown>((args) =>
+  api.post(getRouteURL("newsletter", "register"), args)
+);
