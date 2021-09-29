@@ -46,12 +46,17 @@ public class AdminController {
 
     @PostMapping("/toggle-ban/{id}")
     public ResponseEntity<?> banUser(@PathVariable long id) {
-        return new ResponseEntity<>(toggleUserBan(id), HttpStatus.OK);
+        return new ResponseEntity<>(userService.toggleUserBan(id), HttpStatus.OK);
     }
 
-    @PostMapping("/toggle-approval/{id}")
+    @PostMapping("/approve-seller/{id}")
     public ResponseEntity<?> approveSeller(@PathVariable long id) {
-        return new ResponseEntity<>(toggleSellerApproval(id), HttpStatus.OK);
+        return new ResponseEntity<>(userService.approveSeller(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/reject-seller/{id}")
+    public ResponseEntity<?> rejectSeller(@PathVariable long id) {
+        return new ResponseEntity<>(userService.rejectSeller(id), HttpStatus.OK);
     }
 
     @PutMapping("/update-users/{id}")
@@ -73,18 +78,6 @@ public class AdminController {
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private User toggleUserBan(long id) {
-        User user = userService.getUserById(id);
-        user.setEnabled(!user.isEnabled());
-        return userService.updateUser(user);
-    }
-
-    private User toggleSellerApproval(long id) {
-        User seller = userService.getSellerById(id);
-        seller.setEnabled(!seller.isEnabled());
-        return userService.updateUser(seller);
     }
 
 }
