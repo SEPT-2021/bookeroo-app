@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -20,25 +20,29 @@ import backgroundImage from "../../assets/books/backgroundBook2.png";
 import Footer from "../../components/Footer";
 import FormField from "../../util/FormField";
 import { registerNewsletter } from "../../util/api";
+import LoadingButton from "../../util/LoadingButton";
 
 function HomePage({ classes }: HomePageProps) {
-  const { mutate, error, isSuccess } = useMutation(registerNewsletter);
+  const { mutate, error, isSuccess, isLoading } =
+    useMutation(registerNewsletter);
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [errorMessage, setError] = useState<[]>([]);
-
-  const setErrors = async () => {
-    await setError(error?.response?.data.email);
-  };
-
-  const handleClickOpen = async () => {
-    await mutate({ email });
+  const [errorMessage, setError] = useState<string>();
+  const emailError = error?.response?.data.email;
+  // Runs when the mutation has finished
+  useEffect(() => {
+    setError(emailError);
     setOpen(true);
+  }, [emailError]);
+
+  const handleClickOpen = () => {
+    mutate({ email });
   };
 
   const handleClose = () => {
     setOpen(false);
+    setError(undefined);
   };
 
   // eslint-disable-next-line consistent-return
@@ -104,16 +108,16 @@ function HomePage({ classes }: HomePageProps) {
         >
           Email
         </FormField>
-        <Button
+        <LoadingButton
+          loading={isLoading}
           variant="contained"
           color="primary"
           onClick={() => {
             handleClickOpen();
-            setErrors();
           }}
         >
           Submit
-        </Button>
+        </LoadingButton>
         {renderPopup()}
       </Container>
       <Footer />
