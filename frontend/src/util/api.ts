@@ -6,13 +6,12 @@ export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins"|'newsletter',
+  service: "books" | "users" | "orders" | "admins" | "newsletter",
   route: string
 ) {
   const port = (() => {
     switch (service) {
       case "users":
-        return 8080;
       case "newsletter":
         return 8080;
       case "books":
