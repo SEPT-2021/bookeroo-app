@@ -23,9 +23,6 @@ public class ShippingAddressValidator implements Validator {
     public void validate(Object object, Errors errors) {
         ShippingAddress shippingAddress = (ShippingAddress) object;
 
-        if (shippingAddress.getAddressLine1().isEmpty())
-            errors.rejectValue("shippingAddress.addressLine1", "Value", "Address line 1 must not be blank");
-
         if (!shippingAddress.getCity().chars().allMatch(Character::isAlphabetic))
             errors.rejectValue("shippingAddress.city", "Value", "City name may only contain alphabets");
 
@@ -41,7 +38,7 @@ public class ShippingAddressValidator implements Validator {
             ));
 
         if (shippingAddress.getState().length() != STATE_LENGTH)
-            errors.rejectValue("shippingAddress.postalCode", "Length", String.format(
+            errors.rejectValue("shippingAddress.state", "Length", String.format(
                     "State must be of length %d", STATE_LENGTH
             ));
     }

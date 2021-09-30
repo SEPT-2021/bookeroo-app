@@ -1,14 +1,20 @@
 package com.bookeroo.microservice.payment.model;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * Shipping address data model, contains information to ship orders to.
  */
 public class ShippingAddress {
 
+    @NotBlank(message = "Address line 1 cannot be null or blank")
     private String addressLine1;
     private String addressLine2;
+    @NotBlank(message = "City cannot be null or blank")
     private String city;
+    @NotBlank(message = "State cannot be null or blank")
     private String state;
+    @NotBlank(message = "Postal code cannot be null or blank")
     private String postalCode;
 
     public ShippingAddress() {
