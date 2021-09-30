@@ -43,8 +43,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public void setPasswordEncoder() {
+        this.passwordEncoder = passwordEncoder();
     }
 
     @Override
