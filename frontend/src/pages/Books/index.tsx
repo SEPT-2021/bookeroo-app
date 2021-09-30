@@ -74,8 +74,22 @@ const Books = () => {
     );
   };
 
-  if (isLoading) return <LinearProgress />;
-  if (error) return <div>something wrong</div>;
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return (
+      <Wrapper>
+        <div>Failed to load books. Check console for details</div>
+      </Wrapper>
+    );
+  }
+
+  if (isLoading)
+    return (
+      <Wrapper>
+        <LinearProgress />
+      </Wrapper>
+    );
 
   return (
     <Wrapper>
