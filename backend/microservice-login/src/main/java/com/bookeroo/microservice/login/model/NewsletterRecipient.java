@@ -13,8 +13,8 @@ public class NewsletterRecipient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Email
-    @NotBlank
+    @Email(message = "Sorry, that is not a valid email")
+    @NotBlank(message = "Sorry, email cannot be blank")
     private String email;
 
     public NewsletterRecipient() {

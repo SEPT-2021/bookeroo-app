@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NewsletterRepository extends JpaRepository<NewsletterRecipient, Long> {
+
+    boolean existsByEmail(String email);
+
 }
