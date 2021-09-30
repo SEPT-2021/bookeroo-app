@@ -23,6 +23,7 @@ function NavBar({ classes }: NavBarProps) {
     signOut();
     history.push("/");
   };
+
   return (
     <AppBar className={classes.appbar} elevation={5}>
       <Toolbar className={classes.appbarWrapper}>
@@ -37,6 +38,11 @@ function NavBar({ classes }: NavBarProps) {
           <Link to="/addBook">
             <Button>Add Book</Button>
           </Link>
+          {user?.roles === "ROLE_ADMIN" && (
+            <Link to="/adminDashboard">
+              <Button>Manager Users</Button>
+            </Link>
+          )}
         </Box>
         <Box>
           {user ? (

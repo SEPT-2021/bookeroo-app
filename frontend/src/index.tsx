@@ -52,6 +52,10 @@ ReactDOM.render(
                 <AddBook />
               </Route>
 
+              <Route path="/adminDashboard">
+                <UsersList />
+              </Route>
+
               <Route path="/paymentSuccess">
                 <PaymentSuccess />
               </Route>

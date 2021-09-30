@@ -17,7 +17,7 @@ import { useMutation } from "react-query";
 import FormGroup from "@mui/material/FormGroup";
 import { styled, Switch } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { banUnBanUser, getAllUsers } from "../../util/api";
+import { banUnBanUser, deleteUserByID, getAllUsers } from "../../util/api";
 import { User } from "../../components/GlobalContext";
 
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
@@ -92,8 +92,6 @@ function UserRow({
           <Stack direction="row" spacing={3}>
             <FormGroup aria-label="position" row>
               <FormControlLabel
-                labelPlacement="start"
-                label="Account Status"
                 control={
                   <OnOffSwitch
                     checked={switchChecked}
@@ -104,6 +102,7 @@ function UserRow({
                     }}
                   />
                 }
+                label=" "
               />
             </FormGroup>
           </Stack>
@@ -125,9 +124,21 @@ function UserRow({
 
 function UsersList() {
   const [sampleUsers, setSampleUsers] = useState<User[]>();
-
   const { data, mutate, isSuccess } = useMutation(getAllUsers);
+  const { mutate: deleteUserMutate, isSuccess: deleteUserSuccess } =
+    useMutation(deleteUserByID);
 
+  const refreshPage = async () => {
+    window.location.reload(false);
+  };
+
+  if (deleteUserSuccess) {
+    refreshPage();
+  }
+
+  const deleteUser = async (userId: number) => {
+    deleteUserMutate({ userId });
+  };
   const loadAllUsers = useCallback(() => {
     if (!isSuccess) mutate({ data });
     setSampleUsers(data);
@@ -139,17 +150,14 @@ function UsersList() {
 
   return (
     <Container style={{ marginTop: 100 }}>
-      <Typography variant="h3" align="center" style={{ margin: "20px 0" }}>
-        Manage Users
-      </Typography>
       <List>
         {sampleUsers?.map((user) => (
           <UserRow
             user={user}
             key={user.id}
-            onDelete={() =>
-              console.log(`Implement delete! Deleting ${user.id}`)
-            }
+            onDelete={() => {
+              deleteUser(user.id);
+            }}
           />
         ))}
       </List>
