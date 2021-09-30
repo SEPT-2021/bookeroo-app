@@ -4,23 +4,21 @@ import { api, profile } from "../util/api";
 import { TokenProps } from "../util/types";
 
 export interface User {
-  createdAt: string;
-  enabled: boolean;
-  firstName: string;
   id: number;
-  lastName: string;
-  password: string;
-  roles: "ROLE_USER" | "ROLE_ADMIN";
-  updatedAt: string | null;
   username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  roles: "ROLE_USER" | "ROLE_ADMIN";
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 interface GlobalContextType {
   user?: User;
-
   login(data: TokenProps): void;
-
-  signout(): void;
+  signOut(): void;
 }
 
 export const GlobalContext = createContext<GlobalContextType>({} as never);
@@ -47,14 +45,14 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   useEffect(() => {
     setToken(localStorage.getItem("token") || undefined);
   }, []);
-  const signout = () => {
+  const signOut = () => {
     localStorage.removeItem("token");
     setToken(undefined);
   };
   // Clear token if error
   useEffect(() => {
     if (isError) {
-      signout();
+      signOut();
     }
   }, [isError]);
   return (
@@ -65,7 +63,7 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
           localStorage.setItem("token", data.jwt as string);
           setToken(data.jwt);
         },
-        signout,
+        signOut,
       }}
     >
       {children}

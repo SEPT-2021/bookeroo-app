@@ -17,12 +17,13 @@ import Link from "../util/Link";
 import { GlobalContext } from "./GlobalContext";
 
 function NavBar({ classes }: NavBarProps) {
-  const { user, signout } = useContext(GlobalContext);
+  const { user, signOut } = useContext(GlobalContext);
   const history = useHistory();
-  const onSignout = () => {
-    signout();
+  const onSignOut = () => {
+    signOut();
     history.push("/");
   };
+
   return (
     <AppBar className={classes.appbar} elevation={5}>
       <Toolbar className={classes.appbarWrapper}>
@@ -37,13 +38,18 @@ function NavBar({ classes }: NavBarProps) {
           <Link to="/addBook">
             <Button>Add Book</Button>
           </Link>
+          {user?.roles === "ROLE_ADMIN" && (
+            <Link to="/adminDashboard">
+              <Button>Manager Users</Button>
+            </Link>
+          )}
         </Box>
         <Box>
           {user ? (
             <Box display="flex" alignItems="center">
               <Person />
               <Typography variant="subtitle2">{user?.firstName}</Typography>
-              <Button variant="contained" onClick={onSignout}>
+              <Button variant="contained" onClick={onSignOut}>
                 Sign out
               </Button>
             </Box>
