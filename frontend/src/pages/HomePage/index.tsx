@@ -22,15 +22,20 @@ import FormField from "../../util/FormField";
 import { registerNewsletter } from "../../util/api";
 
 function HomePage({ classes }: HomePageProps) {
-  const { isLoading, mutate, error, data, isSuccess } =
+  const { mutate, error, isSuccess } =
     useMutation(registerNewsletter);
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [errorMessage, setError] = useState<[]>([]);
+
+  const setErrors = async () => {
+    await setError(error?.response?.data.email);
+  };
 
   const handleClickOpen = async () => {
+    await mutate({ email });
     setOpen(true);
-    mutate({ email });
   };
 
   const handleClose = () => {
@@ -63,7 +68,7 @@ function HomePage({ classes }: HomePageProps) {
           </DialogActions>
         </Dialog>
       );
-    if (error)
+    if (error && errorMessage !== undefined)
       return (
         <Dialog
           open={open}
@@ -71,14 +76,7 @@ function HomePage({ classes }: HomePageProps) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            The email you entered is incorrect!
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Please enter the correct email. Thank you
-            </DialogContentText>
-          </DialogContent>
+          <DialogTitle id="alert-dialog-title">{errorMessage}</DialogTitle>
           <DialogActions>
             <Button onClick={handleClose} autoFocus>
               Close
@@ -99,7 +97,6 @@ function HomePage({ classes }: HomePageProps) {
           Sign up for our Newsletter
         </Typography>
         <FormField
-          errors={error?.response?.data}
           name="email"
           autoComplete="email"
           placeholder="Email"
@@ -108,7 +105,14 @@ function HomePage({ classes }: HomePageProps) {
         >
           Email
         </FormField>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            handleClickOpen();
+            setErrors();
+          }}
+        >
           Submit
         </Button>
         {renderPopup()}
