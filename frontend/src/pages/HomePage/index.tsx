@@ -22,8 +22,7 @@ import FormField from "../../util/FormField";
 import { registerNewsletter } from "../../util/api";
 
 function HomePage({ classes }: HomePageProps) {
-  const { mutate, error, isSuccess } =
-    useMutation(registerNewsletter);
+  const { mutate, error, isSuccess } = useMutation(registerNewsletter);
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
