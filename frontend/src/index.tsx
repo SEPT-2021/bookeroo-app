@@ -19,6 +19,7 @@ import NavBar from "./components/NavBar";
 import { GlobalContextProvider } from "./components/GlobalContext";
 import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
+import UsersList from "./pages/AdminDashBoard/UsersList";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,10 @@ ReactDOM.render(
                 <AddBook />
               </Route>
 
+              <Route path="/adminDashboard">
+                <UsersList />
+              </Route>
+
               <Route path="/paymentSuccess">
                 <PaymentSuccess />
               </Route>
@@ -62,6 +67,9 @@ ReactDOM.render(
               </Route>
               <Route path="/allBooks">
                 <Books />
+              </Route>
+              <Route path="/users">
+                <UsersList />
               </Route>
               <Route component={NotFoundPage} />
             </Switch>

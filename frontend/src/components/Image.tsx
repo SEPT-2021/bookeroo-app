@@ -15,7 +15,6 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
-import { BOOK_ANIMATION_TIME } from "../static/books";
 import { BookItemType } from "../util/types";
 import { GlobalContext } from "./GlobalContext";
 import { deleteBookById } from "../util/api";
@@ -54,7 +53,7 @@ export default function Image({
     setExpanded(!expanded);
   };
   return (
-    <Collapse in={checked} timeout={checked ? BOOK_ANIMATION_TIME : undefined}>
+    <Collapse in={checked} timeout={checked ? 1500 : undefined}>
       <Card className={classes.card}>
         <CardHeader
           avatar={

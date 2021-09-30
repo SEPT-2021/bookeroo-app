@@ -6,7 +6,7 @@ export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "newsletter",
+  service: "books" | "users" | "orders" | "admins"|'newsletter',
   route: string
 ) {
   const port = (() => {
@@ -19,6 +19,8 @@ function getRouteURL(
         return 8081;
       case "orders":
         return 8082;
+      case "admins":
+        return 8083;
       default:
         throw new Error(`No port for service: ${service}`);
     }
@@ -138,6 +140,20 @@ export const paymentCapture = makeTypedAPICall<
   },
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
+
+export const getAllUsers = makeTypedAPICall<unknown, undefined>(() =>
+  api.get(getRouteURL("admins", "inspect-users"))
+);
+
+export const banUnBanUser = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `toggle-ban/${args.userId}`)));
+
+export const deleteUserByID = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.delete(getRouteURL("admins", `delete-users/${args.userId}`)));
 
 export const registerNewsletter = makeTypedAPICall<unknown, unknown>((args) =>
   api.post(getRouteURL("newsletter", "register"), args)
