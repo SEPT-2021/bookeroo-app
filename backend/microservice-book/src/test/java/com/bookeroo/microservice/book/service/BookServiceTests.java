@@ -22,7 +22,7 @@ public class BookServiceTests {
         Book book = new Book();
         book.setTitle("testTitle");
         book.setAuthor("testAuthor");
-        book.setPageCount(100);
+        book.setPageCount("100");
         book.setIsbn(RandomString.make(MINIMUM_ISBN_LENGTH));
         book.setDescription("testDescription");
         book.setCover("https://picsum.photos/200");

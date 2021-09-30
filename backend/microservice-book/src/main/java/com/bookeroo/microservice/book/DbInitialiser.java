@@ -2,6 +2,8 @@ package com.bookeroo.microservice.book;
 
 
 import com.bookeroo.microservice.book.model.Book;
+import com.bookeroo.microservice.book.model.Book.BookCategory;
+import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +31,11 @@ public class DbInitialiser {
             Book book = new Book();
             book.setTitle("randomTitle");
             book.setAuthor("randomAuthor");
-            book.setPageCount(100);
-            book.setPrice(10.0);
+            book.setPageCount("100");
             book.setIsbn("1234567891011");
             book.setDescription("randomDescription");
+            book.setBookCondition(BookCondition.FAIR.name);
+            book.setBookCategory(BookCategory.LITERARY_FICTION.name);
             book.setCover("https://picsum.photos/200");
             bookRepository.save(book);
 
@@ -42,13 +45,15 @@ public class DbInitialiser {
     }
 
     private Book getRandomBook() {
+        Random random = new Random();
         Book book = new Book();
         book.setTitle("randomTitle");
         book.setAuthor("randomAuthor");
-        book.setPageCount(new Random().nextInt(1000));
-        book.setPrice(10.0);
+        book.setPageCount(String.valueOf(random.nextInt(1000)));
         book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9000_000_000_000L) + 1000_000_000_000L));
         book.setDescription("randomDescription");
+        book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name);
+        book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name);
         book.setCover("https://picsum.photos/200");
         return book;
     }

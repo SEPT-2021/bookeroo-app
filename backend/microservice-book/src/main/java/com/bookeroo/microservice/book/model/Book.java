@@ -2,7 +2,6 @@ package com.bookeroo.microservice.book.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -19,18 +18,60 @@ public class Book {
     private String title;
     @NotBlank(message = "Author cannot be blank")
     private String author;
-    @NotNull(message = "Number of pages cannot be null")
-    private long pageCount;
+    @NotBlank(message = "Number of pages cannot be blank")
+    private String pageCount;
     @NotBlank(message = "ISBN cannot be blank")
     private String isbn;
     @NotBlank(message = "Books are required to have a brief description")
     @Size(max = 8191)
     private String description;
+    @NotBlank(message = "Condition cannot be blank")
+    private String bookCondition;
+    @NotBlank(message = "Category cannot be blank")
+    private String bookCategory;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
     private Date createdAt;
     private Date updatedAt;
+
+    public enum BookCondition {
+        AS_NEW("As New"),
+        FINE("Fine"),
+        VERY_GOOD("Very Good"),
+        FAIR("Fair"),
+        POOR("Poor");
+
+        public String name;
+
+        BookCondition(String name) {
+            this.name = name;
+        }
+    }
+
+    public enum BookCategory {
+        LITERARY_FICTION("Literary Fiction"),
+        MYSTERY("Mystery"),
+        THRILLER("Thriller"),
+        HORROR("Horror"),
+        HISTORICAL("Historical"),
+        ROMANCE("Romance"),
+        WESTERN("Western"),
+        BILDUNGSROMAN("Bildungsroman"),
+        SPECULATIVE_FICTION("Speculative Fiction"),
+        SCIENCE_FICTION("Science Fiction"),
+        FANTASY("Fantasy"),
+        DYSTOPIAN("Dystopian"),
+        MAGICAL_REALISM("Magical Realism"),
+        REALIST_LITERATURE("Realist Literature"),
+        OTHER("Other");
+
+        public String name;
+
+        BookCategory(String category) {
+            this.name = category;
+        }
+    }
 
     public Book() {
     }
@@ -59,11 +100,11 @@ public class Book {
         this.author = author;
     }
 
-    public long getPageCount() {
+    public String getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(long pageCount) {
+    public void setPageCount(String pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -81,6 +122,22 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBookCondition() {
+        return bookCondition;
+    }
+
+    public void setBookCondition(String condition) {
+        this.bookCondition = condition;
+    }
+
+    public String getBookCategory() {
+        return bookCategory;
+    }
+
+    public void setBookCategory(String category) {
+        this.bookCategory = category;
     }
 
     public String getCover() {
@@ -126,7 +183,7 @@ public class Book {
 
         Book book = (Book) object;
         return id == book.id
-                && pageCount == book.pageCount
+                && pageCount.equals(book.pageCount)
                 && title.equals(book.title)
                 && author.equals(book.author)
                 && isbn.equals(book.isbn)

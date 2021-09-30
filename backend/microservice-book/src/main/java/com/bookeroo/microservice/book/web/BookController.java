@@ -55,9 +55,11 @@ public class BookController {
         Book book = new Book();
         book.setTitle(formData.getTitle());
         book.setAuthor(formData.getAuthor());
-        book.setPageCount(Long.parseLong(formData.getPageCount()));
+        book.setPageCount(String.valueOf(formData.getPageCount()));
         book.setIsbn(formData.getIsbn());
         book.setDescription(formData.getDescription());
+        book.setBookCondition(formData.getCondition().name);
+        book.setBookCategory(formData.getCategory().name);
 
         try {
             MultipartFile coverFile = formData.getCoverFile();

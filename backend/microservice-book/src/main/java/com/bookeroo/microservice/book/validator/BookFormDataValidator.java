@@ -13,6 +13,7 @@ public class BookFormDataValidator implements Validator {
 
     public static final int MINIMUM_ISBN_LENGTH = 13;
     public static final int MINIMUM_PAGE_COUNT = 1;
+    public static final int MAXIMUM_PAGE_COUNT = 1_000_000_000;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -21,26 +22,22 @@ public class BookFormDataValidator implements Validator {
 
     @Override
     public void validate(Object object, Errors errors) {
-        BookFormData book = (BookFormData) object;
+        BookFormData data = (BookFormData) object;
 
-        if (book.getIsbn() == null)
-            errors.rejectValue("isbn", "Value", "ISBN cannot be null");
-
-        if (book.getIsbn() != null && book.getIsbn().length() < MINIMUM_ISBN_LENGTH)
+        if (data.getIsbn().length() < MINIMUM_ISBN_LENGTH)
             errors.rejectValue("isbn", "Length",
                     String.format("ISBN must be at least %d digits", MINIMUM_ISBN_LENGTH));
 
-        if (book.getIsbn() != null && !book.getIsbn().chars().allMatch(Character::isDigit))
+        if (!data.getIsbn().chars().allMatch(Character::isDigit))
             errors.rejectValue("isbn", "Value", "ISBN must not contain anything other than 0-9");
 
-        try {
-            if (Long.parseLong(book.getPageCount()) < MINIMUM_PAGE_COUNT)
-                errors.rejectValue("pageCount", "Value",
-                        String.format("Page count must be at least %d", MINIMUM_PAGE_COUNT));
-        } catch (NumberFormatException exception) {
+        if (data.getPageCount() < MINIMUM_PAGE_COUNT)
             errors.rejectValue("pageCount", "Value",
-                    "Page count must be a whole number");
-        }
+                    String.format("Page count must be at least %d", MINIMUM_PAGE_COUNT));
+
+        if (data.getPageCount() > MAXIMUM_PAGE_COUNT)
+            errors.rejectValue("pageCount", "Value",
+                    String.format("Page count cannot be larger than %d", MAXIMUM_PAGE_COUNT));
     }
 
 }

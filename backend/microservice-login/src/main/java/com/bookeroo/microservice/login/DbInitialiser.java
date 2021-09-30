@@ -1,7 +1,7 @@
-package com.bookeroo.microservice.admin;
+package com.bookeroo.microservice.login;
 
-import com.bookeroo.microservice.admin.model.User;
-import com.bookeroo.microservice.admin.repository.UserRepository;
+import com.bookeroo.microservice.login.model.User;
+import com.bookeroo.microservice.login.repository.UserRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,14 +32,23 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            User admin = new User();
-            admin.setUsername("admin@test.com");
-            admin.setFirstName("adminFirstName");
-            admin.setLastName("adminLastName");
-            admin.setPassword(passwordEncoder.encode("password"));
-            admin.setEnabled(true);
-            admin.setRoles("ROLE_ADMIN");
-            userRepository.save(admin);
+            User user1 = new User();
+            user1.setUsername("user1@test.com");
+            user1.setFirstName("user1FirstName");
+            user1.setLastName("user1LastName");
+            user1.setPassword(passwordEncoder.encode("password"));
+            user1.setEnabled(true);
+            user1.setRoles("ROLE_USER");
+            userRepository.save(user1);
+
+            User user2 = new User();
+            user2.setUsername("user2@test.com");
+            user2.setFirstName("user2FirstName");
+            user2.setLastName("user2LastName");
+            user2.setPassword(passwordEncoder.encode("password"));
+            user2.setEnabled(true);
+            user2.setRoles("ROLE_USER");
+            userRepository.save(user2);
 
 //            for (int i = 0; i < 6; i++)
 //                userRepository.save(getRandomUser());
