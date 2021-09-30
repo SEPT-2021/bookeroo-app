@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.bookeroo.microservice.book.validator.BookFormDataValidator.MINIMUM_ISBN_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,12 +20,15 @@ public class BookServiceTests {
     BookService bookService;
 
     Book setupBook() {
+        Random random = new Random();
         Book book = new Book();
         book.setTitle("testTitle");
         book.setAuthor("testAuthor");
         book.setPageCount("100");
         book.setIsbn(RandomString.make(MINIMUM_ISBN_LENGTH));
         book.setDescription("testDescription");
+        book.setBookCondition(Book.BookCondition.values()[random.nextInt(Book.BookCondition.values().length)].name);
+        book.setBookCategory(Book.BookCategory.values()[random.nextInt(Book.BookCategory.values().length)].name);
         book.setCover("https://picsum.photos/200");
         return book;
     }

@@ -1,6 +1,8 @@
 package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.model.Book;
+import com.bookeroo.microservice.book.model.Book.BookCategory;
+import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Random;
 
 import static com.bookeroo.microservice.book.validator.BookFormDataValidator.MINIMUM_ISBN_LENGTH;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,11 +35,14 @@ public class BookControllerTests {
 
     Book setupBook() {
         Book book = new Book();
+        Random random = new Random();
         book.setTitle("testTitle");
         book.setAuthor("testAuthor");
         book.setPageCount("100");
         book.setIsbn(RandomString.make(MINIMUM_ISBN_LENGTH));
         book.setDescription("testDescription");
+        book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name);
+        book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name);
         book.setCover("https://picsum.photos/200");
         return book;
     }
@@ -46,22 +53,21 @@ public class BookControllerTests {
 //        BookFormData bookFormData = new BookFormData();
 //        bookFormData.setTitle(book.getTitle());
 //        bookFormData.setAuthor(book.getAuthor());
-//        bookFormData.setPageCount(book.getPageCount());
+//        bookFormData.setPageCount(Long.parseLong(book.getPageCount()));
 //        bookFormData.setIsbn(book.getIsbn());
-//        bookFormData.setPrice(book.getPrice());
 //        bookFormData.setDescription(book.getDescription());
+//        bookFormData.setCondition(BookCondition.valueOf(book.getBookCondition()));
+//        bookFormData.setCategory(BookCategory.valueOf(book.getBookCategory()));
 //        bookFormData.setCoverUrl(book.getCover());
 //
 //        RequestBuilder request = post("/api/books/add")
 //                .sessionAttr("formData", new BookFormData())
-//                .param("username", book.getTitle())
+//                .param("title", book.getTitle())
 //                .param("author", book.getAuthor())
 //                .param("pageCount", String.valueOf(book.getPageCount()))
 //                .param("isbn", book.getIsbn())
-//                .param("price", String.valueOf(book.getPrice()))
 //                .param("description", book.getDescription())
 //                .param("coverUrl", book.getCover());
-//                .flashAttr("formData", new BookFormData());
 //
 //        mockMvc.perform(request).andExpect(status().isCreated());
 //    }
@@ -74,7 +80,6 @@ public class BookControllerTests {
 //        bookFormData.setAuthor(book.getAuthor());
 //        bookFormData.setPageCount(book.getPageCount());
 //        bookFormData.setIsbn(book.getIsbn());
-//        bookFormData.setPrice(book.getPrice());
 //        bookFormData.setDescription(book.getDescription());
 //        bookFormData.setCoverUrl(book.getCover());
 //
