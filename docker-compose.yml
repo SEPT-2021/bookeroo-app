@@ -24,6 +24,14 @@ services:
         image: bookeroo/micrservice-payment:latest
         ports:
             - 8082:8082
+    microservice-admin:
+        container_name: microservice-admin
+        build:
+            context: ./backend/microservice-admin
+            dockerfile: ../template.Dockerfile
+        image: bookeroo/micrservice-admin:latest
+        ports:
+            - 8083:8083
     frontend:
         container_name: frontend
         build:

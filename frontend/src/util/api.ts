@@ -6,12 +6,13 @@ export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins",
+  service: "books" | "users" | "orders" | "admins" | "newsletter",
   route: string
 ) {
   const port = (() => {
     switch (service) {
       case "users":
+      case "newsletter":
         return 8080;
       case "books":
         return 8081;
@@ -152,3 +153,7 @@ export const deleteUserByID = makeTypedAPICall<
   { userId: number | undefined },
   unknown
 >((args) => api.delete(getRouteURL("admins", `delete-users/${args.userId}`)));
+
+export const registerNewsletter = makeTypedAPICall<unknown, unknown>((args) =>
+  api.post(getRouteURL("newsletter", "register"), args)
+);
