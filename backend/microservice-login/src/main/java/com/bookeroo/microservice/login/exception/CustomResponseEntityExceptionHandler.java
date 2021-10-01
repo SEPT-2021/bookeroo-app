@@ -21,14 +21,20 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler
-    public final ResponseEntity<?> handleInvalidField(UserFieldValidationException exception){
+    public final ResponseEntity<?> handleInvalidField(UserFieldValidationException exception) {
         UserFieldValidationResponse exceptionResponse = new UserFieldValidationResponse(exception.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public final ResponseEntity<?> handleUserNotFound(UserNotFoundException exception){
+    public final ResponseEntity<?> handleUserNotFound(UserNotFoundException exception) {
         UserNotFoundResponse exceptionResponse = new UserNotFoundResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<?> handleInvalidEmail(InvalidEmailException exception) {
+        InvalidEmailResponse exceptionResponse = new InvalidEmailResponse(exception.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 

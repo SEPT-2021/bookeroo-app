@@ -85,6 +85,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.js").permitAll()
                 .antMatchers("/api/users/register").permitAll()
                 .antMatchers("/api/users/login").permitAll()
+                .antMatchers("/api/newsletter/**").permitAll()
                 .antMatchers("/api/users/**").authenticated()
                 .anyRequest().authenticated();
 
