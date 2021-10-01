@@ -36,7 +36,7 @@ public class Book {
     private Date updatedAt;
 
     public enum BookCondition {
-        AS_NEW("As New"),
+        NEW("New"),
         FINE("Fine"),
         VERY_GOOD("Very Good"),
         FAIR("Fair"),
