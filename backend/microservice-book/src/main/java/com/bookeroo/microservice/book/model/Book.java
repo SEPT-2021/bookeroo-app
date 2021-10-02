@@ -4,36 +4,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Book JPA entity to represent the book data model.
  */
 @Entity
 public class Book {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @NotBlank(message = "Title cannot be blank")
-    private String title;
-    @NotBlank(message = "Author cannot be blank")
-    private String author;
-    @NotBlank(message = "Number of pages cannot be blank")
-    private String pageCount;
-    @NotBlank(message = "ISBN cannot be blank")
-    private String isbn;
-    @NotBlank(message = "Books are required to have a brief description")
-    @Size(max = 8191)
-    private String description;
-    @NotBlank(message = "Condition cannot be blank")
-    private String bookCondition;
-    @NotBlank(message = "Category cannot be blank")
-    private String bookCategory;
-    @NotBlank(message = "Books must have a cover")
-    @Size(max = 1023)
-    private String cover;
-    private Date createdAt;
-    private Date updatedAt;
 
     public enum BookCondition {
         NEW("New"),
@@ -68,10 +45,36 @@ public class Book {
 
         public String name;
 
-        BookCategory(String category) {
-            this.name = category;
+        BookCategory(String name) {
+            this.name = name;
         }
     }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @NotBlank(message = "Title cannot be blank")
+    private String title;
+    @NotBlank(message = "Author cannot be blank")
+    private String author;
+    @NotBlank(message = "Number of pages cannot be blank")
+    private String pageCount;
+    @NotBlank(message = "ISBN cannot be blank")
+    private String isbn;
+    @NotBlank(message = "Books are required to have a brief description")
+    @Size(max = 8191)
+    private String description;
+    @NotBlank(message = "Price cannot be blank")
+    private String price;
+    @NotBlank(message = "Condition cannot be blank")
+    private String bookCondition;
+    @NotBlank(message = "Category cannot be blank")
+    private String bookCategory;
+    @NotBlank(message = "Books must have a cover")
+    @Size(max = 1023)
+    private String cover;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Book() {
     }
@@ -124,20 +127,28 @@ public class Book {
         this.description = description;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public String getBookCondition() {
         return bookCondition;
     }
 
-    public void setBookCondition(String condition) {
-        this.bookCondition = condition;
+    public void setBookCondition(String bookCondition) {
+        this.bookCondition = bookCondition;
     }
 
     public String getBookCategory() {
         return bookCategory;
     }
 
-    public void setBookCategory(String category) {
-        this.bookCategory = category;
+    public void setBookCategory(String bookCategory) {
+        this.bookCategory = bookCategory;
     }
 
     public String getCover() {
@@ -182,13 +193,27 @@ public class Book {
             return false;
 
         Book book = (Book) object;
-        return id == book.id
-                && pageCount.equals(book.pageCount)
-                && title.equals(book.title)
-                && author.equals(book.author)
-                && isbn.equals(book.isbn)
-                && description.equals(book.description)
-                && cover.equals(book.cover);
+
+        if (id != book.id)
+            return false;
+        if (!Objects.equals(title, book.title))
+            return false;
+        if (!Objects.equals(author, book.author))
+            return false;
+        if (!Objects.equals(pageCount, book.pageCount))
+            return false;
+        if (!Objects.equals(isbn, book.isbn))
+            return false;
+        if (!Objects.equals(description, book.description))
+            return false;
+        if (!Objects.equals(price, book.price))
+            return false;
+        if (!Objects.equals(bookCondition, book.bookCondition))
+            return false;
+        if (!Objects.equals(bookCategory, book.bookCategory))
+            return false;
+
+        return Objects.equals(cover, book.cover);
     }
 
     @Override
@@ -201,7 +226,10 @@ public class Book {
                 "\tisbn: \"%s\"\n" +
                 "\tcover: \"%s\"\n" +
                 "\tdescription: \"%s\"\n" +
-                "}", id, title, author, pageCount, isbn, cover, description);
+                "\tprice: \"%s\"\n" +
+                "\tcondition: \"%s\"\n" +
+                "\tcategory: \"%s\"\n" +
+                "}", id, title, author, pageCount, isbn, cover, description, price, bookCondition, bookCategory);
     }
 
 }

@@ -59,11 +59,11 @@ public class PayPalService {
                     .description(book.getIsbn())
                     .unitAmount(new Money()
                             .currencyCode(CURRENCY_CODE)
-                            .value(String.valueOf(round(book.getPrice()))))
+                            .value(String.valueOf(round(Double.parseDouble(book.getPrice())))))
                     .quantity(String.valueOf(item.getQuantity()))
                     .category(ITEM_CATEGORY));
 
-            double itemTotal = book.getPrice() * item.getQuantity();
+            double itemTotal = Double.parseDouble(book.getPrice()) * item.getQuantity();
             orderTotal += itemTotal;
             shipping += itemTotal * SHIPPING_PERCENTAGE;
         }

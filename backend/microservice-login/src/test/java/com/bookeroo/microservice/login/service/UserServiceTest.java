@@ -25,6 +25,12 @@ class UserServiceTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
         user.setRoles("ROLE_USER");
         user.setEnabled(true);
         return user;

@@ -22,6 +22,8 @@ public class BookFormData {
     private String isbn;
     @NotBlank(message = "Books are required to have a brief description")
     private String description;
+    @NotBlank(message = "Price cannot be blank")
+    private String price;
     private BookCondition condition;
     private BookCategory category;
     private MultipartFile coverFile;
@@ -68,6 +70,14 @@ public class BookFormData {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public BookCondition getCondition() {

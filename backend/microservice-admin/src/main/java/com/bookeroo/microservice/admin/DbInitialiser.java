@@ -37,6 +37,12 @@ public class DbInitialiser {
             admin.setFirstName("adminFirstName");
             admin.setLastName("adminLastName");
             admin.setPassword(passwordEncoder.encode("password"));
+            admin.setAddressLine1("123 Bookeroo St");
+            admin.setAddressLine2("Apartment 1");
+            admin.setCity("Melbourne");
+            admin.setState("VIC");
+            admin.setPostalCode("3001");
+            admin.setPhoneNumber("+(61) 413 170 399");
             admin.setEnabled(true);
             admin.setRoles("ROLE_ADMIN");
             userRepository.save(admin);
@@ -52,6 +58,13 @@ public class DbInitialiser {
         user.setFirstName("randomFirstName");
         user.setLastName("randomLastName");
         user.setPassword(passwordEncoder.encode("password"));
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
+        user.setEnabled(true);
         user.setEnabled(true);
         user.setRoles("ROLE_USER");
         return user;

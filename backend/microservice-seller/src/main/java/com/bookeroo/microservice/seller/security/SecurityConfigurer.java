@@ -42,8 +42,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public void setPasswordEncoder() {
+        this.passwordEncoder = passwordEncoder();
     }
 
     @Override
@@ -85,8 +85,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/**/*.js").permitAll()
                 // TODO .antMatchers("/api/admins/**").hasRole(User.Role.SELLER.name())
                 .antMatchers("/api/sellers/**").permitAll()
-                // TODO .antMatchers("/api/listings/**").authenticated())
-                .antMatchers("/api/listings/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);

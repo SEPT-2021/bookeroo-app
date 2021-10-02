@@ -1,7 +1,6 @@
 package com.bookeroo.microservice.book.repository;
 
 import com.bookeroo.microservice.book.model.Book;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,12 +17,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Book findByIsbn(String isbn);
 
-    Iterable<Book> findByTitleContains(String keyword);
+    Iterable<Book> findByTitleContaining(String keyword);
 
-    Iterable<Book> findByAuthorContains(String keyword);
+    Iterable<Book> findByAuthorContaining(String keyword);
 
-    Iterable<Book> findByTitleContainsOrAuthorContainsOrDescriptionContains(
-            String title, String author, String description);
+    Iterable<Book> findByIsbnContaining(String keyword);
+
+    Iterable<Book> findByBookCategoryContaining(String keyword);
+
+    Iterable<Book> findByTitleContainingOrAuthorContainingOrIsbnContainingOrBookCategoryContaining(
+            String title, String author, String isbn, String category);
 
     List<Book> findAll();
 

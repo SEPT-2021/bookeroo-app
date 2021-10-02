@@ -34,13 +34,14 @@ public class DbInitialiser {
             book.setPageCount("100");
             book.setIsbn("1234567891011");
             book.setDescription("randomDescription");
-            book.setBookCondition(BookCondition.FAIR.name);
-            book.setBookCategory(BookCategory.LITERARY_FICTION.name);
+            book.setPrice("10.0");
+            book.setBookCondition(BookCondition.FAIR.name());
+            book.setBookCategory(BookCategory.LITERARY_FICTION.name());
             book.setCover("https://picsum.photos/200");
             bookRepository.save(book);
 
-//            for (int i = 0; i < 6; i++)
-//                bookRepository.save(getRandomBook());
+            for (int i = 0; i < 6; i++)
+                bookRepository.save(getRandomBook());
         }
     }
 
@@ -52,8 +53,9 @@ public class DbInitialiser {
         book.setPageCount(String.valueOf(random.nextInt(1000)));
         book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9000_000_000_000L) + 1000_000_000_000L));
         book.setDescription("randomDescription");
-        book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name);
-        book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name);
+        book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
+        book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
+        book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
         book.setCover("https://picsum.photos/200");
         return book;
     }

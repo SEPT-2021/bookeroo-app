@@ -3,6 +3,7 @@ package com.bookeroo.microservice.seller.service;
 import com.bookeroo.microservice.seller.exception.SellerNotFoundException;
 import com.bookeroo.microservice.seller.exception.UserNotFoundException;
 import com.bookeroo.microservice.seller.model.User;
+import com.bookeroo.microservice.seller.model.User.UserRole;
 import com.bookeroo.microservice.seller.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class UserService {
 
     public User getSellerById(long id) throws SellerNotFoundException {
         User user;
-        if ((user = userRepository.findById(id)) == null || !user.getRoles().contains(User.Role.SELLER.name()))
+        if ((user = userRepository.findById(id)) == null || !user.getRoles().contains(UserRole.SELLER.name()))
             throw new UserNotFoundException(String.format("Seller by id %d not found", id));
 
         return user;
@@ -65,7 +66,7 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRolesNotContaining(User.Role.ADMIN.name());
+        return userRepository.findAllByRolesNotContaining(UserRole.ADMIN.name());
     }
 
 }

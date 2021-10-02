@@ -29,20 +29,19 @@ import java.net.URL;
 public class BookController {
 
     private final BookService bookService;
-    private final S3Service s3Service;
-    private final ValidationErrorService validationErrorService;
     private final BookFormDataValidator bookFormDataValidator;
+    private final ValidationErrorService validationErrorService;
+    private final S3Service s3Service;
 
     @Autowired
-    public BookController(
-            BookService bookService,
-            S3Service s3Service,
-            ValidationErrorService validationErrorService,
-            BookFormDataValidator bookFormDataValidator) {
+    public BookController(BookService bookService,
+                          BookFormDataValidator bookFormDataValidator,
+                          ValidationErrorService validationErrorService,
+                          S3Service s3Service) {
         this.bookService = bookService;
-        this.s3Service = s3Service;
-        this.validationErrorService = validationErrorService;
         this.bookFormDataValidator = bookFormDataValidator;
+        this.validationErrorService = validationErrorService;
+        this.s3Service = s3Service;
     }
 
     @PostMapping("/add")
@@ -58,8 +57,9 @@ public class BookController {
         book.setPageCount(String.valueOf(formData.getPageCount()));
         book.setIsbn(formData.getIsbn());
         book.setDescription(formData.getDescription());
-        book.setBookCondition(formData.getCondition().name);
-        book.setBookCategory(formData.getCategory().name);
+        book.setPrice(formData.getPrice());
+        book.setBookCondition(formData.getCondition().name());
+        book.setBookCategory(formData.getCategory().name());
 
         try {
             MultipartFile coverFile = formData.getCoverFile();
@@ -121,6 +121,12 @@ public class BookController {
                     break;
                 case "author":
                     searchResults = bookService.searchBookByAuthor(value);
+                    break;
+                case "isbn":
+                    searchResults = bookService.searchBookByIsbn(value);
+                    break;
+                case "category":
+                    searchResults = bookService.searchBookByCategory(value);
                     break;
                 case "keyword":
                     searchResults = bookService.searchBookByKeyword(value);

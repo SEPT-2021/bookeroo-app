@@ -1,6 +1,8 @@
 package com.bookeroo.microservice.seller;
 
 import com.bookeroo.microservice.seller.model.Book;
+import com.bookeroo.microservice.seller.model.Book.BookCategory;
+import com.bookeroo.microservice.seller.model.Book.BookCondition;
 import com.bookeroo.microservice.seller.model.User;
 import com.bookeroo.microservice.seller.repository.BookRepository;
 import com.bookeroo.microservice.seller.repository.UserRepository;
@@ -42,8 +44,14 @@ public class DbInitialiser {
             admin.setFirstName("adminFirstName");
             admin.setLastName("adminLastName");
             admin.setPassword(passwordEncoder.encode("password"));
-            admin.setEnabled(true);
+            admin.setAddressLine1("123 Bookeroo St");
+            admin.setAddressLine2("Apartment 1");
+            admin.setCity("Melbourne");
+            admin.setState("VIC");
+            admin.setPostalCode("3001");
+            admin.setPhoneNumber("+(61) 413 170 399");
             admin.setRoles("ROLE_ADMIN");
+            admin.setEnabled(true);
             userRepository.save(admin);
 
             User user = new User();
@@ -51,8 +59,14 @@ public class DbInitialiser {
             user.setFirstName("userFirstName");
             user.setLastName("userLastName");
             user.setPassword(passwordEncoder.encode("password"));
-            user.setEnabled(true);
+            user.setAddressLine1("123 Bookeroo St");
+            user.setAddressLine2("Apartment 2");
+            user.setCity("Melbourne");
+            user.setState("VIC");
+            user.setPostalCode("3001");
+            user.setPhoneNumber("+(61) 413 170 399");
             user.setRoles("ROLE_USER");
+            user.setEnabled(true);
             userRepository.save(user);
 
             User seller = new User();
@@ -60,23 +74,21 @@ public class DbInitialiser {
             seller.setFirstName("sellerFirstName");
             seller.setLastName("sellerLastName");
             seller.setPassword(passwordEncoder.encode("password"));
-            seller.setEnabled(true);
+            seller.setAddressLine1("123 Bookeroo St");
+            seller.setAddressLine2("Apartment 3");
+            seller.setCity("Melbourne");
+            seller.setState("VIC");
+            seller.setPostalCode("3001");
+            seller.setPhoneNumber("+(61) 413 170 399");
             seller.setRoles("ROLE_USER,ROLE_SELLER");
+            seller.setEnabled(true);
             userRepository.save(seller);
-
-            Book book = new Book();
-            book.setTitle("randomTitle");
-            book.setAuthor("randomAuthor");
-            book.setPageCount(100);
-            book.setIsbn("1234567891011");
-            book.setDescription("randomDescription");
-            book.setCover("https://picsum.photos/200");
-            bookRepository.save(book);
 
 //            for (int i = 0; i < 6; i++)
 //                userRepository.save(getRandomUser());
-//            for (int i = 0; i < 6; i++)
-//                bookRepository.save(getRandomBook());
+
+            for (int i = 0; i < 6; i++)
+                bookRepository.save(getRandomBook());
         }
     }
 
@@ -86,18 +98,28 @@ public class DbInitialiser {
         user.setFirstName("randomFirstName");
         user.setLastName("randomLastName");
         user.setPassword(passwordEncoder.encode("password"));
-        user.setEnabled(true);
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
         user.setRoles("ROLE_USER");
+        user.setEnabled(true);
         return user;
     }
 
     private Book getRandomBook() {
         Book book = new Book();
+        Random random = new Random();
         book.setTitle("randomTitle");
         book.setAuthor("randomAuthor");
-        book.setPageCount(new Random().nextInt(1000));
-        book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9000_000_000_000L) + 1000_000_000_000L));
-        book.setDescription("randomDescription");
+        book.setPageCount(String.valueOf(new Random().nextInt(100)));
+        book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9_000_000_000_000L) + 1_000_000_000_000L));
+        book.setDescription("testDescription");
+        book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
+        book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
+        book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
         book.setCover("https://picsum.photos/200");
         return book;
     }

@@ -1,11 +1,10 @@
 package com.bookeroo.microservice.seller.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -13,6 +12,18 @@ import java.util.Date;
  */
 @Entity
 public class User {
+
+    public enum UserRole {
+        USER("User"),
+        ADMIN("Admin"),
+        SELLER("Seller");
+
+        public String name;
+
+        UserRole(String name) {
+            this.name = name;
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +38,22 @@ public class User {
     private String firstName;
     @NotBlank(message = "Lastname cannot be blank")
     private String lastName;
-    @NotBlank(message = "User needs to have one or more roles of format ROLE_{label}")
+    @NotBlank(message = "Address line 1 cannot be blank")
+    private String addressLine1;
+    private String addressLine2;
+    @NotBlank(message = "City cannot be blank")
+    private String city;
+    @NotBlank(message = "State cannot be blank")
+    private String state;
+    @NotBlank(message = "Postal code cannot be blank")
+    @Pattern(regexp = "(^[0-9]{4}$)", message = "Not a valid postal code")
+    private String postalCode;
+    @NotBlank(message = "Phone number cannot be blank")
+    @Pattern(regexp = "(^(\\+?\\(61\\)|\\(\\+?61\\)|\\+?61|\\(0[1-9]\\)|0[1-9])?( ?-?[0-9]){7,9}$)", message = "Not a valid phone number")
+    private String phoneNumber;
+    @NotBlank(message = "User needs to have one or more roles")
     private String roles;
-    @NotNull(message = "Boolean flag \"enable\" has to be set")
+    @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
     private Date createdAt;
     private Date updatedAt;
@@ -37,11 +61,6 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private SellerDetails sellerDetails;
-
-
-    public enum Role {
-        USER, ADMIN, SELLER
-    }
 
     public User() {
     }
@@ -86,6 +105,54 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
+
+    public String getAddressLine2() {
+        return addressLine2;
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getRoles() {
         return roles;
     }
@@ -118,14 +185,6 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public SellerDetails getSellerDetails() {
-        return sellerDetails;
-    }
-
-    public void setSellerDetails(SellerDetails sellerDetails) {
-        this.sellerDetails = sellerDetails;
-    }
-
     @PrePersist
     protected void onCreate() {
         this.createdAt = new Date();
@@ -137,7 +196,6 @@ public class User {
     }
 
     @Override
-    @JsonIgnore
     public String toString() {
         return String.format("User {\n" +
                         "\tid: %s,\n" +

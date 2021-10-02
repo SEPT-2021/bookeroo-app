@@ -37,8 +37,14 @@ public class DbInitialiser {
             user1.setFirstName("user1FirstName");
             user1.setLastName("user1LastName");
             user1.setPassword(passwordEncoder.encode("password"));
-            user1.setEnabled(true);
+            user1.setAddressLine1("123 Bookeroo St");
+            user1.setAddressLine2("Apartment 1");
+            user1.setCity("Melbourne");
+            user1.setState("VIC");
+            user1.setPostalCode("3001");
+            user1.setPhoneNumber("+(61) 413 170 399");
             user1.setRoles("ROLE_USER");
+            user1.setEnabled(true);
             userRepository.save(user1);
 
             User user2 = new User();
@@ -46,8 +52,14 @@ public class DbInitialiser {
             user2.setFirstName("user2FirstName");
             user2.setLastName("user2LastName");
             user2.setPassword(passwordEncoder.encode("password"));
-            user2.setEnabled(true);
+            user2.setAddressLine1("123 Bookeroo St");
+            user2.setAddressLine2("Apartment 2");
+            user2.setCity("Melbourne");
+            user2.setState("VIC");
+            user2.setPostalCode("3001");
+            user2.setPhoneNumber("+(61) 413 170 399");
             user2.setRoles("ROLE_USER");
+            user2.setEnabled(true);
             userRepository.save(user2);
 
 //            for (int i = 0; i < 6; i++)
@@ -61,8 +73,14 @@ public class DbInitialiser {
         user.setFirstName("randomFirstName");
         user.setLastName("randomLastName");
         user.setPassword(passwordEncoder.encode("password"));
-        user.setEnabled(true);
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 3");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
         user.setRoles("ROLE_USER");
+        user.setEnabled(true);
         return user;
     }
 

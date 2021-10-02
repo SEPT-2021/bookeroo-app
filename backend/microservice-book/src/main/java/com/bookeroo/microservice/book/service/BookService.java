@@ -1,7 +1,6 @@
 package com.bookeroo.microservice.book.service;
 
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
-import com.bookeroo.microservice.book.exception.ISBNAlreadyExistsException;
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
-        if (bookRepository.findByIsbn(book.getIsbn()) != null)
-            throw new ISBNAlreadyExistsException(String.format("ISBN %s already exists", book.getIsbn()));
-
         return bookRepository.save(book);
     }
 
@@ -52,22 +48,36 @@ public class BookService {
 
     public List<Book> searchBookByTitle(String title) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByTitleContains(title).forEach(results::add);
+        bookRepository.findByTitleContaining(title).forEach(results::add);
 
         return results;
     }
 
     public List<Book> searchBookByAuthor(String author) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByAuthorContains(author).forEach(results::add);
+        bookRepository.findByAuthorContaining(author).forEach(results::add);
+
+        return results;
+    }
+
+    public List<Book> searchBookByIsbn(String author) {
+        List<Book> results = new ArrayList<>();
+        bookRepository.findByIsbnContaining(author).forEach(results::add);
+
+        return results;
+    }
+
+    public List<Book> searchBookByCategory(String author) {
+        List<Book> results = new ArrayList<>();
+        bookRepository.findByBookCategoryContaining(author).forEach(results::add);
 
         return results;
     }
 
     public List<Book> searchBookByKeyword(String keyword) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByTitleContainsOrAuthorContainsOrDescriptionContains(
-                keyword, keyword, keyword).forEach(results::add);
+        bookRepository.findByTitleContainingOrAuthorContainingOrIsbnContainingOrBookCategoryContaining(
+                keyword, keyword, keyword, keyword).forEach(results::add);
 
         return results;
     }

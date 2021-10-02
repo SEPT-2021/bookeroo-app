@@ -2,7 +2,6 @@ package com.bookeroo.microservice.book.service;
 
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Random;
 
-import static com.bookeroo.microservice.book.validator.BookFormDataValidator.MINIMUM_ISBN_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -25,10 +23,11 @@ public class BookServiceTests {
         book.setTitle("testTitle");
         book.setAuthor("testAuthor");
         book.setPageCount("100");
-        book.setIsbn(RandomString.make(MINIMUM_ISBN_LENGTH));
+        book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9_000_000_000_000L) + 1_000_000_000_000L));
         book.setDescription("testDescription");
-        book.setBookCondition(Book.BookCondition.values()[random.nextInt(Book.BookCondition.values().length)].name);
-        book.setBookCategory(Book.BookCategory.values()[random.nextInt(Book.BookCategory.values().length)].name);
+        book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
+        book.setBookCondition(Book.BookCondition.values()[random.nextInt(Book.BookCondition.values().length)].name());
+        book.setBookCategory(Book.BookCategory.values()[random.nextInt(Book.BookCategory.values().length)].name());
         book.setCover("https://picsum.photos/200");
         return book;
     }
@@ -72,7 +71,7 @@ public class BookServiceTests {
     void givenBooksPresent_whenSearchedByKeyword_returnMatchingBooks() {
         Book book1 = setupBook();
         String searchString = "uniqueSearchedKeyword";
-        book1.setDescription(searchString);
+        book1.setBookCategory(searchString);
         book1 = bookService.saveBook(book1);
         Book book2 = setupBook();
         book2 = bookService.saveBook(book2);

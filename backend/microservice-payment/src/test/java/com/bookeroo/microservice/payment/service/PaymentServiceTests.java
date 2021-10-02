@@ -1,6 +1,8 @@
 package com.bookeroo.microservice.payment.service;
 
 import com.bookeroo.microservice.payment.model.*;
+import com.bookeroo.microservice.payment.model.Book.BookCategory;
+import com.bookeroo.microservice.payment.model.Book.BookCondition;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.Order;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
@@ -26,19 +28,27 @@ public class PaymentServiceTests {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setEnabled(true);
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
         user.setRoles("ROLE_USER");
+        user.setEnabled(true);
         return user;
     }
 
     CartCheckout setupCartCheckout() {
         Book book = new Book();
-        book.setTitle("testTitle1");
+        book.setTitle("testTitle");
         book.setAuthor("testAuthor");
-        book.setPageCount(100);
-        book.setIsbn(RandomString.make(13));
-        book.setPrice(100.0);
+        book.setPageCount("100");
+        book.setIsbn("1234567891011");
         book.setDescription("testDescription");
+        book.setPrice("10.0");
+        book.setBookCondition(BookCondition.FAIR.name());
+        book.setBookCategory(BookCategory.LITERARY_FICTION.name());
         book.setCover("https://picsum.photos/200");
 
         List<OrderItem> items = new ArrayList<>();
