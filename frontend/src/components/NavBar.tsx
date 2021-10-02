@@ -43,6 +43,12 @@ function NavBar({ classes }: NavBarProps) {
               <Button>Manager Users</Button>
             </Link>
           )}
+          <Link to="/about">
+            <Button>About Us</Button>
+          </Link>
+          <Link to="/contact">
+            <Button>Contact Us</Button>
+          </Link>
         </Box>
         <Box>
           {user ? (
