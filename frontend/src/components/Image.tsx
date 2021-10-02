@@ -52,6 +52,21 @@ export default function Image({
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const renderBookPage = () => {
+    const currentBook = {
+      imageUrl,
+      id,
+      title,
+      description,
+      author,
+      pageCount,
+      price,
+    };
+    localStorage.setItem("currentBook", JSON.stringify(currentBook));
+    window.location.href = "/singleBook";
+  };
+
   return (
     <Collapse in={checked} timeout={checked ? 1500 : undefined}>
       <Card className={classes.card}>
@@ -88,7 +103,7 @@ export default function Image({
             <AddShoppingCart />
           </IconButton>
           <IconButton aria-label="share">
-            <Launch />
+            <Launch onClick={renderBookPage} />
           </IconButton>
           <IconButton
             onClick={handleExpandClick}
