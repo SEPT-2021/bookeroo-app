@@ -21,6 +21,7 @@ import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
 import UsersList from "./pages/AdminDashBoard/UsersList";
 import AboutUs from "./pages/About";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +76,10 @@ ReactDOM.render(
               <Route path="/about">
                 <AboutUs />
               </Route>
+              <Route path="/contact">
+                <Contact />
+              </Route>
+
               <Route component={NotFoundPage} />
             </Switch>
           </BrowserRouter>
