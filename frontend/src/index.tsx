@@ -20,6 +20,7 @@ import { GlobalContextProvider } from "./components/GlobalContext";
 import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
 import UsersList from "./pages/AdminDashBoard/UsersList";
+import AboutUs from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,9 @@ ReactDOM.render(
               </Route>
               <Route path="/users">
                 <UsersList />
+              </Route>
+              <Route path="/about">
+                <AboutUs />
               </Route>
               <Route component={NotFoundPage} />
             </Switch>
