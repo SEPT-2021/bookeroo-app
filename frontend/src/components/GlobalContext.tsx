@@ -9,6 +9,11 @@ export interface User {
   password: string;
   firstName: string;
   lastName: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  postalCode: string;
   roles: "ROLE_USER" | "ROLE_ADMIN";
   enabled: boolean;
   createdAt: string;

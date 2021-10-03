@@ -41,11 +41,17 @@ const makeTypedAPICall =
 export const registerUser = makeTypedAPICall<
   {
     username: string;
+    password: string;
     firstName: string;
     lastName: string;
-    password: string;
     roles: string;
-    enabled: true;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    phoneNumber: string;
+    enabled: boolean;
   },
   TokenProps & { user: User }
 >((args) => api.post(getRouteURL("users", "register"), args));
@@ -62,6 +68,8 @@ export const addBook = makeTypedAPICall<
     pageCount: string;
     isbn: string;
     price: string;
+    condition: string;
+    category: string;
     description: string;
     coverFile: File | unknown;
   },
@@ -73,6 +81,8 @@ export const addBook = makeTypedAPICall<
   data.append("pageCount", args.pageCount);
   data.append("isbn", args.isbn);
   data.append("price", args.price);
+  data.append("condition", args.condition);
+  data.append("category", args.category);
   data.append("description", args.description);
   data.append("coverFile", args.coverFile as File);
 

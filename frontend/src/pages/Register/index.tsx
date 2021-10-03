@@ -27,6 +27,13 @@ function Register({ classes }: RegisterProps) {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [addressLine1, setAddressLine1] = useState("");
+  const [addressLine2, setAddressLine2] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const context = useContext(GlobalContext);
   const passwordsMatchingError =
     password && password !== confirmPassword && "Passwords must match";
@@ -40,6 +47,12 @@ function Register({ classes }: RegisterProps) {
       firstName,
       lastName,
       roles: "ROLE_USER",
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      postalCode,
+      phoneNumber,
       enabled: true,
     });
   };
@@ -102,6 +115,13 @@ function Register({ classes }: RegisterProps) {
             />
             <FormField
               errors={error?.response?.data}
+              name="phoneNumber"
+              label="Phone Number"
+              autoComplete="phoneNumber"
+              onChange={setPhoneNumber}
+            />
+            <FormField
+              errors={error?.response?.data}
               name="password"
               label="Password"
               type="password"
@@ -122,6 +142,42 @@ function Register({ classes }: RegisterProps) {
               autoComplete="current-password"
               onChange={setConfirmPassword}
             />
+            <FormField
+              errors={error?.response?.data}
+              name="addressLine1"
+              label="Address Line 1"
+              autoComplete="addressLine1"
+              onChange={setAddressLine1}
+            />
+            <FormField
+              errors={error?.response?.data}
+              name="addressLine2"
+              label="Address Line 2"
+              autoComplete="addressLine2"
+              onChange={setAddressLine2}
+            />
+            <FormField
+              errors={error?.response?.data}
+              name="city"
+              label="City"
+              autoComplete="city"
+              onChange={setCity}
+            />
+            <FormField
+              errors={error?.response?.data}
+              name="state"
+              label="State"
+              autoComplete="state"
+              onChange={setState}
+            />
+            <FormField
+              errors={error?.response?.data}
+              name="postalCode"
+              label="Postal Code"
+              autoComplete="postalCode"
+              onChange={setPostalCode}
+            />
+
             <LoadingButton
               loading={isLoading}
               disabled={!!passwordsMatchingError}
