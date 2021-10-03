@@ -35,8 +35,8 @@ function AddBook({ classes }: AddBookProps) {
   const [isCoverFilePicked, setIsCoverFilePicked] = useState(bookSelection);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [bookCondition, setBookCondition] = useState("");
-  const [bookCategory, setBookCategory] = useState("");
+  const [condition, setCondition] = useState("");
+  const [category, setCategory] = useState("");
   const [openCategory, setOpenCategory] = React.useState(false);
   const [openCondition, setOpenCondition] = React.useState(false);
 
@@ -46,11 +46,13 @@ function AddBook({ classes }: AddBookProps) {
     mutate({
       title,
       author,
-      isbn,
       pageCount,
-      coverFile,
-      description,
+      isbn,
       price,
+      condition,
+      category,
+      description,
+      coverFile,
     });
   };
 
@@ -74,15 +76,15 @@ function AddBook({ classes }: AddBookProps) {
   };
 
   const handleChangeBookCondition = (
-    event: SelectChangeEvent<typeof bookCondition>
+    event: SelectChangeEvent<typeof condition>
   ) => {
-    setBookCondition(event.target.value || "");
+    setCondition(event.target.value || "");
   };
 
   const handleChangeBookCategory = (
-    event: SelectChangeEvent<typeof bookCategory>
+    event: SelectChangeEvent<typeof category>
   ) => {
-    setBookCategory(event.target.value || "");
+    setCategory(event.target.value || "");
   };
 
   const handleClickOpenCondition = () => {
@@ -189,18 +191,18 @@ function AddBook({ classes }: AddBookProps) {
                     <Select
                       labelId="demo-dialog-select-label"
                       id="demo-dialog-select"
-                      value={bookCondition}
+                      value={condition}
                       onChange={handleChangeBookCondition}
                       input={<OutlinedInput label="Book Condition" />}
                     >
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="New">New</MenuItem>
-                      <MenuItem value="Fine">Fine</MenuItem>
-                      <MenuItem value="Very Good">Very Good</MenuItem>
-                      <MenuItem value="Fair">Fair</MenuItem>
-                      <MenuItem value="Poor">Poor</MenuItem>
+                      <MenuItem value="NEW">New</MenuItem>
+                      <MenuItem value="FINE">Fine</MenuItem>
+                      <MenuItem value="VERY_GOOD">Very Good</MenuItem>
+                      <MenuItem value="FAIR">Fair</MenuItem>
+                      <MenuItem value="POOR">Poor</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -234,38 +236,38 @@ function AddBook({ classes }: AddBookProps) {
                     <Select
                       labelId="demo-dialog-select-label"
                       id="demo-dialog-select"
-                      value={bookCategory}
+                      value={category}
                       onChange={handleChangeBookCategory}
                       input={<OutlinedInput label="Book Category" />}
                     >
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="Literary Fiction">
+                      <MenuItem value="LITERARY_FICTION">
                         Literary Fiction
                       </MenuItem>
-                      <MenuItem value="Mystery">Mystery</MenuItem>
-                      <MenuItem value="Thriller">Thriller</MenuItem>
-                      <MenuItem value="Horror">Horror</MenuItem>
-                      <MenuItem value="Historical">Historical</MenuItem>
-                      <MenuItem value="Romance">Romance</MenuItem>
-                      <MenuItem value="Western">Western</MenuItem>
-                      <MenuItem value="Bildungsroman">Bildungsroman</MenuItem>
-                      <MenuItem value="Speculative Fiction">
+                      <MenuItem value="MYSTERY">Mystery</MenuItem>
+                      <MenuItem value="THRILLER">Thriller</MenuItem>
+                      <MenuItem value="HORROR">Horror</MenuItem>
+                      <MenuItem value="HISTORICAL">Historical</MenuItem>
+                      <MenuItem value="ROMANCE">Romance</MenuItem>
+                      <MenuItem value="WESTERN">Western</MenuItem>
+                      <MenuItem value="BILDUNGSROMAN">Bildungsroman</MenuItem>
+                      <MenuItem value="SPECULATIVE_FICTION">
                         Speculative Fiction
                       </MenuItem>
-                      <MenuItem value="Science Fiction">
+                      <MenuItem value="SCIENCE_FICTION">
                         Science Fiction
                       </MenuItem>
-                      <MenuItem value="Fantasy">Fantasy</MenuItem>
-                      <MenuItem value="Dystopian">Dystopian</MenuItem>
-                      <MenuItem value="Magical Realism">
+                      <MenuItem value="FANTASY">Fantasy</MenuItem>
+                      <MenuItem value="DYSTOPIAN">Dystopian</MenuItem>
+                      <MenuItem value="MAGICAL_REALISM">
                         Magical Realism
                       </MenuItem>
-                      <MenuItem value="Realist Literature">
+                      <MenuItem value="REALIST_LITERATURE">
                         Realist Literature
                       </MenuItem>
-                      <MenuItem value="Other">Other</MenuItem>
+                      <MenuItem value="OTHER">Other</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
