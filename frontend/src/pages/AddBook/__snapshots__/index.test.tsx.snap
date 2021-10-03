@@ -3,17 +3,18 @@
 exports[`AddBook matches snapshot render AddBook 1`] = `
 <div>
   <main
-    class="MuiGrid-root AddBook-root-1 MuiGrid-container MuiGrid-justify-content-xs-center"
+    class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-undefined AddBook-root-1 css-1lym95h-MuiGrid-root"
   >
     <div
       class="AddBook-paper-3"
     >
       <div
-        class="MuiAvatar-root MuiAvatar-circular AddBook-avatar-4 MuiAvatar-colorDefault"
+        class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault AddBook-avatar-4 css-2s90m6-MuiAvatar-root"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiAvatar-fallback"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiAvatar-fallback css-10mi8st-MuiSvgIcon-root-MuiAvatar-fallback"
+          data-testid="PersonIcon"
           focusable="false"
           viewBox="0 0 24 24"
         >
@@ -23,12 +24,12 @@ exports[`AddBook matches snapshot render AddBook 1`] = `
         </svg>
       </div>
       <h1
-        class="MuiTypography-root MuiTypography-h5"
+        class="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
       >
         Add A Book
       </h1>
       <div
-        class="MuiBox-root MuiBox-root-12"
+        class="MuiBox-root css-0"
       >
         <div
           class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
@@ -289,6 +290,30 @@ exports[`AddBook matches snapshot render AddBook 1`] = `
           </div>
         </div>
         <div>
+          <button
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            Select Book Condition
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+        <div>
+          <button
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            Select Book Category
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+        <div>
           <form
             action=""
             enctype="multipart/form-data"
@@ -314,10 +339,10 @@ exports[`AddBook matches snapshot render AddBook 1`] = `
           />
         </button>
         <div
-          class="MuiBox-root MuiBox-root-13"
+          class="MuiBox-root css-y1gt6f"
         >
           <span
-            class="MuiTypography-root MuiTypography-caption"
+            class="MuiTypography-root MuiTypography-caption css-1sn4lm3-MuiTypography-root"
           >
             Disclaimer: This application was built for SEPT 2021, and is a university project. Please do not provide valuable data into this application.
           </span>
@@ -418,17 +443,18 @@ Object {
 exports[`Rendering page AddBook renders without crashing 1`] = `
 <div>
   <main
-    class="MuiGrid-root AddBook-root-1 MuiGrid-container MuiGrid-justify-content-xs-center"
+    class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-undefined AddBook-root-1 css-1lym95h-MuiGrid-root"
   >
     <div
       class="AddBook-paper-3"
     >
       <div
-        class="MuiAvatar-root MuiAvatar-circular AddBook-avatar-4 MuiAvatar-colorDefault"
+        class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault AddBook-avatar-4 css-2s90m6-MuiAvatar-root"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiAvatar-fallback"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiAvatar-fallback css-10mi8st-MuiSvgIcon-root-MuiAvatar-fallback"
+          data-testid="PersonIcon"
           focusable="false"
           viewBox="0 0 24 24"
         >
@@ -438,12 +464,12 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
         </svg>
       </div>
       <h1
-        class="MuiTypography-root MuiTypography-h5"
+        class="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
       >
         Add A Book
       </h1>
       <div
-        class="MuiBox-root MuiBox-root-6"
+        class="MuiBox-root css-0"
       >
         <div
           class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
@@ -704,6 +730,24 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
           </div>
         </div>
         <div>
+          <button
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            Select Book Condition
+          </button>
+        </div>
+        <div>
+          <button
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            Select Book Category
+          </button>
+        </div>
+        <div>
           <form
             action=""
             enctype="multipart/form-data"
@@ -726,10 +770,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
           </span>
         </button>
         <div
-          class="MuiBox-root MuiBox-root-11"
+          class="MuiBox-root css-y1gt6f"
         >
           <span
-            class="MuiTypography-root MuiTypography-caption"
+            class="MuiTypography-root MuiTypography-caption css-1sn4lm3-MuiTypography-root"
           >
             Disclaimer: This application was built for SEPT 2021, and is a university project. Please do not provide valuable data into this application.
           </span>
