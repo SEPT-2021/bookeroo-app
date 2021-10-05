@@ -20,6 +20,7 @@ import { GlobalContextProvider } from "./components/GlobalContext";
 import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
 import UsersList from "./pages/AdminDashBoard/UsersList";
+import UserDetails from "./pages/UserDetails";
 
 const queryClient = new QueryClient();
 
@@ -55,7 +56,9 @@ ReactDOM.render(
               <Route path="/adminDashboard">
                 <UsersList />
               </Route>
-
+              <Route path="/UserDetails">
+                <UserDetails />
+              </Route>
               <Route path="/paymentSuccess">
                 <PaymentSuccess />
               </Route>
