@@ -15,10 +15,12 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
+import { CardActionArea } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { BookItemType } from "../util/types";
 import { GlobalContext } from "./GlobalContext";
 import { deleteBookById } from "../util/api";
+import Link from "../util/Link";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -35,15 +37,16 @@ type BookProps = {
   onCartClick: () => void;
 };
 
-export default function Image({
+export default function BookCard({
   book: { cover: imageUrl, id, title, description, author, pageCount, price },
   checked,
   onCartClick,
 }: BookProps) {
   const classes = useStyles();
+  const link = `/book/${id}`;
+  const history = useHistory();
   const [expanded, setExpanded] = React.useState(false);
   const { user } = useContext(GlobalContext);
-  const history = useHistory();
   const client = useQueryClient();
   const { mutate: deleteMutate, isLoading } = useMutation(deleteBookById, {
     onSuccess: () => {
@@ -54,48 +57,48 @@ export default function Image({
     setExpanded(!expanded);
   };
 
-  const renderBookPage = () => {
-    history.push(`/book/${id}`);
-  };
-
   return (
     <Collapse in={checked} timeout={checked ? 1500 : undefined}>
       <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="recipe">
-              <Book />
-            </Avatar>
-          }
-          action={
-            user?.roles === "ROLE_ADMIN" && (
-              <IconButton onClick={() => deleteMutate({ id: String(id) })}>
-                {isLoading ? (
-                  <CircularProgress size={24} color="secondary" />
-                ) : (
-                  <Delete />
-                )}
-              </IconButton>
-            )
-          }
-          title={<b>{title}</b>}
-          subheader={author}
-        />
-        <CardMedia className={classes.media} image={imageUrl} title={title} />
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Page Count: {pageCount}
-            <br />
-            Price: {price}
-          </Typography>
-        </CardContent>
+        <CardActionArea onClick={() => history.push(link)}>
+          <CardHeader
+            avatar={
+              <Avatar aria-label="recipe">
+                <Book />
+              </Avatar>
+            }
+            action={
+              user?.roles === "ROLE_ADMIN" && (
+                <IconButton onClick={() => deleteMutate({ id: String(id) })}>
+                  {isLoading ? (
+                    <CircularProgress size={24} color="secondary" />
+                  ) : (
+                    <Delete />
+                  )}
+                </IconButton>
+              )
+            }
+            title={<b>{title}</b>}
+            subheader={author}
+          />
+          <CardMedia className={classes.media} image={imageUrl} title={title} />
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Page Count: {pageCount}
+              <br />
+              Price: {price}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={onCartClick}>
             <AddShoppingCart />
           </IconButton>
-          <IconButton aria-label="share">
-            <Launch onClick={renderBookPage} />
-          </IconButton>
+          <Link to={link}>
+            <IconButton aria-label="share">
+              <Launch />
+            </IconButton>
+          </Link>
           <IconButton
             onClick={handleExpandClick}
             aria-expanded={expanded}

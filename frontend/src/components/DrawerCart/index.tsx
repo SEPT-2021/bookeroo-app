@@ -1,30 +1,33 @@
 import React, { useContext } from "react";
-import { Badge, Drawer, Grid, IconButton } from "@material-ui/core";
+import { Badge, Button, Drawer, Grid, IconButton } from "@material-ui/core";
 import styled from "styled-components";
 import { ShoppingCartOutlined } from "@material-ui/icons";
+import { Box, BoxProps } from "@mui/material";
 import CartItem from "../CartItem/CartItem";
 import Link from "../../util/Link";
 import { BookItemType } from "../../util/types";
 import { GlobalContext } from "../GlobalContext";
 
-const Wrapper = styled.aside`
-  font-family: Arial, Helvetica, sans-serif;
-  width: 500px;
-  padding: 20px;
-`;
-
-type Props = {
-  cartItems: BookItemType[];
-  addToCart: (clickedItem: BookItemType) => void;
-  removeFromCart: (id: number) => void;
-};
-
-const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
+export const Cart: React.FC<BoxProps & { hideCheckoutButton?: boolean }> = ({
+  sx,
+  hideCheckoutButton,
+  ...rest
+}) => {
+  const { cartItems, addToCart, removeFromCart, setCartOpen } =
+    useContext(GlobalContext);
   const calculateTotal = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
   return (
-    <Wrapper>
+    <Box
+      sx={{
+        fontFamily: "Arial, Helvetica, sans-serif",
+        width: 500,
+        padding: 2,
+        ...sx,
+      }}
+      {...rest}
+    >
       <h2>Your Shopping Cart</h2>
       {cartItems.length === 0 ? <p>No items in cart.</p> : null}
       {cartItems.map((item) => (
@@ -36,12 +39,20 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
         />
       ))}
       <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
-      <Grid item>
-        <Link to="/checkout" variant="body2">
-          Checkout
-        </Link>
-      </Grid>
-    </Wrapper>
+      {!hideCheckoutButton && (
+        <Grid item>
+          <Link to="/checkout" variant="body2">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setCartOpen(false)}
+            >
+              Checkout
+            </Button>
+          </Link>
+        </Grid>
+      )}
+    </Box>
   );
 };
 
@@ -53,8 +64,7 @@ const StyledButton = styled(IconButton)`
 `;
 
 export default function DrawerCart() {
-  const { addToCart, removeFromCart, cartItems, setCartOpen, cartOpen } =
-    useContext(GlobalContext);
+  const { cartItems, setCartOpen, cartOpen } = useContext(GlobalContext);
 
   const getTotalItems = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -66,11 +76,7 @@ export default function DrawerCart() {
         </Badge>
       </StyledButton>
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-        <Cart
-          cartItems={cartItems}
-          addToCart={addToCart}
-          removeFromCart={removeFromCart}
-        />
+        <Cart />
       </Drawer>
     </>
   );

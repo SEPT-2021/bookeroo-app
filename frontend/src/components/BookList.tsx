@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
-import Image from "./Image";
+import BookCard from "./BookCard";
 import useWindowPosition from "../hook/useWindowPosition";
 import { BookItemType } from "../util/types";
 
@@ -38,7 +38,7 @@ export default function BookList({
       <Grid container id="header" alignItems="center" justifyContent="center">
         {books.map((book) => (
           <Grid item md={3} sm={6} xs={12} className={classes.gridItem}>
-            <Image
+            <BookCard
               book={book}
               key={book.title}
               checked={checked}
