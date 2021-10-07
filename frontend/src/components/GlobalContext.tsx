@@ -1,7 +1,14 @@
-import React, { createContext, FC, useEffect, useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { useQuery } from "react-query";
 import { api, profile } from "../util/api";
-import { TokenProps } from "../util/types";
+import { BookItemType, TokenProps } from "../util/types";
 
 export interface User {
   id: number;
@@ -22,14 +29,53 @@ export interface User {
 
 interface GlobalContextType {
   user?: User;
+
   login(data: TokenProps): void;
+
   signOut(): void;
+
+  cartOpen: boolean;
+  setCartOpen: Dispatch<SetStateAction<boolean>>;
+  cartItems: BookItemType[];
+
+  addToCart(b: BookItemType): void;
+
+  removeFromCart(id: number): void;
 }
 
 export const GlobalContext = createContext<GlobalContextType>({} as never);
 
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   const [token, setToken] = useState<string>();
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([] as BookItemType[]);
+  const addToCart = (clickedItem: BookItemType) => {
+    setCartItems((prev) => {
+      // 1. Is the item already added in the cart?
+      const isItemInCart = prev.find((item) => item.id === clickedItem.id);
+
+      if (isItemInCart) {
+        return prev.map((item) =>
+          item.id === clickedItem.id
+            ? { ...item, amount: item.amount + 1 }
+            : item
+        );
+      }
+      // First time the item is added
+      return [...prev, { ...clickedItem, amount: 1 }];
+    });
+  };
+  const removeFromCart = (id: number) => {
+    setCartItems((prev) =>
+      prev.reduce((ack, item) => {
+        if (item.id === id) {
+          if (item.amount === 1) return ack;
+          return [...ack, { ...item, amount: item.amount - 1 }];
+        }
+        return [...ack, item];
+      }, [] as BookItemType[])
+    );
+  };
   const {
     data: userData,
     refetch,
@@ -69,6 +115,11 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
           setToken(data.jwt);
         },
         signOut,
+        cartOpen,
+        setCartOpen,
+        cartItems,
+        addToCart,
+        removeFromCart,
       }}
     >
       {children}

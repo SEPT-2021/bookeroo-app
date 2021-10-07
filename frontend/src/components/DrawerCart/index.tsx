@@ -1,9 +1,11 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
+import React, { useContext } from "react";
+import { Badge, Drawer, Grid, IconButton } from "@material-ui/core";
 import styled from "styled-components";
+import { ShoppingCartOutlined } from "@material-ui/icons";
 import CartItem from "../CartItem/CartItem";
 import Link from "../../util/Link";
 import { BookItemType, DataItemType } from "../../util/types";
+import { GlobalContext } from "../GlobalContext";
 
 const Wrapper = styled.aside`
   font-family: Arial, Helvetica, sans-serif;
@@ -53,4 +55,39 @@ const Cart: React.FC<Props> = ({
   );
 };
 
-export default Cart;
+const StyledButton = styled(IconButton)`
+  position: fixed;
+  right: 20px;
+  top: 90px;
+  background-color: orange;
+`;
+
+export default function DrawerCart() {
+  const { addToCart, removeFromCart, cartItems, setCartOpen, cartOpen } =
+    useContext(GlobalContext);
+  const getItems = () => {
+    return cartItems.map((obj) => ({
+      book: obj,
+      quantity: obj.amount,
+    }));
+  };
+  const getTotalItems = (items: BookItemType[]) =>
+    items.reduce((ack: number, item) => ack + item.amount, 0);
+  return (
+    <>
+      <StyledButton onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={getTotalItems(cartItems)} color="error">
+          <ShoppingCartOutlined />
+        </Badge>
+      </StyledButton>
+      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+        <Cart
+          cartItems={cartItems}
+          addToCart={addToCart}
+          removeFromCart={removeFromCart}
+          sendToCart={getItems()}
+        />
+      </Drawer>
+    </>
+  );
+}

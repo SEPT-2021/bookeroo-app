@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import styled from "styled-components";
@@ -7,6 +7,8 @@ import { useQuery } from "react-query";
 import { Box, LinearProgress } from "@mui/material";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
+import { GlobalContext } from "../../components/GlobalContext";
+import DrawerCart from "../../components/DrawerCart";
 
 export const Wrapper = styled.div`
   margin-top: 100px;
@@ -19,6 +21,7 @@ export const Wrapper = styled.div`
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
+  const { addToCart } = useContext(GlobalContext);
   const {
     data: book,
     isLoading,
@@ -35,20 +38,22 @@ function SingleBook() {
     );
   }
   return (
-    <Wrapper>
-      <img src={book.cover} alt={book.title} />
-      <div>
-        <h1>{book.title}</h1>
-        <h2> by {book.author}</h2>
-        <p>Page Count : {book.pageCount}</p>
-        <p>Book isbn : {book.isbn}</p>
-        <p>Book description : {book.description}</p>
-      </div>
-      <Button>
-        <AddIcon />
-        Add to cart
-      </Button>
-    </Wrapper>
+    <>
+      <DrawerCart />
+      <Wrapper>
+        <img src={book.cover} alt={book.title} />
+        <div>
+          <h1>{book.title}</h1>
+          <h2> by {book.author}</h2>
+          <p>Page Count : {book.pageCount}</p>
+          <p>Book isbn : {book.isbn}</p>
+          <p>Book description : {book.description}</p>
+        </div>
+        <Button onClick={() => addToCart(book)} startIcon={<AddIcon />}>
+          Add to cart
+        </Button>
+      </Wrapper>
+    </>
   );
 }
 
