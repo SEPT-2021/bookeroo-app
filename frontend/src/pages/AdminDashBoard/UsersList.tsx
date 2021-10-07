@@ -18,8 +18,14 @@ import { useMutation, useQuery } from "react-query";
 import FormGroup from "@mui/material/FormGroup";
 import { styled, Switch } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { banUnBanUser, deleteUserByID, getAllUsers } from "../../util/api";
-import { User } from "../../components/GlobalContext";
+import {
+  approveSeller,
+  banUnBanUser,
+  deleteUserByID,
+  getAllUsers,
+  rejectSeller,
+} from "../../util/api";
+import { Role, User } from "../../components/GlobalContext";
 
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -64,28 +70,46 @@ function UserRow({
   mode: "banUnban" | "approveReject";
 }) {
   const [switchChecked, setSwitchChecked] = useState<boolean>(user.enabled);
-
+  const mutateOptions = {
+    onSuccess: onChange,
+  };
   const { mutate: unBanMutate, isLoading: isBanUnbanLoading } = useMutation(
     banUnBanUser,
-    {
-      onSuccess: onChange,
-    }
+    mutateOptions
   );
   const { mutate: deleteUserMutate, isLoading: isDeleteLoading } = useMutation(
     deleteUserByID,
-    {
-      onSuccess: onChange,
-    }
+    mutateOptions
   );
-  const isLoading = isDeleteLoading || isBanUnbanLoading;
-  const isBanMode = mode === "banUnban";
-  const deleteUser = async (userId: number) => {
-    deleteUserMutate({ userId });
-  };
-  const unbanUser = async (userId: number) => {
-    unBanMutate({ userId });
-  };
+  const { mutate: approveSellerMutate, isLoading: isApproveSellerLoading } =
+    useMutation(approveSeller, mutateOptions);
 
+  const { mutate: rejectSellerMutate, isLoading: isRejectSellerLoading } =
+    useMutation(rejectSeller, mutateOptions);
+
+  const isLoading =
+    isDeleteLoading ||
+    isBanUnbanLoading ||
+    isApproveSellerLoading ||
+    isRejectSellerLoading;
+  const isBanMode = mode === "banUnban";
+  const userAction = async (
+    action: "approve" | "reject" | "banUnban" | "delete"
+    // eslint-disable-next-line consistent-return
+  ) => {
+    const args = { userId: user.id };
+    // eslint-disable-next-line default-case
+    switch (action) {
+      case "approve":
+        return approveSellerMutate(args);
+      case "reject":
+        return rejectSellerMutate(args);
+      case "banUnban":
+        return unBanMutate(args);
+      case "delete":
+        return deleteUserMutate(args);
+    }
+  };
   return (
     <ListItem divider>
       <ListItemAvatar>
@@ -113,7 +137,7 @@ function UserRow({
                     <OnOffSwitch
                       checked={switchChecked}
                       onChange={() => {
-                        unbanUser(user.id).then(() =>
+                        userAction("banUnban").then(() =>
                           setSwitchChecked(!switchChecked)
                         );
                       }}
@@ -123,10 +147,7 @@ function UserRow({
                 />
               </FormGroup>
             ) : (
-              <IconButton
-                // TODO
-                onClick={onChange}
-              >
+              <IconButton onClick={() => userAction("approve")}>
                 <Check />
               </IconButton>
             )}
@@ -135,15 +156,7 @@ function UserRow({
       </div>
 
       <ListItemSecondaryAction>
-        <IconButton
-          onClick={() => {
-            if (isBanMode) deleteUser(user.id);
-            else if (onChange) {
-              // TODO
-              onChange();
-            }
-          }}
-        >
+        <IconButton onClick={() => userAction(isBanMode ? "delete" : "reject")}>
           {/* eslint-disable-next-line no-nested-ternary */}
           {isLoading ? (
             <CircularProgress color="secondary" size={20} />
@@ -167,7 +180,7 @@ function UsersList() {
     refetch,
   } = useQuery("users", getAllUsers);
   useEffect(() => {
-    setSellers(sampleUsers || []);
+    setSellers(sampleUsers?.filter((u) => u.roles !== Role.ROLE_SELLER) || []);
   }, [sampleUsers]);
 
   if (isLoading) {

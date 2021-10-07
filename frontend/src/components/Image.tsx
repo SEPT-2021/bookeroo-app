@@ -16,7 +16,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
 import { BookItemType } from "../util/types";
-import { GlobalContext } from "./GlobalContext";
+import { GlobalContext, Role } from "./GlobalContext";
 import { deleteBookById } from "../util/api";
 
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +77,7 @@ export default function Image({
             </Avatar>
           }
           action={
-            user?.roles === "ROLE_ADMIN" && (
+            user?.roles === Role.ROLE_ADMIN && (
               <IconButton onClick={() => deleteMutate({ id: String(id) })}>
                 {isLoading ? (
                   <CircularProgress size={24} color="secondary" />

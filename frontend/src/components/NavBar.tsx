@@ -14,7 +14,7 @@ import { Person } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import Link from "../util/Link";
-import { GlobalContext } from "./GlobalContext";
+import { GlobalContext, Role } from "./GlobalContext";
 
 function NavBar({ classes }: NavBarProps) {
   const { user, signOut } = useContext(GlobalContext);
@@ -38,7 +38,7 @@ function NavBar({ classes }: NavBarProps) {
           <Link to="/addBook">
             <Button>Add Book</Button>
           </Link>
-          {user?.roles === "ROLE_ADMIN" && (
+          {user?.roles === Role.ROLE_ADMIN && (
             <Link to="/adminDashboard">
               <Button>Manage Users</Button>
             </Link>
