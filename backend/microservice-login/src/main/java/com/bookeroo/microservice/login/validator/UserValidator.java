@@ -33,21 +33,21 @@ public class UserValidator implements Validator {
 
 
         if (!user.getCity().chars().allMatch(Character::isAlphabetic))
-            errors.rejectValue("shippingAddress.city", "Value", "City name may only contain alphabets");
+            errors.rejectValue("city", "Value", "City name may only contain alphabets");
 
         if (!user.getState().chars().allMatch(Character::isAlphabetic))
-            errors.rejectValue("shippingAddress.state", "Value", "State name may only contain alphabets");
+            errors.rejectValue("state", "Value", "State name may only contain alphabets");
 
         if (!user.getPostalCode().chars().allMatch(Character::isDigit))
-            errors.rejectValue("shippingAddress.postalCode", "Value", "Postal code must only contain numerals");
+            errors.rejectValue("postalCode", "Value", "Postal code must only contain numerals");
 
         if (user.getPostalCode().length() != POSTAL_CODE_LENGTH)
-            errors.rejectValue("shippingAddress.postalCode", "Length", String.format(
+            errors.rejectValue("postalCode", "Length", String.format(
                     "Postal code must be of length %d", POSTAL_CODE_LENGTH
             ));
 
         if (user.getState().length() != STATE_LENGTH)
-            errors.rejectValue("shippingAddress.state", "Length", String.format(
+            errors.rejectValue("state", "Length", String.format(
                     "State must be of length %d", STATE_LENGTH
             ));
     }

@@ -150,7 +150,7 @@ export const paymentCapture = makeTypedAPICall<
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
 
-export const getAllUsers = makeTypedAPICall<unknown, undefined>(() =>
+export const getAllUsers = makeTypedAPICall<unknown, User[]>(() =>
   api.get(getRouteURL("admins", "inspect-users"))
 );
 
@@ -158,6 +158,16 @@ export const banUnBanUser = makeTypedAPICall<
   { userId: number | undefined },
   unknown
 >((args) => api.post(getRouteURL("admins", `toggle-ban/${args.userId}`)));
+
+export const approveSeller = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `approve-seller/${args.userId}`)));
+
+export const rejectSeller = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `reject-seller/${args.userId}`)));
 
 export const deleteUserByID = makeTypedAPICall<
   { userId: number | undefined },

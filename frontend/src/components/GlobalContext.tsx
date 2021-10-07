@@ -11,6 +11,12 @@ import { api, profile } from "../util/api";
 import { BookItemType, TokenProps } from "../util/types";
 import useStickyState from "../util/useStickyState";
 
+export enum Role {
+  ROLE_USER = "ROLE_USER",
+  ROLE_ADMIN = "ROLE_ADMIN",
+  ROLE_SELLER = "ROLE_SELLER",
+}
+
 export interface User {
   id: number;
   username: string;
@@ -22,7 +28,7 @@ export interface User {
   city: string;
   state: string;
   postalCode: string;
-  roles: "ROLE_USER" | "ROLE_ADMIN";
+  roles: Role;
   enabled: boolean;
   createdAt: string;
   updatedAt: string | null;

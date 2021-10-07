@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { CardActionArea } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { BookItemType } from "../util/types";
-import { GlobalContext } from "./GlobalContext";
+import { GlobalContext, Role } from "./GlobalContext";
 import { deleteBookById } from "../util/api";
 import Link from "../util/Link";
 
@@ -68,7 +68,7 @@ export default function BookCard({
               </Avatar>
             }
             action={
-              user?.roles === "ROLE_ADMIN" && (
+              user?.roles === Role.ROLE_ADMIN && (
                 <IconButton onClick={() => deleteMutate({ id: String(id) })}>
                   {isLoading ? (
                     <CircularProgress size={24} color="secondary" />
