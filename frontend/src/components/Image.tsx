@@ -15,6 +15,7 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
+import { useHistory } from "react-router-dom";
 import { BookItemType } from "../util/types";
 import { GlobalContext } from "./GlobalContext";
 import { deleteBookById } from "../util/api";
@@ -42,10 +43,10 @@ export default function Image({
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { user } = useContext(GlobalContext);
+  const history = useHistory();
   const client = useQueryClient();
   const { mutate: deleteMutate, isLoading } = useMutation(deleteBookById, {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onSuccess: (_, __, ___) => {
+    onSuccess: () => {
       client.invalidateQueries("books");
     },
   });
@@ -54,17 +55,7 @@ export default function Image({
   };
 
   const renderBookPage = () => {
-    const currentBook = {
-      imageUrl,
-      id,
-      title,
-      description,
-      author,
-      pageCount,
-      price,
-    };
-    localStorage.setItem("currentBook", JSON.stringify(currentBook));
-    window.location.href = "/singleBook";
+    history.push(`/book/${id}`);
   };
 
   return (

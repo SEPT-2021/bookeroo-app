@@ -53,7 +53,7 @@ ReactDOM.render(
                 <AddBook />
               </Route>
 
-              <Route path="/singleBook">
+              <Route path="/book/:id">
                 <SingleBook />
               </Route>
 

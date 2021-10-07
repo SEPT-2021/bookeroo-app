@@ -15,7 +15,6 @@ import { getBookBySearchTerm } from "../../util/api";
 import { BookItemType } from "../../util/types";
 import BookList from "../../components/BookList";
 import SearchBar from "../../components/searchBar";
-import { Wrapper } from "../../components/Book";
 
 const StyledButton = styled(IconButton)`
   margin-right: 30px;
@@ -24,6 +23,9 @@ const StyledButton = styled(IconButton)`
   background-color: orange;
 `;
 
+const Wrapper = styled.div`
+  margin-top: 80px;
+`;
 const Books = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as BookItemType[]);
