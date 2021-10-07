@@ -150,7 +150,7 @@ export const paymentCapture = makeTypedAPICall<
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
 
-export const getAllUsers = makeTypedAPICall<unknown, undefined>(() =>
+export const getAllUsers = makeTypedAPICall<unknown, User[]>(() =>
   api.get(getRouteURL("admins", "inspect-users"))
 );
 

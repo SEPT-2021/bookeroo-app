@@ -40,7 +40,7 @@ function NavBar({ classes }: NavBarProps) {
           </Link>
           {user?.roles === "ROLE_ADMIN" && (
             <Link to="/adminDashboard">
-              <Button>Manager Users</Button>
+              <Button>Manage Users</Button>
             </Link>
           )}
         </Box>
