@@ -3,7 +3,7 @@
 exports[`Books matches snapshot render Books 1`] = `
 <div>
   <div
-    class="sc-dlfnuX hPLKlV"
+    class="sc-hKgJUU kLAxkW"
   >
     <div
       class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
@@ -110,7 +110,7 @@ Object {
 exports[`Rendering page Books renders without crashing 1`] = `
 <div>
   <div
-    class="sc-dlfnuX hPLKlV"
+    class="sc-hKgJUU kLAxkW"
   >
     <div
       class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
