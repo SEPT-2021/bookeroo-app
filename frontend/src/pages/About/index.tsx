@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  createStyles,
-  Grid,
-  Theme,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
+import { createStyles, Grid, withStyles, WithStyles } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
 
 function AboutUs({ classes }: AboutUsProps) {
@@ -24,7 +18,7 @@ function AboutUs({ classes }: AboutUsProps) {
   );
 }
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     root: {
       display: "flex",
