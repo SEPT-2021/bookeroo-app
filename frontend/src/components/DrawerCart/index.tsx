@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ShoppingCartOutlined } from "@material-ui/icons";
 import CartItem from "../CartItem/CartItem";
 import Link from "../../util/Link";
-import { BookItemType, DataItemType } from "../../util/types";
+import { BookItemType } from "../../util/types";
 import { GlobalContext } from "../GlobalContext";
 
 const Wrapper = styled.aside`
@@ -17,21 +17,11 @@ type Props = {
   cartItems: BookItemType[];
   addToCart: (clickedItem: BookItemType) => void;
   removeFromCart: (id: number) => void;
-  sendToCart: DataItemType[];
 };
 
-const Cart: React.FC<Props> = ({
-  cartItems,
-  addToCart,
-  removeFromCart,
-  sendToCart,
-}) => {
+const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
   const calculateTotal = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
-
-  const setLocalStorageCart = () => {
-    localStorage.setItem("cart", JSON.stringify(sendToCart));
-  };
 
   return (
     <Wrapper>
@@ -47,7 +37,7 @@ const Cart: React.FC<Props> = ({
       ))}
       <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
       <Grid item>
-        <Link to="/checkout" variant="body2" onClick={setLocalStorageCart}>
+        <Link to="/checkout" variant="body2">
           Checkout
         </Link>
       </Grid>
@@ -65,12 +55,7 @@ const StyledButton = styled(IconButton)`
 export default function DrawerCart() {
   const { addToCart, removeFromCart, cartItems, setCartOpen, cartOpen } =
     useContext(GlobalContext);
-  const getItems = () => {
-    return cartItems.map((obj) => ({
-      book: obj,
-      quantity: obj.amount,
-    }));
-  };
+
   const getTotalItems = (items: BookItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
   return (
@@ -85,7 +70,6 @@ export default function DrawerCart() {
           cartItems={cartItems}
           addToCart={addToCart}
           removeFromCart={removeFromCart}
-          sendToCart={getItems()}
         />
       </Drawer>
     </>

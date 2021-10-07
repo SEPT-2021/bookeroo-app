@@ -3,11 +3,11 @@ export interface TokenProps {
 }
 
 export type ShippingItemType = {
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  postalCode: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
 };
 
 export type BookItemType = {
@@ -28,5 +28,5 @@ export type DataItemType = {
 };
 export type CartType = {
   orderItems: DataItemType[];
-  shippingAddress: ShippingItemType;
+  shippingAddress?: ShippingItemType;
 };

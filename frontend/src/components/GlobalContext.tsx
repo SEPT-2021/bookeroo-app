@@ -9,6 +9,7 @@ import React, {
 import { useQuery } from "react-query";
 import { api, profile } from "../util/api";
 import { BookItemType, TokenProps } from "../util/types";
+import useStickyState from "../util/useStickyState";
 
 export interface User {
   id: number;
@@ -48,7 +49,7 @@ export const GlobalContext = createContext<GlobalContextType>({} as never);
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   const [token, setToken] = useState<string>();
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([] as BookItemType[]);
+  const [cartItems, setCartItems] = useStickyState<BookItemType[]>([], "cart");
   const addToCart = (clickedItem: BookItemType) => {
     setCartItems((prev) => {
       // 1. Is the item already added in the cart?

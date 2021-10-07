@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useContext, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -10,12 +11,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core";
 import FormField from "../../util/FormField";
-import { CartType, DataItemType } from "../../util/types";
+import { CartType } from "../../util/types";
 import { checkout, profile } from "../../util/api";
+import { GlobalContext } from "../../components/GlobalContext";
 
 function Copyright() {
   return (
@@ -33,18 +34,19 @@ const theme = createTheme();
 
 function Checkout({ classes }: CheckoutProps) {
   const { data: userData } = useQuery("user", profile);
-
+  const { cartItems } = useContext(GlobalContext);
   const [addressLine1, setAddressLine1] = useState(userData?.addressLine1);
   const [addressLine2, setAddressLine2] = useState(userData?.addressLine2);
   const [city, setCity] = useState(userData?.city);
   const [state, setState] = useState(userData?.state);
   const [postalCode, setPostalCode] = useState(userData?.postalCode);
-
-  const { data: checkoutData, mutate, error, reset } = useMutation(checkout);
-
-  const getLocal = () => {
-    return JSON.parse(localStorage.getItem("cart") as string) as DataItemType[];
+  const getItems = () => {
+    return cartItems.map((obj) => ({
+      book: obj,
+      quantity: obj.amount,
+    }));
   };
+  const { data: checkoutData, mutate, error, reset } = useMutation(checkout);
 
   const getShippingAddress = () => ({
     addressLine1,
@@ -54,11 +56,9 @@ function Checkout({ classes }: CheckoutProps) {
     postalCode,
   });
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const makeData: () => CartType = () => {
     return {
-      orderItems: getLocal(),
+      orderItems: getItems(),
       shippingAddress: getShippingAddress(),
     };
   };
