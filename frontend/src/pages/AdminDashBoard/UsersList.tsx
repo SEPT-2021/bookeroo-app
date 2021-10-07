@@ -216,9 +216,10 @@ function UsersList() {
               user={user}
               key={user.id}
               mode="approveReject"
-              onChange={() =>
-                setSellers(sellers.filter((s) => s.id !== user.id))
-              }
+              onChange={() => {
+                setSellers(sellers.filter((s) => s.id !== user.id));
+                refetch();
+              }}
             />
           ))
         ) : (
