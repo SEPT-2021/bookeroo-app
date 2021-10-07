@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Box, Card, Container, Grid, Typography } from "@mui/material";
+import { Box, Card, Container, Grid, Paper, Typography } from "@mui/material";
 import { Add, ArrowBack } from "@material-ui/icons";
 import { Button, LinearProgress } from "@material-ui/core";
 import { findBookById } from "../../util/api";
@@ -46,10 +46,9 @@ function SingleBook() {
             />
           </Grid>
           <Grid item md={8}>
-            <Card sx={{ width: "100%", height: "100%", padding: 3 }}>
+            <Paper sx={{ width: "100%", height: "100%", padding: 3 }}>
               <Typography variant="h3">{book.title}</Typography>
               <Typography variant="h5" gutterBottom>
-                {" "}
                 by {book.author}
               </Typography>
               <Typography variant="caption">
@@ -65,7 +64,7 @@ function SingleBook() {
               >
                 Add to cart
               </Button>
-            </Card>
+            </Paper>
           </Grid>
         </Grid>
       </Container>
