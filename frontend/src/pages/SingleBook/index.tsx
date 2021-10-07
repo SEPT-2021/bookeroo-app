@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Box, Card, Container, Grid, Typography } from "@mui/material";
-import { Add } from "@material-ui/icons";
+import { Add, ArrowBack } from "@material-ui/icons";
 import { Button, LinearProgress } from "@material-ui/core";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
@@ -33,7 +33,9 @@ function SingleBook() {
       <DrawerCart />
       <Container sx={{ marginTop: "100px" }}>
         <Link to="/allBooks">
-          <Button color="primary">Back to All Books</Button>
+          <Button color="primary" startIcon={<ArrowBack />}>
+            Back to All Books
+          </Button>
         </Link>
         <Grid container spacing={8}>
           <Grid item md={4}>
