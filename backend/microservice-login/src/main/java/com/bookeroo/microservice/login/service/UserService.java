@@ -2,12 +2,12 @@ package com.bookeroo.microservice.login.service;
 
 import com.bookeroo.microservice.login.exception.UserNotFoundException;
 import com.bookeroo.microservice.login.model.User;
+import com.bookeroo.microservice.login.model.User.UserRole;
 import com.bookeroo.microservice.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -56,7 +56,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional
     public void deleteUser(long id) throws UserNotFoundException {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found\n", id));
@@ -65,7 +64,7 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRoleNot(User.UserRole.ADMIN.name());
+        return userRepository.findAllByRoleNot(UserRole.ADMIN.name);
     }
 
 }

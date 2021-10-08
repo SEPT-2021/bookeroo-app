@@ -6,13 +6,17 @@ import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import com.bookeroo.microservice.book.service.S3Service;
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Random;
 
 @Component
@@ -44,13 +48,14 @@ public class DbInitialiser {
 
     private Book getRandomBook() {
         Random random = new Random();
+        Faker faker = new Faker(new Locale("en-AU"));
         Book book = new Book();
-        book.setTitle("randomTitle");
-        book.setAuthor("randomAuthor");
+        book.setTitle(faker.book().title());
+        book.setAuthor(faker.book().author());
         book.setPageCount(String.valueOf(random.nextInt(1000)));
         book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9000_000_000_000L) + 1000_000_000_000L));
-        book.setDescription("randomDescription");
-        book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
+        book.setDescription(faker.yoda().quote());
+        book.setPrice(BigDecimal.valueOf(random.nextFloat() % 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
         book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
         book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
         try {

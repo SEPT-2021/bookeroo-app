@@ -23,7 +23,7 @@ public class SellerDetailsService {
     }
 
     public List<SellerDetails> getAllPendingSellers() {
-        return sellerDetailsRepository.findAllByUser_RoleAndUser_RoleNot(UserRole.USER.name(), UserRole.SELLER.name());
+        return sellerDetailsRepository.findAllByUser_RoleAndUser_RoleNot(UserRole.USER.name, UserRole.SELLER.name);
     }
 
 }

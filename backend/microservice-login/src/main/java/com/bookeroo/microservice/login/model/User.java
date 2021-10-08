@@ -14,9 +14,9 @@ import java.util.Date;
 public class User {
 
     public enum UserRole {
-        USER("User"),
-        ADMIN("Admin"),
-        SELLER("Seller");
+        USER("ROLE_USER"),
+        ADMIN("ROLE_ADMIN"),
+        SELLER("ROLE_SELLER");
 
         public String name;
 

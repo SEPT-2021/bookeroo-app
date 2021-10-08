@@ -8,7 +8,6 @@ import com.bookeroo.microservice.seller.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -57,7 +56,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
     public void deleteUser(long id) throws UserNotFoundException {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found", id));
@@ -66,7 +64,7 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRoleNotContaining(UserRole.ADMIN.name());
+        return userRepository.findAllByRoleNot(UserRole.ADMIN.name);
     }
 
 }

@@ -28,7 +28,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "Length",
                     String.format("Password must be at least %d characters", MINIMUM_PASSWORD_LENGTH));
 
-        if (user.getRole().contains(User.UserRole.ADMIN.name()))
+        if (user.getRole().equals(User.UserRole.ADMIN.name))
             errors.rejectValue("roles", "Value", "User role cannot be ADMIN");
 
 

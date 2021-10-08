@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -52,14 +51,14 @@ public class AdminController {
         return new ResponseEntity<>(userService.toggleUserBan(id), HttpStatus.OK);
     }
 
-    @PostMapping("/approve-seller/{id}")
-    public ResponseEntity<?> approveSeller(@PathVariable long id) {
-        return new ResponseEntity<>(userService.approveSeller(id), HttpStatus.OK);
-    }
-
     @GetMapping("/inspect-sellers")
     public ResponseEntity<?> inspectAllSellers() {
         return new ResponseEntity<>(sellerDetailsService.getAllPendingSellers(), HttpStatus.OK);
+    }
+
+    @PostMapping("/approve-seller/{id}")
+    public ResponseEntity<?> approveSeller(@PathVariable long id) {
+        return new ResponseEntity<>(userService.approveSeller(id), HttpStatus.OK);
     }
 
     @PostMapping("/reject-seller/{id}")
@@ -69,20 +68,7 @@ public class AdminController {
 
     @PutMapping("/update-users/{id}")
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody User updatedUser) {
-        User user = userService.getUserById(id);
-        for (Field field : User.class.getDeclaredFields()) {
-            try {
-                field.setAccessible(true);
-                field.set(user, (!field.getType().isPrimitive() && field.get(updatedUser) != null)
-                        ? field.get(updatedUser)
-                        : field.get(user));
-                if (field.getName().equals("password")) {
-                    System.out.println(field.get(user));
-                }
-            } catch (IllegalAccessException ignored) {}
-        }
-
-        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUser(id, updatedUser), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-users/{id}")

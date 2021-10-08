@@ -6,9 +6,10 @@ import com.bookeroo.microservice.admin.model.User;
 import com.bookeroo.microservice.admin.model.User.UserRole;
 import com.bookeroo.microservice.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -18,10 +19,16 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User getUserById(long id) throws UserNotFoundException {
@@ -62,14 +69,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(User user) throws UserNotFoundException {
-        if (!userRepository.existsById(user.getId()))
-            throw new UserNotFoundException(String.format("User %s not found", user.getUsername()));
+    public User updateUser(long id, User updatedUser) throws UserNotFoundException {
+        User user = getUserById(id);
+        for (Field field : User.class.getDeclaredFields()) {
+            try {
+                field.setAccessible(true);
+                field.set(user, (!field.getType().isPrimitive() && field.get(updatedUser) != null)
+                        ? field.get(updatedUser)
+                        : field.get(user));
+                if (field.getName().equals("password"))
+                    field.set(user, passwordEncoder.encode(field.get(updatedUser).toString()));
+            } catch (IllegalAccessException ignored) {}
+        }
 
         return userRepository.save(user);
     }
 
-    @Transactional
     public void deleteUser(long id) throws UserNotFoundException {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found", id));
@@ -78,7 +93,7 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRoleNot(UserRole.ADMIN.name());
+        return userRepository.findAllByRoleNotContaining(UserRole.ADMIN.name());
     }
 
     public User toggleUserBan(long id) {

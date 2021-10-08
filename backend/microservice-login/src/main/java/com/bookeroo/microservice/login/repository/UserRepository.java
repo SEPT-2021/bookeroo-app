@@ -20,12 +20,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAll();
 
+    List<User> findAllByRoleNot(String role);
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean existsById(long id);
 
+    @Transactional
     void deleteUserById(long id);
-
-    List<User> findAllByRoleNot(String role);
 
     @Transactional
     void deleteUserByUsername(String username);

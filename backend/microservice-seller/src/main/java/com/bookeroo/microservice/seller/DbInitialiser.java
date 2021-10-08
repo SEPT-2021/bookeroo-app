@@ -2,7 +2,6 @@ package com.bookeroo.microservice.seller;
 
 import com.bookeroo.microservice.seller.model.User;
 import com.bookeroo.microservice.seller.repository.UserRepository;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -76,32 +75,12 @@ public class DbInitialiser {
                 seller.setState("VIC");
                 seller.setPostalCode("3001");
                 seller.setPhoneNumber("+(61) 413 170 399");
-                seller.setRole("ROLE_USER,ROLE_SELLER");
+                seller.setRole("ROLE_SELLER");
                 seller.setEnabled(true);
                 userRepository.deleteUserByUsername(seller.getUsername());
                 userRepository.save(seller);
-
-//            for (int i = 0; i < 6; i++)
-//                userRepository.save(getRandomUser());
             } catch (Exception ignore) {}
         }
-    }
-
-    private User getRandomUser() {
-        User user = new User();
-        user.setUsername(RandomString.make(8) + "@test.com");
-        user.setFirstName("randomFirstName");
-        user.setLastName("randomLastName");
-        user.setPassword(passwordEncoder.encode("password"));
-        user.setAddressLine1("123 Bookeroo St");
-        user.setAddressLine2("Apartment 1");
-        user.setCity("Melbourne");
-        user.setState("VIC");
-        user.setPostalCode("3001");
-        user.setPhoneNumber("+(61) 413 170 399");
-        user.setRole("ROLE_USER");
-        user.setEnabled(true);
-        return user;
     }
 
 }

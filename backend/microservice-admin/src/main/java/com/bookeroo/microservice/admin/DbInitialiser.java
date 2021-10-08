@@ -1,15 +1,15 @@
 package com.bookeroo.microservice.admin;
 
 import com.bookeroo.microservice.admin.model.User;
-import com.bookeroo.microservice.admin.model.User.UserRole;
 import com.bookeroo.microservice.admin.repository.UserRepository;
-import net.bytebuddy.utility.RandomString;
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Locale;
 
 @Component
 public class DbInitialiser {
@@ -33,9 +33,8 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            userRepository.deleteAllByRole(UserRole.ADMIN.name());
-
             try {
+                Faker faker = new Faker(new Locale("en-AU"));
                 User admin = new User();
                 admin.setUsername("admin@test.com");
                 admin.setFirstName("adminFirstName");
@@ -52,9 +51,9 @@ public class DbInitialiser {
                 userRepository.deleteUserByUsername(admin.getUsername());
                 userRepository.save(admin);
 
+                userRepository.deleteAllByUsernameContaining("random");
                 for (int i = 0; i < 4; i++) {
                     User user = getRandomUser();
-                    userRepository.deleteUserByUsername(user.getUsername());
                     userRepository.save(user);
                 }
             } catch (Exception ignore) {}
@@ -62,18 +61,18 @@ public class DbInitialiser {
     }
 
     private User getRandomUser() {
+        Faker faker = new Faker(new Locale("en-AU"));
         User user = new User();
-        user.setUsername(RandomString.make(8) + "@test.com");
-        user.setFirstName("randomFirstName");
-        user.setLastName("randomLastName");
+        user.setUsername(faker.name().username() + "@random.com");
+        user.setFirstName(faker.name().firstName());
+        user.setLastName(faker.name().lastName());
         user.setPassword(passwordEncoder.encode("password"));
-        user.setAddressLine1("123 Bookeroo St");
-        user.setAddressLine2("Apartment 1");
-        user.setCity("Melbourne");
-        user.setState("VIC");
-        user.setPostalCode("3001");
-        user.setPhoneNumber("+(61) 413 170 399");
-        user.setEnabled(true);
+        user.setAddressLine1(faker.address().streetAddress());
+        user.setAddressLine2(faker.address().secondaryAddress());
+        user.setCity(faker.address().city());
+        user.setState(faker.address().stateAbbr());
+        user.setPostalCode(faker.address().zipCode());
+        user.setPhoneNumber(faker.phoneNumber().phoneNumber());
         user.setEnabled(true);
         user.setRole("ROLE_USER");
         return user;

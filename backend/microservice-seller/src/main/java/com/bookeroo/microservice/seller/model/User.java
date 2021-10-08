@@ -14,9 +14,9 @@ import java.util.Date;
 public class User {
 
     public enum UserRole {
-        USER("User"),
-        ADMIN("Admin"),
-        SELLER("Seller");
+        USER("ROLE_USER"),
+        ADMIN("ROLE_ADMIN"),
+        SELLER("ROLE_SELLER");
 
         public String name;
 
@@ -28,6 +28,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private SellerDetails sellerDetails;
     @NotBlank(message = "Username cannot be blank")
     @Email(message = "Username needs to be an email address")
     @Column(unique = true)
@@ -68,6 +71,14 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public SellerDetails getSellerDetails() {
+        return sellerDetails;
+    }
+
+    public void setSellerDetails(SellerDetails sellerDetails) {
+        this.sellerDetails = sellerDetails;
     }
 
     public String getUsername() {

@@ -14,6 +14,6 @@ public interface SellerDetailsRepository extends JpaRepository<SellerDetails, Lo
 
     SellerDetails findByUser_Username(String username);
 
-    List<SellerDetails> findAllByUser_RoleAndUser_RoleNot(String role1, String role2);
+    List<SellerDetails> findAllByUser_RoleAndUser_RoleNot(String role, String roleNot);
 
 }
