@@ -1,36 +1,74 @@
-import React from "react";
-import { Button } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import styled from "styled-components";
-
-export const Wrapper = styled.div`
-  margin-top: 100px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  border: 3px solid black;
-  padding: 10px;
-`;
+import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Add, ArrowBack } from "@material-ui/icons";
+import { Button, LinearProgress } from "@material-ui/core";
+import { findBookById } from "../../util/api";
+import NotFoundPage from "../NotFoundPage";
+import { GlobalContext } from "../../components/GlobalContext";
+import DrawerCart from "../../components/DrawerCart";
+import Link from "../../util/Link";
 
 function SingleBook() {
-  const retrievedBooks = localStorage.getItem("currentBook");
-  const books = JSON.parse(retrievedBooks as string);
-
+  const { id } = useParams<{ id: string }>();
+  const { addToCart } = useContext(GlobalContext);
+  const {
+    data: book,
+    isLoading,
+    error,
+  } = useQuery("singleBook", () => findBookById({ id }));
+  if (error) {
+    return <NotFoundPage />;
+  }
+  if (isLoading || !book) {
+    return (
+      <Box marginTop="80px">
+        <LinearProgress />
+      </Box>
+    );
+  }
   return (
-    <Wrapper>
-      <img src={books.imageUrl} alt={books.title} />
-      <div>
-        <h1>{books.title}</h1>
-        <h2> by {books.author}</h2>
-        <p>Page Count : {books.pageCount}</p>
-        <p>Book isbn : {books.isbn}</p>
-        <p>Book description : {books.description}</p>
-      </div>
-      <Button>
-        <AddIcon />
-        Add to cart
-      </Button>
-    </Wrapper>
+    <>
+      <DrawerCart />
+      <Container sx={{ marginTop: "100px" }}>
+        <Link to="/allBooks">
+          <Button color="primary" startIcon={<ArrowBack />}>
+            Back to All Books
+          </Button>
+        </Link>
+        <Grid container spacing={8}>
+          <Grid item md={4}>
+            <img
+              src={book.cover}
+              alt={book.title}
+              style={{ borderRadius: 15, height: 500, width: "100%" }}
+            />
+          </Grid>
+          <Grid item md={8}>
+            <Paper sx={{ width: "100%", height: "100%", padding: 3 }}>
+              <Typography variant="h3">{book.title}</Typography>
+              <Typography variant="h5" gutterBottom>
+                by {book.author}
+              </Typography>
+              <Typography variant="caption">
+                Page Count : {book.pageCount}
+              </Typography>
+              <p>Book isbn : {book.isbn}</p>
+              <p>Book description : {book.description}</p>
+              <Button
+                onClick={() => addToCart(book)}
+                startIcon={<Add />}
+                variant="contained"
+                color="primary"
+              >
+                Add to cart
+              </Button>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 }
 

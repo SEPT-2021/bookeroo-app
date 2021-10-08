@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import CheckOut from "./index";
 import LoadingButton from "../../util/LoadingButton";
+import { GlobalContextProvider } from "../../components/GlobalContext";
 
 afterEach(cleanup);
 describe("Rendering page CheckOut", () => {
@@ -11,7 +12,9 @@ describe("Rendering page CheckOut", () => {
     const div = document.createElement("div");
     ReactDOM.render(
       <QueryClientProvider client={new QueryClient()}>
-        <CheckOut />{" "}
+        <GlobalContextProvider>
+          <CheckOut />
+        </GlobalContextProvider>
       </QueryClientProvider>,
       div
     );
@@ -30,7 +33,9 @@ describe("CheckOut matches snapshot", () => {
   test("render CheckOut", () => {
     const { container } = render(
       <QueryClientProvider client={new QueryClient()}>
-        <CheckOut />
+        <GlobalContextProvider>
+          <CheckOut />
+        </GlobalContextProvider>
       </QueryClientProvider>
     );
     expect(container).toMatchSnapshot();
