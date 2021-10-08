@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Box, Card, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { Add, ArrowBack } from "@material-ui/icons";
 import { Button, LinearProgress } from "@material-ui/core";
 import { findBookById } from "../../util/api";
