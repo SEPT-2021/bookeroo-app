@@ -76,7 +76,7 @@ function Checkout() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh",
+            height: "70vh",
           }}
         >
           <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
