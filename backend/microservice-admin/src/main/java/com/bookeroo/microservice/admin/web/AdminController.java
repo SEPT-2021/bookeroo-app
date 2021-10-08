@@ -76,6 +76,9 @@ public class AdminController {
                 field.set(user, (!field.getType().isPrimitive() && field.get(updatedUser) != null)
                         ? field.get(updatedUser)
                         : field.get(user));
+                if (field.getName().equals("password")) {
+                    System.out.println(field.get(user));
+                }
             } catch (IllegalAccessException ignored) {}
         }
 
