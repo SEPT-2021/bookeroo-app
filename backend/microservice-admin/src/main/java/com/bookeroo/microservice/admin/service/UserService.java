@@ -78,11 +78,7 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRole(UserRole.ADMIN.name());
-    }
-
-    public List<User> getAllNonApprovedSellers() {
-        return userRepository.findAllByRoleAndRoleNot(UserRole.ADMIN.name(), UserRole.SELLER.name());
+        return userRepository.findAllByRoleNot(UserRole.ADMIN.name());
     }
 
     public User toggleUserBan(long id) {

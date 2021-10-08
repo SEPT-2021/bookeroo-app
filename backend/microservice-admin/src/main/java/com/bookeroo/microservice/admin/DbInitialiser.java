@@ -1,6 +1,7 @@
 package com.bookeroo.microservice.admin;
 
 import com.bookeroo.microservice.admin.model.User;
+import com.bookeroo.microservice.admin.model.User.UserRole;
 import com.bookeroo.microservice.admin.repository.UserRepository;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,23 +33,31 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            User admin = new User();
-            admin.setUsername("admin@test.com");
-            admin.setFirstName("adminFirstName");
-            admin.setLastName("adminLastName");
-            admin.setPassword(passwordEncoder.encode("password"));
-            admin.setAddressLine1("123 Bookeroo St");
-            admin.setAddressLine2("Apartment 1");
-            admin.setCity("Melbourne");
-            admin.setState("VIC");
-            admin.setPostalCode("3001");
-            admin.setPhoneNumber("+(61) 413 170 399");
-            admin.setEnabled(true);
-            admin.setRole("ROLE_ADMIN");
-            userRepository.save(admin);
+            userRepository.deleteAllByRole(UserRole.ADMIN.name());
 
-            for (int i = 0; i < 6; i++)
-                userRepository.save(getRandomUser());
+            try {
+                User admin = new User();
+                admin.setUsername("admin@test.com");
+                admin.setFirstName("adminFirstName");
+                admin.setLastName("adminLastName");
+                admin.setPassword(passwordEncoder.encode("password"));
+                admin.setAddressLine1("123 Admin St");
+                admin.setAddressLine2("Apartment 1");
+                admin.setCity("Melbourne");
+                admin.setState("VIC");
+                admin.setPostalCode("3001");
+                admin.setPhoneNumber("+(61) 413 170 399");
+                admin.setEnabled(true);
+                admin.setRole("ROLE_ADMIN");
+                userRepository.deleteUserByUsername(admin.getUsername());
+                userRepository.save(admin);
+
+                for (int i = 0; i < 4; i++) {
+                    User user = getRandomUser();
+                    userRepository.deleteUserByUsername(user.getUsername());
+                    userRepository.save(user);
+                }
+            } catch (Exception ignore) {}
         }
     }
 

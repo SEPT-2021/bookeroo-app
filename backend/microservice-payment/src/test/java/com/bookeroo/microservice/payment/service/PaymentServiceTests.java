@@ -49,7 +49,7 @@ public class PaymentServiceTests {
         book.setPrice("10.0");
         book.setBookCondition(BookCondition.FAIR.name());
         book.setBookCategory(BookCategory.LITERARY_FICTION.name());
-        book.setCover("https://picsum.photos/200");
+        book.setCover("https://picsum.photos/360/640");
 
         List<OrderItem> items = new ArrayList<>();
         OrderItem item = new OrderItem();

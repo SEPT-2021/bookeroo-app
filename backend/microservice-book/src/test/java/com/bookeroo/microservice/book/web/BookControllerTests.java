@@ -5,6 +5,7 @@ import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.model.BookFormData;
 import com.bookeroo.microservice.book.service.BookService;
+import com.bookeroo.microservice.book.service.S3Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +37,9 @@ public class BookControllerTests {
     @Autowired
     BookService bookService;
 
+    @Autowired
+    S3Service s3Service;
+
     Book setupBook() {
         Book book = new Book();
         Random random = new Random();
@@ -43,7 +51,11 @@ public class BookControllerTests {
         book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
         book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
         book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
-        book.setCover("https://picsum.photos/200");
+        try {
+            book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
+        } catch (IOException ignore) {
+        }
+
         return book;
     }
 
@@ -92,6 +104,7 @@ public class BookControllerTests {
                 .param("category", bookFormData.getCategory().name())
                 .param("coverUrl", bookFormData.getCoverUrl())
                 .flashAttr("formData", bookFormData)).andReturn().getResponse().getContentAsString();
+
         assertEquals(objectMapper.readValue(response, Book.class).getTitle(), bookFormData.getTitle());
     }
 
@@ -103,8 +116,8 @@ public class BookControllerTests {
         String response = mockMvc.perform(get("/api/books/" + book.getId()))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(book.getTitle()));
-    }
+        Book responseBook = objectMapper.readValue(response, Book.class);
+        assertEquals(responseBook, book);    }
 
     @Test
     void givenSavedBooks_whenAllBooksRequested_returnBooks() throws Exception {
@@ -116,7 +129,8 @@ public class BookControllerTests {
         String response = mockMvc.perform(get("/api/books/all"))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(book1.getTitle()) && response.contains(book2.getTitle()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(response, Book[].class));
+        assertTrue(books.contains(book1) && books.contains(book2));
     }
 
     @Test
@@ -131,7 +145,7 @@ public class BookControllerTests {
     @Test
     void givenBooksPresent_whenSearchedByKeyword_returnMatchingBooks() throws Exception {
         Book book1 = setupBook();
-        String searchString = "uniqueSearchedKeyword";
+        String searchString = BookCategory.BILDUNGSROMAN.name();
         book1.setBookCategory(searchString);
         book1 = bookService.saveBook(book1);
         Book book2 = setupBook();
@@ -142,11 +156,8 @@ public class BookControllerTests {
                         .param("type", "keyword"))
                 .andReturn().getResponse().getContentAsString();
 
-        System.out.println(searchResult);
-
-        assertTrue(
-                searchResult.contains(
-                        book1.getBookCategory()) && !searchResult.contains(book2.getBookCategory()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
+        assertTrue(books.contains(book1) && !books.contains(book2));
     }
 
     @Test
@@ -163,7 +174,8 @@ public class BookControllerTests {
                         .param("type", "title"))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(searchResult.contains(book1.getTitle()) && !searchResult.contains(book2.getTitle()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
+        assertTrue(books.contains(book1) && !books.contains(book2));
     }
 
     @Test
@@ -180,7 +192,8 @@ public class BookControllerTests {
                         .param("type", "author"))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(searchResult.contains(book1.getAuthor()) && !searchResult.contains(book2.getAuthor()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
+        assertTrue(books.contains(book1) && !books.contains(book2));
     }
 
 }

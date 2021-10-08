@@ -6,9 +6,7 @@ import com.bookeroo.microservice.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service layer for the {@link Book} JPA entity.
@@ -60,24 +58,26 @@ public class BookService {
         return results;
     }
 
-    public List<Book> searchBookByIsbn(String author) {
+    public List<Book> searchBookByIsbn(String isbn) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByIsbnContaining(author).forEach(results::add);
+        bookRepository.findByIsbnContaining(isbn).forEach(results::add);
 
         return results;
     }
 
-    public List<Book> searchBookByCategory(String author) {
+    public List<Book> searchBookByCategory(String category) {
         List<Book> results = new ArrayList<>();
-        bookRepository.findByBookCategoryContaining(author).forEach(results::add);
+        bookRepository.findByBookCategoryContaining(category).forEach(results::add);
 
         return results;
     }
 
-    public List<Book> searchBookByKeyword(String keyword) {
-        List<Book> results = new ArrayList<>();
-        bookRepository.findByTitleContainingOrAuthorContainingOrIsbnContainingOrBookCategoryContaining(
-                keyword, keyword, keyword, keyword).forEach(results::add);
+    public Set<Book> searchBookByKeyword(String keyword) {
+        Set<Book> results = new TreeSet<>(Comparator.comparingLong(Book::getId));
+        results.addAll(searchBookByTitle(keyword));
+        results.addAll(searchBookByAuthor(keyword));
+        results.addAll(searchBookByIsbn(keyword));
+        results.addAll(searchBookByCategory(keyword));
 
         return results;
     }

@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -18,6 +21,8 @@ class UserServiceTest {
 
     @Autowired
     UserRepository repository;
+
+    final List<String> testUsers = new ArrayList<>();
 
     User setupUser() {
         User user = new User();
@@ -33,6 +38,7 @@ class UserServiceTest {
         user.setPhoneNumber("+(61) 413 170 399");
         user.setRole("ROLE_USER");
         user.setEnabled(true);
+        testUsers.add(user.getUsername());
         return user;
     }
 
@@ -71,7 +77,7 @@ class UserServiceTest {
     void givenSavedUser_whenSavingAgain_updateUser() {
         User user = setupUser();
         user = service.saveUser(user);
-        String userLastName = RandomString.make(8);
+        String userLastName = "updatedLastName";
         user.setLastName(userLastName);
         user = service.saveUser(user);
 

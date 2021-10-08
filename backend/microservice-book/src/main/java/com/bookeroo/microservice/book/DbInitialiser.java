@@ -5,43 +5,40 @@ import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.repository.BookRepository;
+import com.bookeroo.microservice.book.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
 
 @Component
 public class DbInitialiser {
 
     private final BookRepository bookRepository;
+    private final S3Service s3Service;
 
     @Value("#{new Boolean('${db.initialise}')}")
     private boolean postConstruct;
 
     @Autowired
-    public DbInitialiser(BookRepository bookRepository) {
+    public DbInitialiser(BookRepository bookRepository, S3Service s3Service) {
         this.bookRepository = bookRepository;
+        this.s3Service = s3Service;
     }
 
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-//            Book book = new Book();
-//            book.setTitle("randomTitle");
-//            book.setAuthor("randomAuthor");
-//            book.setPageCount("100");
-//            book.setIsbn("1234567891011");
-//            book.setDescription("randomDescription");
-//            book.setPrice("10.0");
-//            book.setBookCondition(BookCondition.FAIR.name());
-//            book.setBookCategory(BookCategory.LITERARY_FICTION.name());
-//            book.setCover("https://picsum.photos/200");
-//            bookRepository.save(book);
-
-            for (int i = 0; i < 6; i++)
-                bookRepository.save(getRandomBook());
+            bookRepository.deleteAll();
+            for (int i = 0; i < 8; i++) {
+                try {
+                    bookRepository.save(getRandomBook());
+                } catch (Exception ignore) {}
+            }
         }
     }
 
@@ -56,7 +53,9 @@ public class DbInitialiser {
         book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
         book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
         book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
-        book.setCover("https://picsum.photos/200");
+        try {
+            book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
+        } catch (IOException ignore) {}
         return book;
     }
 

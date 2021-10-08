@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Book JPA entity to represent the book data model.
@@ -196,24 +195,24 @@ public class Book {
 
         if (id != book.id)
             return false;
-        if (!Objects.equals(title, book.title))
+        if (!title.equals(book.title))
             return false;
-        if (!Objects.equals(author, book.author))
+        if (!author.equals(book.author))
             return false;
-        if (!Objects.equals(pageCount, book.pageCount))
+        if (!pageCount.equals(book.pageCount))
             return false;
-        if (!Objects.equals(isbn, book.isbn))
+        if (!isbn.equals(book.isbn))
             return false;
-        if (!Objects.equals(description, book.description))
+        if (!description.equals(book.description))
             return false;
-        if (!Objects.equals(price, book.price))
+        if (!price.equals(book.price))
             return false;
-        if (!Objects.equals(bookCondition, book.bookCondition))
+        if (!bookCondition.equals(book.bookCondition))
             return false;
-        if (!Objects.equals(bookCategory, book.bookCategory))
+        if (!bookCategory.equals(book.bookCategory))
             return false;
 
-        return Objects.equals(cover, book.cover);
+        return cover.equals(book.cover);
     }
 
     @Override

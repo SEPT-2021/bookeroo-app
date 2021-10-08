@@ -6,8 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +19,9 @@ public class BookServiceTests {
 
     @Autowired
     BookService bookService;
+
+    @Autowired
+    S3Service s3Service;
 
     Book setupBook() {
         Random random = new Random();
@@ -28,7 +34,9 @@ public class BookServiceTests {
         book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
         book.setBookCondition(Book.BookCondition.values()[random.nextInt(Book.BookCondition.values().length)].name());
         book.setBookCategory(Book.BookCategory.values()[random.nextInt(Book.BookCategory.values().length)].name());
-        book.setCover("https://picsum.photos/200");
+        try {
+            book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
+        } catch (IOException ignore) {}
         return book;
     }
 
@@ -76,7 +84,7 @@ public class BookServiceTests {
         Book book2 = setupBook();
         book2 = bookService.saveBook(book2);
 
-        List<Book> searchResult = bookService.searchBookByKeyword(searchString);
+        Set<Book> searchResult = bookService.searchBookByKeyword(searchString);
         assertTrue(searchResult.contains(book1) && !searchResult.contains(book2));
     }
 

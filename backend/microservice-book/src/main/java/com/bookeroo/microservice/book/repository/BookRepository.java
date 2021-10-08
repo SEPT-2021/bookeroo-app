@@ -17,16 +17,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Book findByIsbn(String isbn);
 
-    Iterable<Book> findByTitleContaining(String keyword);
+    Iterable<Book> findByTitleContaining(String title);
 
-    Iterable<Book> findByAuthorContaining(String keyword);
+    Iterable<Book> findByAuthorContaining(String author);
 
-    Iterable<Book> findByIsbnContaining(String keyword);
+    Iterable<Book> findByIsbnContaining(String isbn);
 
-    Iterable<Book> findByBookCategoryContaining(String keyword);
-
-    Iterable<Book> findByTitleContainingOrAuthorContainingOrIsbnContainingOrBookCategoryContaining(
-            String title, String author, String isbn, String category);
+    Iterable<Book> findByBookCategoryContaining(String category);
 
     List<Book> findAll();
 
