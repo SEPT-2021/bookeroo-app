@@ -148,7 +148,11 @@ function UserRow({
               </FormGroup>
             ) : (
               <IconButton onClick={() => userAction("approve")}>
-                <Check />
+                {isLoading ? (
+                  <CircularProgress color="secondary" size={20} />
+                ) : (
+                  <Check />
+                )}
               </IconButton>
             )}
           </Stack>

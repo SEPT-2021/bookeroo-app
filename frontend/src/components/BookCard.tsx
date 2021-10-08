@@ -60,27 +60,27 @@ export default function BookCard({
   return (
     <Collapse in={checked} timeout={checked ? 1500 : undefined}>
       <Card className={classes.card}>
+        <CardHeader
+          avatar={
+            <Avatar aria-label="recipe">
+              <Book />
+            </Avatar>
+          }
+          action={
+            user?.role === Role.ROLE_ADMIN && (
+              <IconButton onClick={() => deleteMutate({ id: String(id) })}>
+                {isLoading ? (
+                  <CircularProgress size={24} color="secondary" />
+                ) : (
+                  <Delete />
+                )}
+              </IconButton>
+            )
+          }
+          title={<b>{title}</b>}
+          subheader={author}
+        />
         <CardActionArea onClick={() => history.push(link)}>
-          <CardHeader
-            avatar={
-              <Avatar aria-label="recipe">
-                <Book />
-              </Avatar>
-            }
-            action={
-              user?.role === Role.ROLE_ADMIN && (
-                <IconButton onClick={() => deleteMutate({ id: String(id) })}>
-                  {isLoading ? (
-                    <CircularProgress size={24} color="secondary" />
-                  ) : (
-                    <Delete />
-                  )}
-                </IconButton>
-              )
-            }
-            title={<b>{title}</b>}
-            subheader={author}
-          />
           <CardMedia className={classes.media} image={imageUrl} title={title} />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
