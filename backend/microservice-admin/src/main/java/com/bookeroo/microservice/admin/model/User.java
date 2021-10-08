@@ -154,8 +154,8 @@ public class User {
         return role;
     }
 
-    public void setRole(String roles) {
-        this.role = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public boolean isEnabled() {

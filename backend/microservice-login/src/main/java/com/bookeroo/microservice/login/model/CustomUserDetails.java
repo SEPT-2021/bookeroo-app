@@ -26,6 +26,8 @@ public class CustomUserDetails implements UserDetails {
         authorities = Arrays.stream(new String[]{user.getRole()})
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+
+
     }
 
     @Override

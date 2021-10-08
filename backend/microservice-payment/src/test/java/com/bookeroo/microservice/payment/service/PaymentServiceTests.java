@@ -34,7 +34,7 @@ public class PaymentServiceTests {
         user.setState("VIC");
         user.setPostalCode("3001");
         user.setPhoneNumber("+(61) 413 170 399");
-        user.setRoles("ROLE_USER");
+        user.setRole("ROLE_USER");
         user.setEnabled(true);
         return user;
     }
