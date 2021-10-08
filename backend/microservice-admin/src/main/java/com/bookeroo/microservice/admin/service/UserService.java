@@ -34,7 +34,7 @@ public class UserService {
 
     public User getSellerById(long id) throws SellerNotFoundException {
         User user;
-        if ((user = userRepository.findById(id)) == null || !user.getRoles().contains(UserRole.SELLER.name()))
+        if ((user = userRepository.findById(id)) == null || !user.getRole().contains(UserRole.SELLER.name()))
             throw new UserNotFoundException(String.format("Seller by id %d not found", id));
 
         return user;
@@ -42,7 +42,7 @@ public class UserService {
 
     public User approveSeller(long id) {
         User user = getUserById(id);
-        user.setRoles(user.getRoles() + ",ROLE_" + UserRole.SELLER.name());
+        user.setRole("ROLE_" + UserRole.SELLER.name());
         return userRepository.save(user);
     }
 
@@ -78,11 +78,11 @@ public class UserService {
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRolesNotContaining(UserRole.ADMIN.name());
+        return userRepository.findAllByRole(UserRole.ADMIN.name());
     }
 
     public List<User> getAllNonApprovedSellers() {
-        return userRepository.findAllByRolesContainingAndRolesNotContaining(UserRole.ADMIN.name(), UserRole.SELLER.name());
+        return userRepository.findAllByRoleAndRoleNot(UserRole.ADMIN.name(), UserRole.SELLER.name());
     }
 
     public User toggleUserBan(long id) {

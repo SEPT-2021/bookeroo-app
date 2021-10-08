@@ -58,8 +58,8 @@ public class BookController {
         book.setIsbn(formData.getIsbn());
         book.setDescription(formData.getDescription());
         book.setPrice(formData.getPrice());
-        book.setBookCondition(formData.getCondition().name());
-        book.setBookCategory(formData.getCategory().name());
+        book.setBookCondition(formData.getCondition().name);
+        book.setBookCategory(formData.getCategory().name);
 
         try {
             MultipartFile coverFile = formData.getCoverFile();

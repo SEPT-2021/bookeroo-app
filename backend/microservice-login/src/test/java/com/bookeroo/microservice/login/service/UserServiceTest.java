@@ -31,7 +31,7 @@ class UserServiceTest {
         user.setState("VIC");
         user.setPostalCode("3001");
         user.setPhoneNumber("+(61) 413 170 399");
-        user.setRoles("ROLE_USER");
+        user.setRole("ROLE_USER");
         user.setEnabled(true);
         return user;
     }
@@ -91,7 +91,7 @@ class UserServiceTest {
     void givenUsersPresent_whenNonAdminUsersFetched_doNotReturnAdmin() {
         User user = setupUser();
         User admin = setupUser();
-        admin.setRoles("ROLE_ADMIN");
+        admin.setRole("ROLE_ADMIN");
 
         service.saveUser(user);
         service.saveUser(admin);

@@ -44,11 +44,11 @@ public class DbInitialiser {
             admin.setPostalCode("3001");
             admin.setPhoneNumber("+(61) 413 170 399");
             admin.setEnabled(true);
-            admin.setRoles("ROLE_ADMIN");
+            admin.setRole("ROLE_ADMIN");
             userRepository.save(admin);
 
-//            for (int i = 0; i < 6; i++)
-//                userRepository.save(getRandomUser());
+            for (int i = 0; i < 6; i++)
+                userRepository.save(getRandomUser());
         }
     }
 
@@ -66,7 +66,7 @@ public class DbInitialiser {
         user.setPhoneNumber("+(61) 413 170 399");
         user.setEnabled(true);
         user.setEnabled(true);
-        user.setRoles("ROLE_USER");
+        user.setRole("ROLE_USER");
         return user;
     }
 

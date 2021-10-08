@@ -27,7 +27,7 @@ public class SellerDetailsValidator implements Validator {
             errors.rejectValue("abn", "Length",
                     String.format("ABN must be exactly %d digits", ABN_LENGTH));
 
-        if (details.getPhoneNumber() != null && !details.getPhoneNumber().chars().allMatch(Character::isDigit))
+        if (details.getBusinessPhone() != null && !details.getBusinessPhone().chars().allMatch(Character::isDigit))
             errors.rejectValue("phoneNumber", "Value",
                     "Phone number must not contain anything other than 0-9");
     }

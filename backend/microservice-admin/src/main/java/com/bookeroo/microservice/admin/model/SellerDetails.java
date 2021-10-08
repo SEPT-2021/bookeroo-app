@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.seller.model;
+package com.bookeroo.microservice.admin.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

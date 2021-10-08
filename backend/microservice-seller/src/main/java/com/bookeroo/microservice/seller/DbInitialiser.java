@@ -39,35 +39,35 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            User admin = new User();
-            admin.setUsername("admin@test.com");
-            admin.setFirstName("adminFirstName");
-            admin.setLastName("adminLastName");
-            admin.setPassword(passwordEncoder.encode("password"));
-            admin.setAddressLine1("123 Bookeroo St");
-            admin.setAddressLine2("Apartment 1");
-            admin.setCity("Melbourne");
-            admin.setState("VIC");
-            admin.setPostalCode("3001");
-            admin.setPhoneNumber("+(61) 413 170 399");
-            admin.setRoles("ROLE_ADMIN");
-            admin.setEnabled(true);
-            userRepository.save(admin);
-
-            User user = new User();
-            user.setUsername("user@test.com");
-            user.setFirstName("userFirstName");
-            user.setLastName("userLastName");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setAddressLine1("123 Bookeroo St");
-            user.setAddressLine2("Apartment 2");
-            user.setCity("Melbourne");
-            user.setState("VIC");
-            user.setPostalCode("3001");
-            user.setPhoneNumber("+(61) 413 170 399");
-            user.setRoles("ROLE_USER");
-            user.setEnabled(true);
-            userRepository.save(user);
+//            User admin = new User();
+//            admin.setUsername("admin@test.com");
+//            admin.setFirstName("adminFirstName");
+//            admin.setLastName("adminLastName");
+//            admin.setPassword(passwordEncoder.encode("password"));
+//            admin.setAddressLine1("123 Bookeroo St");
+//            admin.setAddressLine2("Apartment 1");
+//            admin.setCity("Melbourne");
+//            admin.setState("VIC");
+//            admin.setPostalCode("3001");
+//            admin.setPhoneNumber("+(61) 413 170 399");
+//            admin.setRole("ROLE_ADMIN");
+//            admin.setEnabled(true);
+//            userRepository.save(admin);
+//
+//            User user = new User();
+//            user.setUsername("user@test.com");
+//            user.setFirstName("userFirstName");
+//            user.setLastName("userLastName");
+//            user.setPassword(passwordEncoder.encode("password"));
+//            user.setAddressLine1("123 Bookeroo St");
+//            user.setAddressLine2("Apartment 2");
+//            user.setCity("Melbourne");
+//            user.setState("VIC");
+//            user.setPostalCode("3001");
+//            user.setPhoneNumber("+(61) 413 170 399");
+//            user.setRole("ROLE_USER");
+//            user.setEnabled(true);
+//            userRepository.save(user);
 
             User seller = new User();
             seller.setUsername("seller@test.com");
@@ -80,15 +80,15 @@ public class DbInitialiser {
             seller.setState("VIC");
             seller.setPostalCode("3001");
             seller.setPhoneNumber("+(61) 413 170 399");
-            seller.setRoles("ROLE_USER,ROLE_SELLER");
+            seller.setRole("ROLE_USER,ROLE_SELLER");
             seller.setEnabled(true);
             userRepository.save(seller);
 
 //            for (int i = 0; i < 6; i++)
 //                userRepository.save(getRandomUser());
 
-            for (int i = 0; i < 6; i++)
-                bookRepository.save(getRandomBook());
+//            for (int i = 0; i < 6; i++)
+//                bookRepository.save(getRandomBook());
         }
     }
 
@@ -104,7 +104,7 @@ public class DbInitialiser {
         user.setState("VIC");
         user.setPostalCode("3001");
         user.setPhoneNumber("+(61) 413 170 399");
-        user.setRoles("ROLE_USER");
+        user.setRole("ROLE_USER");
         user.setEnabled(true);
         return user;
     }

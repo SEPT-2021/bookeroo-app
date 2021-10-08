@@ -43,7 +43,7 @@ public class DbInitialiser {
             user1.setState("VIC");
             user1.setPostalCode("3001");
             user1.setPhoneNumber("+(61) 413 170 399");
-            user1.setRoles("ROLE_USER");
+            user1.setRole("ROLE_USER");
             user1.setEnabled(true);
             userRepository.save(user1);
 
@@ -58,7 +58,7 @@ public class DbInitialiser {
             user2.setState("VIC");
             user2.setPostalCode("3001");
             user2.setPhoneNumber("+(61) 413 170 399");
-            user2.setRoles("ROLE_USER");
+            user2.setRole("ROLE_USER");
             user2.setEnabled(true);
             userRepository.save(user2);
 
@@ -79,7 +79,7 @@ public class DbInitialiser {
         user.setState("VIC");
         user.setPostalCode("3001");
         user.setPhoneNumber("+(61) 413 170 399");
-        user.setRoles("ROLE_USER");
+        user.setRole("ROLE_USER");
         user.setEnabled(true);
         return user;
     }

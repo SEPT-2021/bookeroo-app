@@ -51,8 +51,9 @@ public class User {
     @NotBlank(message = "Phone number cannot be blank")
     @Pattern(regexp = "(^(\\+?\\(61\\)|\\(\\+?61\\)|\\+?61|\\(0[1-9]\\)|0[1-9])?( ?-?[0-9]){7,9}$)", message = "Not a valid phone number")
     private String phoneNumber;
-    @NotBlank(message = "User needs to have one or more roles")
-    private String roles;
+    @NotBlank(message = "User needs to have a role defined")
+    @Pattern(regexp = "(^ROLE_USER|ROLE_SELLER|ROLE_ADMIN)", message = "Not a valid role")
+    private String role;
     @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
     private Date createdAt;
@@ -149,12 +150,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRole(String roles) {
+        this.role = roles;
     }
 
     public boolean isEnabled() {
@@ -204,7 +205,7 @@ public class User {
                         "\tcreatedAt: %s\n" +
                         "\tupdatedAt: %s\n" +
                         "}",
-                id, username, password, firstName, lastName, roles, enabled, createdAt, updatedAt);
+                id, username, password, firstName, lastName, role, enabled, createdAt, updatedAt);
     }
 
 }

@@ -2,6 +2,7 @@ package com.bookeroo.microservice.admin.web;
 
 import com.bookeroo.microservice.admin.exception.UserNotFoundException;
 import com.bookeroo.microservice.admin.model.User;
+import com.bookeroo.microservice.admin.service.SellerDetailsService;
 import com.bookeroo.microservice.admin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,12 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
+    private final SellerDetailsService sellerDetailsService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, SellerDetailsService sellerDetailsService) {
         this.userService = userService;
+        this.sellerDetailsService = sellerDetailsService;
     }
 
     @GetMapping("/profile")
@@ -52,6 +55,11 @@ public class AdminController {
     @PostMapping("/approve-seller/{id}")
     public ResponseEntity<?> approveSeller(@PathVariable long id) {
         return new ResponseEntity<>(userService.approveSeller(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/inspect-sellers")
+    public ResponseEntity<?> inspectAllSellers() {
+        return new ResponseEntity<>(sellerDetailsService.getAllPendingSellers(), HttpStatus.OK);
     }
 
     @PostMapping("/reject-seller/{id}")

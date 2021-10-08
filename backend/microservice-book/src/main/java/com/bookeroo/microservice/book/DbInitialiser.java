@@ -28,17 +28,17 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            Book book = new Book();
-            book.setTitle("randomTitle");
-            book.setAuthor("randomAuthor");
-            book.setPageCount("100");
-            book.setIsbn("1234567891011");
-            book.setDescription("randomDescription");
-            book.setPrice("10.0");
-            book.setBookCondition(BookCondition.FAIR.name());
-            book.setBookCategory(BookCategory.LITERARY_FICTION.name());
-            book.setCover("https://picsum.photos/200");
-            bookRepository.save(book);
+//            Book book = new Book();
+//            book.setTitle("randomTitle");
+//            book.setAuthor("randomAuthor");
+//            book.setPageCount("100");
+//            book.setIsbn("1234567891011");
+//            book.setDescription("randomDescription");
+//            book.setPrice("10.0");
+//            book.setBookCondition(BookCondition.FAIR.name());
+//            book.setBookCategory(BookCategory.LITERARY_FICTION.name());
+//            book.setCover("https://picsum.photos/200");
+//            bookRepository.save(book);
 
             for (int i = 0; i < 6; i++)
                 bookRepository.save(getRandomBook());
