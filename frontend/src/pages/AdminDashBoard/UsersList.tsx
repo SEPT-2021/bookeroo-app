@@ -122,7 +122,7 @@ function UserRow({
         secondary={
           <>
             <Typography variant="body2">
-              {user.username} - {user.roles}
+              {user.username} - {user.role}
             </Typography>
           </>
         }
@@ -180,7 +180,7 @@ function UsersList() {
     refetch,
   } = useQuery("users", getAllUsers);
   useEffect(() => {
-    setSellers(sampleUsers?.filter((u) => u.roles !== Role.ROLE_SELLER) || []);
+    setSellers(sampleUsers?.filter((u) => u.role !== Role.ROLE_SELLER) || []);
   }, [sampleUsers]);
 
   if (isLoading) {

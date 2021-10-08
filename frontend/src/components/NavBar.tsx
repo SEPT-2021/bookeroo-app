@@ -38,7 +38,7 @@ function NavBar({ classes }: NavBarProps) {
           <Link to="/addBook">
             <Button>Add Book</Button>
           </Link>
-          {user?.roles === Role.ROLE_ADMIN && (
+          {user?.role === Role.ROLE_ADMIN && (
             <Link to="/adminDashboard">
               <Button>Manage Users</Button>
             </Link>

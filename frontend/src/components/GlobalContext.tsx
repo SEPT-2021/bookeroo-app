@@ -28,7 +28,7 @@ export interface User {
   city: string;
   state: string;
   postalCode: string;
-  roles: Role;
+  role: Role;
   enabled: boolean;
   createdAt: string;
   updatedAt: string | null;

@@ -68,7 +68,7 @@ export default function BookCard({
               </Avatar>
             }
             action={
-              user?.roles === Role.ROLE_ADMIN && (
+              user?.role === Role.ROLE_ADMIN && (
                 <IconButton onClick={() => deleteMutate({ id: String(id) })}>
                   {isLoading ? (
                     <CircularProgress size={24} color="secondary" />
