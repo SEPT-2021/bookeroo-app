@@ -97,7 +97,7 @@ export const findBookById = makeTypedAPICall<
   {
     id: string;
   },
-  unknown
+  BookItemType
 >((args) => api.get(getRouteURL("books", args.id)));
 
 export const deleteBookById = makeTypedAPICall<
