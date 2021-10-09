@@ -17,6 +17,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Book findByIsbn(String isbn);
 
+    Book findByTitleAndAuthor(String title, String author);
+
     Iterable<Book> findByTitleContaining(String title);
 
     Iterable<Book> findByAuthorContaining(String author);

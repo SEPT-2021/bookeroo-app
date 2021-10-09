@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.login.exception;
+package com.bookeroo.microservice.book.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

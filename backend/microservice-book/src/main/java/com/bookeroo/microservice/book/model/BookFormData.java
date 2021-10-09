@@ -24,7 +24,9 @@ public class BookFormData {
     private String description;
     @NotBlank(message = "Price cannot be blank")
     private String price;
+    @NotNull(message = "Book condition cannot be null")
     private BookCondition condition;
+    @NotNull(message = "Book category cannot be null")
     private BookCategory category;
     private MultipartFile coverFile;
     private String coverUrl;

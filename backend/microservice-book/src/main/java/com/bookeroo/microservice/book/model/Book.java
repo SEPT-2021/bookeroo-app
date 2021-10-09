@@ -1,14 +1,19 @@
 package com.bookeroo.microservice.book.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Book JPA entity to represent the book data model.
  */
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "author"})})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "listings"})
 public class Book {
 
     public enum BookCondition {
@@ -63,12 +68,11 @@ public class Book {
     @NotBlank(message = "Books are required to have a brief description")
     @Size(max = 8191)
     private String description;
-    @NotBlank(message = "Price cannot be blank")
-    private String price;
-    @NotBlank(message = "Condition cannot be blank")
-    private String bookCondition;
     @NotBlank(message = "Category cannot be blank")
     private String bookCategory;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    Set<Listing> listings;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
@@ -126,22 +130,6 @@ public class Book {
         this.description = description;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getBookCondition() {
-        return bookCondition;
-    }
-
-    public void setBookCondition(String bookCondition) {
-        this.bookCondition = bookCondition;
-    }
-
     public String getBookCategory() {
         return bookCategory;
     }
@@ -156,6 +144,14 @@ public class Book {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public Set<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(Set<Listing> listings) {
+        this.listings = listings;
     }
 
     public Date getCreatedAt() {
@@ -205,10 +201,6 @@ public class Book {
             return false;
         if (!description.equals(book.description))
             return false;
-        if (!price.equals(book.price))
-            return false;
-        if (!bookCondition.equals(book.bookCondition))
-            return false;
         if (!bookCategory.equals(book.bookCategory))
             return false;
 
@@ -225,10 +217,8 @@ public class Book {
                 "\tisbn: \"%s\"\n" +
                 "\tcover: \"%s\"\n" +
                 "\tdescription: \"%s\"\n" +
-                "\tprice: \"%s\"\n" +
-                "\tcondition: \"%s\"\n" +
                 "\tcategory: \"%s\"\n" +
-                "}", id, title, author, pageCount, isbn, cover, description, price, bookCondition, bookCategory);
+                "}", id, title, author, pageCount, isbn, cover, description, bookCategory);
     }
 
 }

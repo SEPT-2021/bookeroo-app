@@ -1,16 +1,20 @@
 package com.bookeroo.microservice.book.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * User JPA entity to represent the user data model.
  */
 @Entity
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "listings"})
 public class User {
 
     public enum UserRole {
@@ -56,6 +60,9 @@ public class User {
     private String role;
     @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    Set<Listing> listings;
     private Date createdAt;
     private Date updatedAt;
 
@@ -164,6 +171,14 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Set<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(Set<Listing> listings) {
+        this.listings = listings;
     }
 
     public Date getCreatedAt() {

@@ -85,14 +85,10 @@ public class UserController {
                 authenticationRequest.getPassword()
         ));
 
-        try {
-            String jwt = tokenProvider.generateToken(
-                    userDetailsService.loadUserByUsername(authenticationRequest.getUsername()));
-            return new ResponseEntity<>(new AuthenticationResponse(
-                    userService.getUserByUsername(authenticationRequest.getUsername()), jwt), HttpStatus.OK);
-        } catch (UserNotFoundException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        String jwt = tokenProvider.generateToken(
+                userDetailsService.loadUserByUsername(authenticationRequest.getUsername()));
+        return new ResponseEntity<>(new AuthenticationResponse(
+                userService.getUserByUsername(authenticationRequest.getUsername()), jwt), HttpStatus.OK);
     }
 
     @GetMapping("/profile")

@@ -32,14 +32,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserById(long id) throws UserNotFoundException {
+    public User getUserById(long id) {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found\n", id));
 
         return userRepository.findById(id);
     }
 
-    public User getUserByUsername(String username) throws UserNotFoundException {
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UserNotFoundException(String.format("User by username %s not found\n", username)));
@@ -49,14 +49,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void updateUser(User user) throws UserNotFoundException {
-        if (!userRepository.existsById(user.getId()))
-            throw new UserNotFoundException(String.format("User %s not found\n", user.getUsername()));
-
-        userRepository.save(user);
-    }
-
-    public void deleteUser(long id) throws UserNotFoundException {
+    public void deleteUser(long id) {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found\n", id));
 

@@ -1,12 +1,10 @@
 package com.bookeroo.microservice.book.web;
 
-import com.bookeroo.microservice.book.exception.BookFormDataValidationException;
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
-import com.bookeroo.microservice.book.exception.S3UploadFailureException;
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.BookFormData;
+import com.bookeroo.microservice.book.security.JWTTokenProvider;
 import com.bookeroo.microservice.book.service.BookService;
-import com.bookeroo.microservice.book.service.S3Service;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
 import com.bookeroo.microservice.book.validator.BookFormDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URL;
+
+import static com.bookeroo.microservice.book.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEME;
 
 /**
  * REST Controller to hold the microservice's endpoint implementations.
@@ -31,54 +28,33 @@ public class BookController {
     private final BookService bookService;
     private final BookFormDataValidator bookFormDataValidator;
     private final ValidationErrorService validationErrorService;
-    private final S3Service s3Service;
+    private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
     public BookController(BookService bookService,
                           BookFormDataValidator bookFormDataValidator,
                           ValidationErrorService validationErrorService,
-                          S3Service s3Service) {
+                          JWTTokenProvider jwtTokenProvider) {
         this.bookService = bookService;
         this.bookFormDataValidator = bookFormDataValidator;
         this.validationErrorService = validationErrorService;
-        this.s3Service = s3Service;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addNewBook(@Valid @ModelAttribute BookFormData formData, BindingResult result) {
+    public ResponseEntity<?> addNewBook(
+            @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
+            @Valid @ModelAttribute BookFormData formData, BindingResult result) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        String username = jwtTokenProvider.extractUsername(tokenHeader.substring(JWT_SCHEME.length()));
         bookFormDataValidator.validate(formData, result);
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
 
-        Book book = new Book();
-        book.setTitle(formData.getTitle());
-        book.setAuthor(formData.getAuthor());
-        book.setPageCount(String.valueOf(formData.getPageCount()));
-        book.setIsbn(formData.getIsbn());
-        book.setDescription(formData.getDescription());
-        book.setPrice(formData.getPrice());
-        book.setBookCondition(formData.getCondition().name);
-        book.setBookCategory(formData.getCategory().name);
-
-        try {
-            MultipartFile coverFile = formData.getCoverFile();
-            if (coverFile != null)
-                book.setCover(s3Service.uploadFile(formData.getCoverFile(), formData.getTitle()));
-            else
-                book.setCover(s3Service.uploadFile(new URL(formData.getCoverUrl()), formData.getTitle()));
-
-            book = bookService.saveBook(book);
-        } catch (ConstraintViolationException exception) {
-            throw new BookFormDataValidationException(
-                    exception.getConstraintViolations().iterator().next().getMessage());
-        } catch (IOException exception) {
-            throw new S3UploadFailureException(exception.getMessage());
-        } catch (Exception exception) {
-            throw new BookFormDataValidationException(exception.getMessage());
-        }
-
-        return new ResponseEntity<>(book, HttpStatus.CREATED);
+        return new ResponseEntity<>(bookService.saveBook(formData, username), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

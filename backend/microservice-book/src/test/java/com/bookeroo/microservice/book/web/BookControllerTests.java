@@ -4,9 +4,12 @@ import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.model.BookFormData;
+import com.bookeroo.microservice.book.model.User;
+import com.bookeroo.microservice.book.repository.UserRepository;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.S3Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,26 +33,24 @@ public class BookControllerTests {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     BookService bookService;
-
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     S3Service s3Service;
+    private int uniqueId;
 
     Book setupBook() {
         Book book = new Book();
         Random random = new Random();
-        book.setTitle("testTitle");
-        book.setAuthor("testAuthor");
+        book.setTitle("testTitle" + uniqueId++);
+        book.setAuthor("testAuthor" + uniqueId++);
         book.setPageCount("100");
         book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9_000_000_000_000L) + 1_000_000_000_000L));
         book.setDescription("testDescription");
-        book.setPrice(String.valueOf(random.nextFloat() % 10.0f));
-        book.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
         book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
         try {
             book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
@@ -62,16 +63,34 @@ public class BookControllerTests {
     BookFormData setupBookFormData() {
         Book book = setupBook();
         BookFormData bookFormData = new BookFormData();
+        Random random = new Random();
         bookFormData.setTitle(book.getTitle());
         bookFormData.setAuthor(book.getAuthor());
         bookFormData.setPageCount(Long.parseLong(book.getPageCount()));
         bookFormData.setIsbn(book.getIsbn());
         bookFormData.setDescription(book.getDescription());
-        bookFormData.setPrice(book.getPrice());
-        bookFormData.setCondition(BookCondition.valueOf(book.getBookCondition()));
+        bookFormData.setPrice(String.valueOf(random.nextFloat() % 100.0f));
+        bookFormData.setCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)]);
         bookFormData.setCategory(BookCategory.valueOf(book.getBookCategory()));
         bookFormData.setCoverUrl(book.getCover());
         return bookFormData;
+    }
+
+    User setupUser() {
+        User user = new User();
+        user.setUsername(RandomString.make(8) + "@test.com");
+        user.setFirstName("testFirstName");
+        user.setLastName("testLastName");
+        user.setPassword("testPassword");
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
+        user.setRole("ROLE_USER");
+        user.setEnabled(true);
+        return userRepository.save(user);
     }
 
     @Test
@@ -110,8 +129,9 @@ public class BookControllerTests {
 
     @Test
     void givenSavedBook_whenGivenId_returnBook() throws Exception {
-        Book book = setupBook();
-        book = bookService.saveBook(book);
+        BookFormData formData = setupBookFormData();
+        User user = setupUser();
+        Book book = bookService.saveBook(formData, user.getUsername());
 
         String response = mockMvc.perform(get("/api/books/" + book.getId()))
                 .andReturn().getResponse().getContentAsString();
@@ -121,10 +141,12 @@ public class BookControllerTests {
 
     @Test
     void givenSavedBooks_whenAllBooksRequested_returnBooks() throws Exception {
-        Book book1 = setupBook();
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
+        BookFormData formData2 = setupBookFormData();
+        User user2 = setupUser();
+        Book book2 = bookService.saveBook(formData2, user2.getUsername());
 
         String response = mockMvc.perform(get("/api/books/all"))
                 .andReturn().getResponse().getContentAsString();
@@ -135,8 +157,9 @@ public class BookControllerTests {
 
     @Test
     void givenBookId_whenDeleteIsRequested_deleteBook() throws Exception {
-        Book book = setupBook();
-        book = bookService.saveBook(book);
+        BookFormData formData = setupBookFormData();
+        User user = setupUser();
+        Book book = bookService.saveBook(formData, user.getUsername());
 
         mockMvc.perform(delete("/api/books/" + book.getId()))
                 .andExpect(status().isOk());
@@ -144,12 +167,11 @@ public class BookControllerTests {
 
     @Test
     void givenBooksPresent_whenSearchedByKeyword_returnMatchingBooks() throws Exception {
-        Book book1 = setupBook();
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
         String searchString = BookCategory.BILDUNGSROMAN.name();
-        book1.setBookCategory(searchString);
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        formData1.setTitle(searchString);
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
 
         String searchResult = mockMvc.perform(get("/api/books")
                         .param("search", searchString)
@@ -157,18 +179,20 @@ public class BookControllerTests {
                 .andReturn().getResponse().getContentAsString();
 
         List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
-        assertTrue(books.contains(book1) && !books.contains(book2));
+        assertTrue(books.contains(book1));
     }
 
     @Test
     void givenBooksPresent_whenSearchedByTitle_returnMatchingBooks() throws Exception {
-        Book book1 = setupBook();
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
         String searchString = "uniqueSearchedTitle";
-        book1.setTitle(searchString);
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        formData1.setTitle(searchString);
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
 
+        BookFormData formData2 = setupBookFormData();
+        User user2 = setupUser();
+        Book book2 = bookService.saveBook(formData2, user2.getUsername());
         String searchResult = mockMvc.perform(get("/api/books")
                         .param("search", searchString)
                         .param("type", "title"))
@@ -180,12 +204,15 @@ public class BookControllerTests {
 
     @Test
     void givenBooksPresent_whenSearchedByAuthor_returnMatchingBooks() throws Exception {
-        Book book1 = setupBook();
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
         String searchString = "uniqueSearchedAuthor";
-        book1.setAuthor(searchString);
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        formData1.setAuthor(searchString);
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
+
+        BookFormData formData2 = setupBookFormData();
+        User user2 = setupUser();
+        Book book2 = bookService.saveBook(formData2, user2.getUsername());
 
         String searchResult = mockMvc.perform(get("/api/books")
                         .param("search", searchString)
