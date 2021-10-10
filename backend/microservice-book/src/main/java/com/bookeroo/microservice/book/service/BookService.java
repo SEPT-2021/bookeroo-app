@@ -4,7 +4,10 @@ import com.bookeroo.microservice.book.exception.BookFormDataValidationException;
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.exception.S3UploadFailureException;
 import com.bookeroo.microservice.book.exception.UserNotFoundException;
-import com.bookeroo.microservice.book.model.*;
+import com.bookeroo.microservice.book.model.Book;
+import com.bookeroo.microservice.book.model.BookFormData;
+import com.bookeroo.microservice.book.model.Listing;
+import com.bookeroo.microservice.book.model.User;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import com.bookeroo.microservice.book.repository.ListingRepository;
 import com.bookeroo.microservice.book.repository.UserRepository;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
 
@@ -41,8 +45,9 @@ public class BookService {
 
     public Book saveBook(BookFormData formData, String username) throws UserNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
-        user.orElseThrow(() -> new UserNotFoundException(String.format("User by username %s not found\n", username)));
-        Book existingBook = bookRepository.findByTitleAndAuthor(formData.getTitle(), formData.getAuthor());
+        user.orElseThrow(() -> new UserNotFoundException(String.format("User by username %s not found", username)));
+        Book existingBook = bookRepository.findByTitleAndAuthorAndIsbn(
+                formData.getTitle(), formData.getAuthor(), formData.getIsbn());
 
         Book book;
         if (existingBook == null) {
@@ -74,24 +79,19 @@ public class BookService {
             book = existingBook;
         }
 
-        ListingKey listingKey = new ListingKey();
-        listingKey.setUserId(user.get().getId());
-        listingKey.setBookId(book.getId());
         Listing listing = new Listing();
-        listing.setId(listingKey);
         listing.setUser(user.get());
         listing.setBook(book);
         listing.setPrice(formData.getPrice());
         listing.setBookCondition(formData.getCondition().name());
         listingRepository.save(listing);
 
-        return bookRepository.getById(book.getId());
+        return bookRepository.findById(book.getId()).orElse(book);
     }
 
     public Book getBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
-        if (!book.isPresent())
-            throw new BookNotFoundException(String.format("Book with id %s not found", id));
+        book.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", id)));
 
         return book.get();
     }
@@ -100,9 +100,26 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    public Book updateBook(long id, Book updatedBook) {
+        Optional<Book> existing = bookRepository.findById(id);
+        existing.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", id)));
+        Book book = existing.get();
+
+        for (Field field : Book.class.getDeclaredFields()) {
+            try {
+                field.setAccessible(true);
+                field.set(book, (!field.getType().isPrimitive() && field.get(updatedBook) != null)
+                        ? field.get(updatedBook)
+                        : field.get(book));
+            } catch (IllegalAccessException ignored) {}
+        }
+
+        return bookRepository.save(book);
+    }
+
     public void removeBook(long id) {
         if (!bookRepository.existsById(id))
-            throw new BookNotFoundException(String.format("Book with id %s not found", id));
+            throw new BookNotFoundException(String.format("Book by id %s not found", id));
 
         bookRepository.deleteById(id);
     }

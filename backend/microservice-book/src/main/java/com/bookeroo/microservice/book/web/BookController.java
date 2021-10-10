@@ -1,6 +1,5 @@
 package com.bookeroo.microservice.book.web;
 
-import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.BookFormData;
 import com.bookeroo.microservice.book.security.JWTTokenProvider;
@@ -58,12 +57,19 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable("id") Long id) {
-        try {
-            return new ResponseEntity<>(bookService.getBook(id), HttpStatus.OK);
-        } catch (BookNotFoundException exception) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Book> getBook(@PathVariable("id") long id) {
+        return new ResponseEntity<>(bookService.getBook(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
+        return new ResponseEntity<>(bookService.updateBook(id, book), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) {
+        bookService.removeBook(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/all")
@@ -71,17 +77,7 @@ public class BookController {
         return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable("id") Long id) {
-        try {
-            bookService.removeBook(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (BookNotFoundException exception) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Iterable<Book>> searchForBook(
             @RequestParam("search") String value,
             @RequestParam(name = "type", required = false) String type) {

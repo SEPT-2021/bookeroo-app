@@ -9,17 +9,16 @@ import java.util.Date;
 @Entity
 public class Listing {
 
-    @EmbeddedId
-    private ListingKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @ManyToOne
-    @MapsId("userId")
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonBackReference(value = "User_Listing")
     User user;
     @ManyToOne
-    @MapsId("bookId")
     @JoinColumn(name = "book_id")
-    @JsonBackReference
+    @JsonBackReference(value = "Book_Listing")
     Book book;
     @NotBlank(message = "Price cannot be blank")
     private String price;
@@ -31,11 +30,11 @@ public class Listing {
     public Listing() {
     }
 
-    public ListingKey getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(ListingKey id) {
+    public void setId(long id) {
         this.id = id;
     }
 

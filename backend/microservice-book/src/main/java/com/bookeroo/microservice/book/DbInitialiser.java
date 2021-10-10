@@ -5,7 +5,6 @@ import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.model.Listing;
-import com.bookeroo.microservice.book.model.ListingKey;
 import com.bookeroo.microservice.book.model.User;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import com.bookeroo.microservice.book.repository.ListingRepository;
@@ -77,11 +76,7 @@ public class DbInitialiser {
             for (int i = 0; i < 8; i++) {
                 try {
                     Book book = bookRepository.save(getRandomBook());
-                    ListingKey listingKey = new ListingKey();
-                    listingKey.setUserId(user.getId());
-                    listingKey.setBookId(book.getId());
                     Listing listing = new Listing();
-                    listing.setId(listingKey);
                     listing.setUser(user);
                     listing.setBook(book);
                     listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());

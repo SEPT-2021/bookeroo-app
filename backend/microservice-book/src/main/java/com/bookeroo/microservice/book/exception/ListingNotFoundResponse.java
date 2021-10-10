@@ -1,13 +1,13 @@
 package com.bookeroo.microservice.book.exception;
 
 /**
- * Response body presented when {@link UserNotFoundException} is thrown.
+ * Response body presented when {@link ListingNotFoundException} is thrown.
  */
-public class UserNotFoundResponse {
+public class ListingNotFoundResponse {
 
     private String id;
 
-    public UserNotFoundResponse(String id) {
+    public ListingNotFoundResponse(String id) {
         this.id = id;
     }
 

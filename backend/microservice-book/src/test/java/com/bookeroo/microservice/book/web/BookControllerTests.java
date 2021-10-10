@@ -4,8 +4,10 @@ import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.model.BookFormData;
+import com.bookeroo.microservice.book.model.CustomUserDetails;
 import com.bookeroo.microservice.book.model.User;
 import com.bookeroo.microservice.book.repository.UserRepository;
+import com.bookeroo.microservice.book.security.JWTTokenProvider;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.S3Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.bookeroo.microservice.book.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,6 +45,8 @@ public class BookControllerTests {
     UserRepository userRepository;
     @Autowired
     S3Service s3Service;
+    @Autowired
+    JWTTokenProvider jwtTokenProvider;
     private int uniqueId;
 
     Book setupBook() {
@@ -96,7 +102,10 @@ public class BookControllerTests {
     @Test
     void givenBookFormData_whenBookAdded_thenReturnStatusCreated() throws Exception {
         BookFormData bookFormData = setupBookFormData();
+        User user = setupUser();
+        String token = jwtTokenProvider.generateToken(new CustomUserDetails(user));
         mockMvc.perform(post("/api/books/add")
+                .header(AUTHORIZATION_HEADER, JWT_SCHEME + token)
                 .param("title", bookFormData.getTitle())
                 .param("author", bookFormData.getAuthor())
                 .param("pageCount", String.valueOf(bookFormData.getPageCount()))
@@ -112,7 +121,10 @@ public class BookControllerTests {
     @Test
     void givenBookFormData_whenBookAdded_thenReturnBookAsResponseBody() throws Exception {
         BookFormData bookFormData = setupBookFormData();
+        User user = setupUser();
+        String token = jwtTokenProvider.generateToken(new CustomUserDetails(user));
         String response = mockMvc.perform(post("/api/books/add")
+                .header(AUTHORIZATION_HEADER, JWT_SCHEME + token)
                 .param("title", bookFormData.getTitle())
                 .param("author", bookFormData.getAuthor())
                 .param("pageCount", String.valueOf(bookFormData.getPageCount()))
@@ -137,7 +149,8 @@ public class BookControllerTests {
                 .andReturn().getResponse().getContentAsString();
 
         Book responseBook = objectMapper.readValue(response, Book.class);
-        assertEquals(responseBook, book);    }
+        assertEquals(responseBook, book);
+    }
 
     @Test
     void givenSavedBooks_whenAllBooksRequested_returnBooks() throws Exception {

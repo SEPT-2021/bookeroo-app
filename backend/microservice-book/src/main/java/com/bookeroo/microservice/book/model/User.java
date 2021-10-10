@@ -8,13 +8,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * User JPA entity to represent the user data model.
  */
 @Entity
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "listings"})
 public class User {
 
     public enum UserRole {
@@ -60,9 +59,9 @@ public class User {
     private String role;
     @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    Set<Listing> listings;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "User_Listing")
+    List<Listing> listings;
     private Date createdAt;
     private Date updatedAt;
 
@@ -173,11 +172,11 @@ public class User {
         this.enabled = enabled;
     }
 
-    public Set<Listing> getListings() {
+    public List<Listing> getListings() {
         return listings;
     }
 
-    public void setListings(Set<Listing> listings) {
+    public void setListings(List<Listing> listings) {
         this.listings = listings;
     }
 

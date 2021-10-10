@@ -38,4 +38,10 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<?> handleListingNotFound(ListingNotFoundException exception) {
+        ListingNotFoundResponse exceptionResponse = new ListingNotFoundResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
 }

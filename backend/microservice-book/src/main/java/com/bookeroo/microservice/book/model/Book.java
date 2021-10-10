@@ -6,14 +6,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Book JPA entity to represent the book data model.
  */
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "author"})})
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "listings"})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "author", "isbn"})})
 public class Book {
 
     public enum BookCondition {
@@ -70,9 +69,9 @@ public class Book {
     private String description;
     @NotBlank(message = "Category cannot be blank")
     private String bookCategory;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    Set<Listing> listings;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "Book_Listing")
+    List<Listing> listings;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
@@ -146,11 +145,11 @@ public class Book {
         this.cover = cover;
     }
 
-    public Set<Listing> getListings() {
+    public List<Listing> getListings() {
         return listings;
     }
 
-    public void setListings(Set<Listing> listings) {
+    public void setListings(List<Listing> listings) {
         this.listings = listings;
     }
 
