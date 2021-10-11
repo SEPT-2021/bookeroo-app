@@ -13,10 +13,11 @@ import com.bookeroo.microservice.book.service.S3Service;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,7 +26,7 @@ import java.util.Locale;
 import java.util.Random;
 
 @Component
-public class DbInitialiser {
+public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent> {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -51,7 +52,11 @@ public class DbInitialiser {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostConstruct
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        initialise();
+    }
+
     private void initialise() {
         if (postConstruct) {
             User user = new User();
@@ -81,6 +86,7 @@ public class DbInitialiser {
                     listing.setBook(book);
                     listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
                     listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
+                    listing.setAvailable(true);
                     listingRepository.save(listing);
                 } catch (Exception ignore) {}
             }

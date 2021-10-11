@@ -1,15 +1,18 @@
 package com.bookeroo.microservice.payment.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Objects;
+import java.util.List;
 
 /**
  * Book JPA entity to represent the book data model.
  */
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "author", "isbn"})})
 public class Book {
 
     public enum BookCondition {
@@ -64,12 +67,11 @@ public class Book {
     @NotBlank(message = "Books are required to have a brief description")
     @Size(max = 8191)
     private String description;
-    @NotBlank(message = "Price cannot be blank")
-    private String price;
-    @NotBlank(message = "Condition cannot be blank")
-    private String bookCondition;
     @NotBlank(message = "Category cannot be blank")
     private String bookCategory;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "Book_Listing")
+    private List<Listing> listings;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
@@ -127,22 +129,6 @@ public class Book {
         this.description = description;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getBookCondition() {
-        return bookCondition;
-    }
-
-    public void setBookCondition(String bookCondition) {
-        this.bookCondition = bookCondition;
-    }
-
     public String getBookCategory() {
         return bookCategory;
     }
@@ -157,6 +143,14 @@ public class Book {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public List<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(List<Listing> listings) {
+        this.listings = listings;
     }
 
     public Date getCreatedAt() {
@@ -196,24 +190,20 @@ public class Book {
 
         if (id != book.id)
             return false;
-        if (!Objects.equals(title, book.title))
+        if (!title.equals(book.title))
             return false;
-        if (!Objects.equals(author, book.author))
+        if (!author.equals(book.author))
             return false;
-        if (!Objects.equals(pageCount, book.pageCount))
+        if (!pageCount.equals(book.pageCount))
             return false;
-        if (!Objects.equals(isbn, book.isbn))
+        if (!isbn.equals(book.isbn))
             return false;
-        if (!Objects.equals(description, book.description))
+        if (!description.equals(book.description))
             return false;
-        if (!Objects.equals(price, book.price))
-            return false;
-        if (!Objects.equals(bookCondition, book.bookCondition))
-            return false;
-        if (!Objects.equals(bookCategory, book.bookCategory))
+        if (!bookCategory.equals(book.bookCategory))
             return false;
 
-        return Objects.equals(cover, book.cover);
+        return cover.equals(book.cover);
     }
 
     @Override
@@ -226,10 +216,8 @@ public class Book {
                 "\tisbn: \"%s\"\n" +
                 "\tcover: \"%s\"\n" +
                 "\tdescription: \"%s\"\n" +
-                "\tprice: \"%s\"\n" +
-                "\tcondition: \"%s\"\n" +
                 "\tcategory: \"%s\"\n" +
-                "}", id, title, author, pageCount, isbn, cover, description, price, bookCondition, bookCategory);
+                "}", id, title, author, pageCount, isbn, cover, description, bookCategory);
     }
 
 }

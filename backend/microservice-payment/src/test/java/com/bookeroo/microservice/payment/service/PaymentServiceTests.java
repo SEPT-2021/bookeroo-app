@@ -1,18 +1,23 @@
 package com.bookeroo.microservice.payment.service;
 
 import com.bookeroo.microservice.payment.model.*;
-import com.bookeroo.microservice.payment.model.Book.BookCategory;
 import com.bookeroo.microservice.payment.model.Book.BookCondition;
+import com.bookeroo.microservice.payment.repository.BookRepository;
+import com.bookeroo.microservice.payment.repository.ListingRepository;
+import com.bookeroo.microservice.payment.repository.UserRepository;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.Order;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Collections;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,6 +26,12 @@ public class PaymentServiceTests {
 
     @Autowired
     private PayPalService payPalService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private BookRepository bookRepository;
+    @Autowired
+    private ListingRepository listingRepository;
 
     User setupUser() {
         User user = new User();
@@ -39,29 +50,33 @@ public class PaymentServiceTests {
         return user;
     }
 
-    CartCheckout setupCartCheckout() {
+    Book setupBook() {
+        Random random = new Random();
         Book book = new Book();
         book.setTitle("testTitle");
         book.setAuthor("testAuthor");
         book.setPageCount("100");
-        book.setIsbn("1234567891011");
+        book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9_000_000_000_000L) + 1_000_000_000_000L));
         book.setDescription("testDescription");
-        book.setPrice("10.0");
-        book.setBookCondition(BookCondition.FAIR.name());
-        book.setBookCategory(BookCategory.LITERARY_FICTION.name());
+        book.setBookCategory(Book.BookCategory.values()[random.nextInt(Book.BookCategory.values().length)].name());
         book.setCover("https://picsum.photos/360/640");
+        return book;
+    }
 
-        List<OrderItem> items = new ArrayList<>();
-        OrderItem item = new OrderItem();
+    CartCheckout setupCartCheckout() {
+        User user = setupUser();
+        user = userRepository.save(user);
+        Book book = setupBook();
+        book = bookRepository.save(book);
 
-        item.setBook(book);
-        item.setQuantity(1);
-        items.add(item);
-
-        book.setTitle("testTitle2");
-        item.setBook(book);
-        item.setQuantity(2);
-        items.add(item);
+        Listing listing = new Listing();
+        Random random = new Random();
+        listing.setUser(user);
+        listing.setBook(book);
+        listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
+        listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
+        listing.setAvailable(true);
+        listing = listingRepository.save(listing);
 
         ShippingAddress address = new ShippingAddress();
         address.setAddressLine1("123 Test St");
@@ -71,18 +86,18 @@ public class PaymentServiceTests {
         address.setPostalCode("3001");
 
         CartCheckout cartCheckout = new CartCheckout();
-        cartCheckout.setOrderItems(items);
+        cartCheckout.setOrderItems(Collections.singletonList(listing));
         cartCheckout.setShippingAddress(address);
         return cartCheckout;
     }
 
     @Test
     void givenUserAndCartCheckout_whenOrderIsCreated_returnStatusCreated() throws IOException {
-        User user = setupUser();
+        User buyer = setupUser();
         CartCheckout cartCheckout = setupCartCheckout();
-        HttpResponse<Order> order = payPalService.createOrder(user, cartCheckout);
+        HttpResponse<Order> order = payPalService.createOrder(cartCheckout, buyer);
 
-        assertEquals("CREATED", order.result().status());
+        assertEquals(HttpStatus.CREATED.value(), order.statusCode());
     }
 
 }

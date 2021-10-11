@@ -5,12 +5,14 @@ import com.bookeroo.microservice.payment.model.User;
 import com.bookeroo.microservice.payment.repository.UserRepository;
 import com.bookeroo.microservice.payment.security.JWTTokenProvider;
 import com.bookeroo.microservice.payment.service.PayPalService;
+import com.bookeroo.microservice.payment.service.TransactionService;
 import com.bookeroo.microservice.payment.service.ValidationErrorService;
 import com.bookeroo.microservice.payment.validator.ShippingAddressValidator;
 import com.paypal.http.HttpResponse;
 import com.paypal.http.serializer.Json;
 import com.paypal.orders.LinkDescription;
 import com.paypal.orders.Order;
+import com.paypal.payments.Refund;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,6 +35,7 @@ import static com.bookeroo.microservice.payment.security.SecurityConstant.JWT_SC
 public class PaymentController {
 
     private final PayPalService payPalService;
+    private final TransactionService transactionService;
     private final UserRepository userRepository;
     private final JWTTokenProvider jwtTokenProvider;
     private final ShippingAddressValidator shippingAddressValidator;
@@ -40,11 +43,13 @@ public class PaymentController {
 
     @Autowired
     public PaymentController(PayPalService payPalService,
+                             TransactionService transactionService,
                              UserRepository userRepository,
                              JWTTokenProvider jwtTokenProvider,
                              ShippingAddressValidator shippingAddressValidator,
                              ValidationErrorService validationErrorService) {
         this.payPalService = payPalService;
+        this.transactionService = transactionService;
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.shippingAddressValidator = shippingAddressValidator;
@@ -66,15 +71,15 @@ public class PaymentController {
                 return errorMap;
 
             String jwt = tokenHeader.substring(JWT_SCHEME.length());
-            User user = userRepository.getByUsername(jwtTokenProvider.extractUsername(jwt));
-            HttpResponse<Order> response = payPalService.createOrder(user, cartCheckout);
+            User buyer = userRepository.getByUsername(jwtTokenProvider.extractUsername(jwt));
+            HttpResponse<Order> response = payPalService.createOrder(cartCheckout, buyer);
             LinkDescription approveLink = null;
-            for (LinkDescription link : response.result().links()) {
+            for (LinkDescription link : response.result().links())
                 if (link.rel().equals("approve"))
                     approveLink = link;
-            }
 
             assert approveLink != null;
+            transactionService.recordTransactions(cartCheckout, buyer, response.result().id());
             return new ResponseEntity<>(approveLink.href(), HttpStatus.OK);
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -82,10 +87,10 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<?> getOrder(@PathVariable String id) {
+    @GetMapping("/get/{orderId}")
+    public ResponseEntity<?> getOrder(@PathVariable String orderId) {
         try {
-            HttpResponse<Order> response = payPalService.getOrder(id);
+            HttpResponse<Order> response = payPalService.getOrder(orderId);
             return ResponseEntity
                     .status(HttpStatus.valueOf(response.statusCode()))
                     .contentType(MediaType.APPLICATION_JSON)
@@ -96,10 +101,10 @@ public class PaymentController {
         }
     }
 
-    @PostMapping("/capture/{id}")
-    public ResponseEntity<?> captureOrder(@PathVariable String id) {
+    @PostMapping("/capture/{orderId}")
+    public ResponseEntity<?> captureOrder(@PathVariable String orderId) {
         try {
-            HttpResponse<Order> response = payPalService.captureOrder(id);
+            HttpResponse<Order> response = payPalService.captureOrder(orderId);
             return ResponseEntity
                     .status(HttpStatus.valueOf(response.statusCode()))
                     .contentType(MediaType.APPLICATION_JSON)
@@ -108,6 +113,25 @@ public class PaymentController {
             exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/refund/{listingId}")
+    public ResponseEntity<?> refundOrder(@PathVariable long listingId) {
+        try {
+            HttpResponse<Refund> response = payPalService.refundOrder(listingId);
+            return ResponseEntity
+                    .status(HttpStatus.valueOf(response.statusCode()))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(new Json().serialize(response.result()));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/transactions/{buyerId}")
+    public ResponseEntity<?> getTransactionsByBuyer(@PathVariable long buyerId) {
+        return new ResponseEntity<>(transactionService.getTransactionsByBuyer(buyerId), HttpStatus.OK);
     }
 
 }

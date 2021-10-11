@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.book.model;
+package com.bookeroo.microservice.payment.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -24,6 +24,8 @@ public class Listing {
     private String price;
     @NotBlank(message = "Condition cannot be blank")
     private String bookCondition;
+    @OneToOne(mappedBy = "listing")
+    private Transaction transaction;
     private boolean isAvailable;
     private Date createdAt;
     private Date updatedAt;
@@ -69,6 +71,14 @@ public class Listing {
 
     public void setBookCondition(String bookCondition) {
         this.bookCondition = bookCondition;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     public boolean isAvailable() {

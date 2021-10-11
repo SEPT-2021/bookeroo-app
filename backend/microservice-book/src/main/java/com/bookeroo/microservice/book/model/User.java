@@ -61,7 +61,7 @@ public class User {
     private boolean enabled;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "User_Listing")
-    List<Listing> listings;
+    private List<Listing> listings;
     private Date createdAt;
     private Date updatedAt;
 

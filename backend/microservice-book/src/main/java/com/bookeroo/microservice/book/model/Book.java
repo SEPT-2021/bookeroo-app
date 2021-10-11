@@ -71,7 +71,7 @@ public class Book {
     private String bookCategory;
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "Book_Listing")
-    List<Listing> listings;
+    private List<Listing> listings;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;

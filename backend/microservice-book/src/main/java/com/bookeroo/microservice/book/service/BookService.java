@@ -84,14 +84,20 @@ public class BookService {
         listing.setBook(book);
         listing.setPrice(formData.getPrice());
         listing.setBookCondition(formData.getCondition().name());
+        listing.setAvailable(true);
         listingRepository.save(listing);
 
-        return bookRepository.findById(book.getId()).orElse(book);
+        book = bookRepository.findById(book.getId()).orElse(book);
+        if (book.getListings() == null)
+            book.setListings(Collections.singletonList(listing));
+
+        return book;
     }
 
     public Book getBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
         book.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", id)));
+        book.get().getListings().removeIf(listing -> !listing.isAvailable());
 
         return book.get();
     }

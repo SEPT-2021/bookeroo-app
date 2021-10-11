@@ -32,6 +32,12 @@ public class ListingService {
         this.userRepository = userRepository;
     }
 
+    public Listing getById(long id) {
+        Optional<Listing> listing = listingRepository.findById(id);
+        listing.orElseThrow(() -> new ListingNotFoundException(String.format("Listing by id %s not found", id)));
+        return listing.get();
+    }
+
     public List<Listing> getAllByBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
         book.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", id)));

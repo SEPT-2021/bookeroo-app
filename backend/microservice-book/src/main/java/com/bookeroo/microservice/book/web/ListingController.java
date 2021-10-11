@@ -19,6 +19,22 @@ public class ListingController {
         this.listingService = listingService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getListing(@PathVariable long id) {
+        return new ResponseEntity<>(listingService.getById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateListing(@PathVariable long id, @RequestBody Listing updatedListing) {
+        return new ResponseEntity<>(listingService.updateListing(id, updatedListing), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteListing(@PathVariable long id) {
+        listingService.removeListing(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/book/{id}")
     public ResponseEntity<?> getAllByBook(@PathVariable("id") long id) {
         return new ResponseEntity<>(listingService.getAllByBook(id), HttpStatus.OK);
@@ -31,17 +47,6 @@ public class ListingController {
         } catch (BookNotFoundException exception) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateListing(@PathVariable long id, @RequestBody Listing updatedListing) {
-        return new ResponseEntity<>(listingService.updateListing(id, updatedListing), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteListing(@PathVariable long id) {
-        listingService.removeListing(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
