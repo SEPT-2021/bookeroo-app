@@ -2,7 +2,6 @@ package com.bookeroo.microservice.seller.web;
 
 import com.bookeroo.microservice.seller.model.SellerDetails;
 import com.bookeroo.microservice.seller.security.JWTTokenProvider;
-import com.bookeroo.microservice.seller.service.BookService;
 import com.bookeroo.microservice.seller.service.SellerDetailsService;
 import com.bookeroo.microservice.seller.service.UserService;
 import com.bookeroo.microservice.seller.service.ValidationErrorService;
@@ -23,7 +22,6 @@ import static com.bookeroo.microservice.seller.security.SecurityConstant.JWT_SCH
 public class SellerController {
 
     private final UserService userService;
-    private final BookService bookService;
     private final SellerDetailsService sellerDetailsService;
     private final SellerDetailsValidator sellerDetailsValidator;
     private final ValidationErrorService validationErrorService;
@@ -31,13 +29,11 @@ public class SellerController {
 
     @Autowired
     public SellerController(UserService userService,
-                            BookService bookService,
                             SellerDetailsService sellerDetailsService,
                             SellerDetailsValidator sellerDetailsValidator,
                             ValidationErrorService validationErrorService,
                             JWTTokenProvider jwtTokenProvider) {
         this.userService = userService;
-        this.bookService = bookService;
         this.sellerDetailsService = sellerDetailsService;
         this.sellerDetailsValidator = sellerDetailsValidator;
         this.validationErrorService = validationErrorService;

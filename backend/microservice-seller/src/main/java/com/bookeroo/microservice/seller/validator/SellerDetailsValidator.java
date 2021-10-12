@@ -13,7 +13,6 @@ public class SellerDetailsValidator implements Validator {
 
     public static final int ABN_LENGTH = 11;
 
-
     @Override
     public boolean supports(Class<?> aClass) {
         return SellerDetails.class.equals(aClass);
