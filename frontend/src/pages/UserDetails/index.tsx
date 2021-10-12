@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import logo from "../../assets/logo.svg";
 import Link from "../../util/Link";
-import { loginUser } from "../../util/api";
+import {updateUser} from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
 import { GlobalContext } from "../../components/GlobalContext";
@@ -24,6 +24,10 @@ import theme from "../../theme";
 
 function UserDetails({ classes }: UserDetailsProps) {
     const { user} = useContext(GlobalContext);
+    const { isLoading, mutate} = useMutation(updateUser);
+    const username = "test";
+    const onSubmit = () => mutate({ username});
+
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -68,7 +72,16 @@ function UserDetails({ classes }: UserDetailsProps) {
                         <Typography component="h6" variant="h6">
                             Address : {user?.addressLine1}, {user?.addressLine2}
                         </Typography>
+                        <LoadingButton
+                            loading={isLoading}
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={onSubmit}> update </LoadingButton>
                     </Box>
+
+
 
 
                 </div>

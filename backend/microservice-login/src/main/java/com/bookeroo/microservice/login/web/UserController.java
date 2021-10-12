@@ -91,10 +91,24 @@ public class UserController {
                 userService.getUserByUsername(authenticationRequest.getUsername()), jwt), HttpStatus.OK);
     }
 
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateprofile(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User target = userService.getUserByUsername(userDetails.getUsername());
+        target.setFirstName("testingupdate");
+
+        userService.saveUser(target);
+        return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);
+    }
+
+
     @GetMapping("/profile")
     public ResponseEntity<?> viewProfile() throws UserNotFoundException {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
+
 
 }
