@@ -94,6 +94,10 @@ public class BookService {
         return book;
     }
 
+    public Book saveBook(Book book) {
+        return bookRepository.save(book);
+    }
+
     public Book getBook(long id) {
         Optional<Book> book = bookRepository.findById(id);
         book.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", id)));
@@ -124,7 +128,7 @@ public class BookService {
             }
         }
 
-        return bookRepository.save(book);
+        return book;
     }
 
     public void removeBook(long id) {

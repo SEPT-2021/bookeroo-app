@@ -28,9 +28,11 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User saveUser(@Valid User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
+    public User saveUser(@Valid User user, boolean isNew) {
+        if (isNew) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setEnabled(true);
+        }
         return userRepository.save(user);
     }
 
@@ -61,13 +63,13 @@ public class UserService {
                             && !Arrays.asList("role", "createdAt", "updatedAt").contains(field.getName()))
                             ? field.get(updatedUser)
                             : field.get(user));
-                    if (field.get(updatedUser) != null && field.getName().equals("password"))
+                    if (field.getName().equals("password"))
                         field.set(user, passwordEncoder.encode(field.get(updatedUser).toString()));
                 }
             } catch (IllegalAccessException ignored) {}
         }
 
-        return userRepository.save(user);
+        return user;
     }
 
     public void deleteUser(long id) {

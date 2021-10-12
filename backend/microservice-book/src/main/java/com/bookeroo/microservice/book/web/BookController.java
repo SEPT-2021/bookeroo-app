@@ -5,6 +5,7 @@ import com.bookeroo.microservice.book.model.BookFormData;
 import com.bookeroo.microservice.book.security.JWTTokenProvider;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
+import com.bookeroo.microservice.book.validator.BookDataValidator;
 import com.bookeroo.microservice.book.validator.BookFormDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,16 +26,19 @@ import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEM
 public class BookController {
 
     private final BookService bookService;
+    private final BookDataValidator bookDataValidator;
     private final BookFormDataValidator bookFormDataValidator;
     private final ValidationErrorService validationErrorService;
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
     public BookController(BookService bookService,
+                          BookDataValidator bookDataValidator,
                           BookFormDataValidator bookFormDataValidator,
                           ValidationErrorService validationErrorService,
                           JWTTokenProvider jwtTokenProvider) {
         this.bookService = bookService;
+        this.bookDataValidator = bookDataValidator;
         this.bookFormDataValidator = bookFormDataValidator;
         this.validationErrorService = validationErrorService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -62,8 +66,16 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
-        return new ResponseEntity<>(bookService.updateBook(id, book), HttpStatus.OK);
+    public ResponseEntity<?> updateBook(@PathVariable("id") long id,
+                                        @RequestBody Book updatedBook,
+                                        BindingResult result) {
+        Book book = bookService.updateBook(id, updatedBook);
+        bookDataValidator.validate(book, result);
+        ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
+        if (errorMap != null)
+            return errorMap;
+
+        return new ResponseEntity<>(bookService.saveBook(book), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

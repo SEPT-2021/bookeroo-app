@@ -63,7 +63,7 @@ public class UserController {
             return errorMap;
 
         try {
-            user = userService.saveUser(user);
+            user = userService.saveUser(user, true);
         } catch (Exception exception) {
             if (exception.getMessage().contains("UK"))
                 throw new UsernameAlreadyExistsException(
@@ -102,11 +102,19 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
-                                        @RequestBody User updatedUser) {
+                                        @RequestBody User updatedUser,
+                                        BindingResult result) {
         if (tokenHeader == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         String jwt = tokenHeader.substring(JWT_SCHEME.length());
-        return new ResponseEntity<>(userService.updateUser(jwtTokenProvider.extractUsername(jwt), updatedUser), HttpStatus.OK);
+
+        User user = userService.updateUser(jwtTokenProvider.extractUsername(jwt), updatedUser);
+        userValidator.validate(user, result);
+        ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
+        if (errorMap != null)
+            return errorMap;
+
+        return new ResponseEntity<>(userService.saveUser(user, false), HttpStatus.OK);
     }
 
 }
