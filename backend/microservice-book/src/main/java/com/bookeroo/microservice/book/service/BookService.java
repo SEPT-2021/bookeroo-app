@@ -114,10 +114,14 @@ public class BookService {
         for (Field field : Book.class.getDeclaredFields()) {
             try {
                 field.setAccessible(true);
-                field.set(book, (!field.getType().isPrimitive() && field.get(updatedBook) != null)
-                        ? field.get(updatedBook)
-                        : field.get(book));
-            } catch (IllegalAccessException ignored) {}
+                if (field.get(updatedBook) != null) {
+                    field.set(book, (!field.getType().isPrimitive()
+                            && !Arrays.asList("listings", "createdAt", "updatedAy").contains(field.getName()))
+                            ? field.get(updatedBook)
+                            : field.get(book));
+                }
+            } catch (IllegalAccessException ignored) {
+            }
         }
 
         return bookRepository.save(book);

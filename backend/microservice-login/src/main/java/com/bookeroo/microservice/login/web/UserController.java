@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.bookeroo.microservice.login.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_SCHEME;
+
 /**
  * REST Controller to hold the microservice's user endpoint implementations.
  */
@@ -35,7 +38,7 @@ public class UserController {
     private final UserValidator userValidator;
     private final ValidationErrorService validationErrorService;
     private final AuthenticationManager authenticationManager;
-    private final JWTTokenProvider tokenProvider;
+    private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
     public UserController(UserService userService,
@@ -49,7 +52,7 @@ public class UserController {
         this.userValidator = userValidator;
         this.validationErrorService = validationErrorService;
         this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
+        this.jwtTokenProvider = tokenProvider;
     }
 
     @PostMapping("/register")
@@ -69,7 +72,7 @@ public class UserController {
                 throw new UserFieldValidationException(exception.getMessage());
         }
 
-        String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
+        String jwt = jwtTokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
         return new ResponseEntity<>(new AuthenticationResponse(user, jwt), HttpStatus.CREATED);
     }
 
@@ -85,7 +88,7 @@ public class UserController {
                 authenticationRequest.getPassword()
         ));
 
-        String jwt = tokenProvider.generateToken(
+        String jwt = jwtTokenProvider.generateToken(
                 userDetailsService.loadUserByUsername(authenticationRequest.getUsername()));
         return new ResponseEntity<>(new AuthenticationResponse(
                 userService.getUserByUsername(authenticationRequest.getUsername()), jwt), HttpStatus.OK);
@@ -95,6 +98,15 @@ public class UserController {
     public ResponseEntity<?> viewProfile() throws UserNotFoundException {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
+                                        @RequestBody User updatedUser) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        String jwt = tokenHeader.substring(JWT_SCHEME.length());
+        return new ResponseEntity<>(userService.updateUser(jwtTokenProvider.extractUsername(jwt), updatedUser), HttpStatus.OK);
     }
 
 }
