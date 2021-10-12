@@ -21,7 +21,7 @@ import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
 import UsersList from "./pages/AdminDashBoard/UsersList";
 import SingleBook from "./pages/SingleBook";
-import UserDetails from "./pages/UserDetails";
+import UserDashBoard from "./pages/UserDetails/test";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +62,7 @@ ReactDOM.render(
                 <UsersList />
               </Route>
               <Route path="/UserDetails">
-                <UserDetails />
+                <UserDashBoard />
               </Route>
 
               <Route path="/paymentSuccess">

@@ -1,12 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 import type { User } from "../components/GlobalContext";
-import { BookItemType, CartType, TokenProps } from "./types";
+import {
+  BookItemType,
+  CartType,
+  RegisterAsSellerType,
+  TokenProps,
+} from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins" | "newsletter",
+  service: "books" | "users" | "orders" | "admins" | "newsletter" | "sellers",
   route: string
 ) {
   const port = (() => {
@@ -20,6 +25,8 @@ function getRouteURL(
         return 8082;
       case "admins":
         return 8083;
+      case "sellers":
+        return 8084;
       default:
         throw new Error(`No port for service: ${service}`);
     }
@@ -189,4 +196,8 @@ export const deleteUserByID = makeTypedAPICall<
 
 export const registerNewsletter = makeTypedAPICall<unknown, unknown>((args) =>
   api.post(getRouteURL("newsletter", "register"), args)
+);
+
+export const registerSeller = makeTypedAPICall<RegisterAsSellerType, unknown>(
+  (args) => api.post(getRouteURL("sellers", "register"), args)
 );

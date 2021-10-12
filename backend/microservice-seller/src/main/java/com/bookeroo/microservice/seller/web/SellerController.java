@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.bookeroo.microservice.seller.security.SecurityConstant.AUTHORIZATION_HEADER;
 import static com.bookeroo.microservice.seller.security.SecurityConstant.JWT_SCHEME;
 
@@ -44,15 +46,15 @@ public class SellerController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerSeller(@RequestHeader(AUTHORIZATION_HEADER) String tokenHeader,
-                                            @RequestBody SellerDetails sellerDetails,
+                                            @Valid @RequestBody SellerDetails sellerDetails,
                                             BindingResult result) {
         String jwt = tokenHeader.substring(JWT_SCHEME.length());
+        sellerDetails.setUser(userService.getUserByUsername(jwtTokenProvider.extractUsername(jwt)));
         sellerDetailsValidator.validate(sellerDetails, result);
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
 
-        sellerDetails.setUser(userService.getUserByUsername(jwtTokenProvider.extractUsername(jwt)));
         return new ResponseEntity<>(sellerDetailsService.saveSellerDetails(sellerDetails), HttpStatus.OK);
     }
 

@@ -26,7 +26,14 @@ export type DataItemType = {
   book: BookItemType;
   quantity: number;
 };
+
 export type CartType = {
   orderItems: DataItemType[];
   shippingAddress?: ShippingItemType;
+};
+
+export type RegisterAsSellerType = {
+  abn: string;
+  businessName: string;
+  businessPhone: string;
 };
