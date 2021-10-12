@@ -93,11 +93,11 @@ public class UserController {
 
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateprofile(){
+    public ResponseEntity<?> updateprofile(@RequestBody String name){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User target = userService.getUserByUsername(userDetails.getUsername());
-        target.setFirstName("testingupdate");
+        target.setFirstName(name);
 
         userService.saveUser(target);
         return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);

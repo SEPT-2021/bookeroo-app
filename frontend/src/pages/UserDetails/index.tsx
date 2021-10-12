@@ -23,10 +23,11 @@ import { GlobalContext } from "../../components/GlobalContext";
 import theme from "../../theme";
 
 function UserDetails({ classes }: UserDetailsProps) {
-    const { user} = useContext(GlobalContext);
+    const {user} = useContext(GlobalContext);
     const { isLoading, mutate} = useMutation(updateUser);
-    const username = "test";
-    const onSubmit = () => mutate({ username});
+    const [firstName, setFirstName] = useState("");
+
+    const onSubmit = () => mutate({firstName});
 
 
     return (
@@ -72,6 +73,12 @@ function UserDetails({ classes }: UserDetailsProps) {
                         <Typography component="h6" variant="h6">
                             Address : {user?.addressLine1}, {user?.addressLine2}
                         </Typography>
+                        <FormField
+                            name="firstName"
+                            label="First Name"
+                            autoComplete="firstName"
+                            onChange={setFirstName}
+                        />
                         <LoadingButton
                             loading={isLoading}
                             fullWidth

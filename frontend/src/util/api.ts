@@ -62,7 +62,7 @@ export const loginUser = makeTypedAPICall<
 >((args) => api.post(getRouteURL("users", "login"), args));
 
 export const updateUser = makeTypedAPICall<
-    { username: string;},
+    { firstName: string;},
     TokenProps & { user: User }
     >((args) => api.post(getRouteURL("users", "update"), args));
 
