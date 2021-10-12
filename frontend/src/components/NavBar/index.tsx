@@ -12,9 +12,9 @@ import {
 } from "@material-ui/core";
 import { Person } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-import logo from "../assets/logo.svg";
-import Link from "../util/Link";
-import { GlobalContext, Role } from "./GlobalContext";
+import logo from "../../assets/logo.svg";
+import Link from "../../util/Link";
+import { GlobalContext, Role } from "../GlobalContext";
 
 function NavBar({ classes }: NavBarProps) {
   const { user, signOut } = useContext(GlobalContext);

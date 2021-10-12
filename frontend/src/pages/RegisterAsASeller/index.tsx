@@ -15,6 +15,10 @@ function RegisterAsASeller({ classes }: RegisterAsASellerProps) {
 
   const onSubmit = () => mutate({ abn, businessName, businessPhone });
 
+  if (error?.response?.status === 409)
+    // TODO SHOW ERROR
+    console.log("ERROR DUPLICATE");
+
   return (
     <Grid container component="main" className={classes.root}>
       <Grid container spacing={2} justifyContent="center">

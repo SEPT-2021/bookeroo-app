@@ -10,7 +10,7 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as Scroll } from "react-scroll";
 import TextLoop from "react-text-loop";
-import Link from "../util/Link";
+import Link from "../../util/Link";
 
 function Header({ classes }: HeaderProps) {
   const [checked, setChecked] = useState(false);

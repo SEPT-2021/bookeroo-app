@@ -19,7 +19,7 @@ import NavBar from "./components/NavBar";
 import { GlobalContextProvider } from "./components/GlobalContext";
 import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
-import UsersList from "./pages/AdminDashBoard/UsersList";
+import UsersList from "./pages/AdminDashBoard";
 import SingleBook from "./pages/SingleBook";
 import UserDashBoard from "./pages/UserDetails/test";
 
