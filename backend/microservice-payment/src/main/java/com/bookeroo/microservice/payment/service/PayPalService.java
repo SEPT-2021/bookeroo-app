@@ -132,8 +132,6 @@ public class PayPalService {
                     Listing listing = listingRepository.getById(transaction.getId().getListingId());
                     listing.setAvailable(false);
                     listingRepository.save(listing);
-
-                    break;
                 }
             }
         }

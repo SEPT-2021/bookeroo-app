@@ -6,10 +6,8 @@ import com.bookeroo.microservice.admin.model.User;
 import com.bookeroo.microservice.admin.model.User.UserRole;
 import com.bookeroo.microservice.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -19,16 +17,10 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
     }
 
     public User getUserById(long id) throws UserNotFoundException {
@@ -67,22 +59,6 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    public User updateUser(long id, User updatedUser) throws UserNotFoundException {
-        User user = getUserById(id);
-        for (Field field : User.class.getDeclaredFields()) {
-            try {
-                field.setAccessible(true);
-                field.set(user, (!field.getType().isPrimitive() && field.get(updatedUser) != null)
-                        ? field.get(updatedUser)
-                        : field.get(user));
-                if (field.getName().equals("password"))
-                    field.set(user, passwordEncoder.encode(field.get(updatedUser).toString()));
-            } catch (IllegalAccessException ignored) {}
-        }
-
-        return userRepository.save(user);
     }
 
     public void deleteUser(long id) throws UserNotFoundException {
