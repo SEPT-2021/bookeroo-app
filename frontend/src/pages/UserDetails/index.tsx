@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import {Person} from "@material-ui/icons";
+
 import { useMutation } from "react-query";
 import {
     Avatar,
@@ -9,26 +10,45 @@ import {
     Grid,
     Hidden,
     Paper,
-    Theme,
     Typography,
     withStyles,
     WithStyles,
 } from "@material-ui/core";
-import logo from "../../assets/logo.svg";
-import Link from "../../util/Link";
 import {updateUser} from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
-import { GlobalContext } from "../../components/GlobalContext";
+import {GlobalContext} from "../../components/GlobalContext";
 import theme from "../../theme";
+import logo from "../../assets/logo.svg";
 
 function UserDetails({ classes }: UserDetailsProps) {
     const {user} = useContext(GlobalContext);
-    const { isLoading, mutate} = useMutation(updateUser);
+    const { isLoading, mutate, isSuccess } = useMutation(updateUser);
+
+
     const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [addressLine1, setAddressLine1] = useState("");
+    const [addressLine2, setAddressLine2] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [postalCode, setPostalCode] = useState("");
+    const onSubmit = async () => {
 
-    const onSubmit = () => mutate({firstName});
+        mutate({
+            firstName,
+            lastName,
+            addressLine1,
+            addressLine2,
+            city,
+            state,
+            postalCode,
+        });
+    };
 
+    if (isSuccess) {
+        return <Redirect to="/UserDetails" />;
+    }
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -62,23 +82,70 @@ function UserDetails({ classes }: UserDetailsProps) {
                     </Typography>
 
                     <Box mt={2}>
-                    <Typography component="h6" variant="h6">
-                        First Name : {user?.firstName}
-                    </Typography>
 
-                    <Typography component="h6" variant="h6">
-                        Last Name : {user?.lastName}
-                    </Typography>
-
-                        <Typography component="h6" variant="h6">
-                            Address : {user?.addressLine1}, {user?.addressLine2}
-                        </Typography>
                         <FormField
                             name="firstName"
-                            label="First Name"
-                            autoComplete="firstName"
+                            label={user?.firstName}
+                            defaultValue={user?.firstName}
+
+                            autoComplete={user?.firstName}
                             onChange={setFirstName}
+
                         />
+                        <FormField
+                            name="lastName"
+                            label={user?.lastName}
+                            defaultValue={user?.lastName}
+
+
+                            autoComplete={user?.lastName}
+                            onChange={setLastName}
+                        />
+                        <FormField
+                            name="addressLine1"
+                            label={user?.addressLine1}
+                            defaultValue={user?.addressLine1}
+
+
+                            autoComplete={user?.addressLine1}
+                            onChange={setAddressLine1}
+                        />
+                        <FormField
+                            name="addressLine2"
+                            label={user?.addressLine2}
+                            defaultValue={user?.addressLine2}
+
+
+                            autoComplete={user?.addressLine2}
+                            onChange={setAddressLine2}
+                        />
+                        <FormField
+                            name="city"
+                            label={user?.city}
+                            defaultValue={user?.city}
+
+
+                            autoComplete={user?.city}
+                            onChange={setCity}
+                        />
+                        <FormField
+                            name="state"
+                            label={user?.state}
+                            defaultValue={user?.state}
+
+                            autoComplete={user?.state}
+                            onChange={setState}
+                        />
+                        <FormField
+                            name="postalCode"
+                            label={user?.postalCode}
+                            defaultValue={user?.postalCode}
+
+
+                            autoComplete={user?.postalCode}
+                            onChange={setPostalCode}
+                        />
+
                         <LoadingButton
                             loading={isLoading}
                             fullWidth

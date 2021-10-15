@@ -32,6 +32,7 @@ export interface User {
   enabled: boolean;
   createdAt: string;
   updatedAt: string | null;
+  phonenumber: string
 }
 
 interface GlobalContextType {
