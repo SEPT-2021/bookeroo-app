@@ -66,11 +66,6 @@ public class AdminController {
         return new ResponseEntity<>(userService.rejectSeller(id), HttpStatus.OK);
     }
 
-    @PutMapping("/update-users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody User updatedUser) {
-        return new ResponseEntity<>(userService.updateUser(id, updatedUser), HttpStatus.OK);
-    }
-
     @DeleteMapping("/delete-users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);

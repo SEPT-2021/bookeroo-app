@@ -84,7 +84,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenAuthenticated_thenReturnStatusOk() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
@@ -99,7 +99,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenEmailIncorrect_thenReturnUnauthorised() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername("wrongEmail@test.com");
@@ -114,7 +114,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenPasswordIncorrect_thenReturnUnauthorised() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
@@ -129,7 +129,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenAuthenticated_thenReturnJWTToken() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());

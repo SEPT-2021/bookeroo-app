@@ -46,13 +46,13 @@ class UserServiceTest {
     void givenUser_whenUserSaved_returnUser() {
         User user = setupUser();
 
-        assertEquals(service.saveUser(user).getUsername(), user.getUsername());
+        assertEquals(service.saveUser(user, true).getUsername(), user.getUsername());
     }
 
     @Test
     void givenSavedUser_whenGivenId_returnUser() throws UserNotFoundException {
         User user = setupUser();
-        long id = service.saveUser(user).getId();
+        long id = service.saveUser(user, true).getId();
 
         assertNotNull(service.getUserById(id));
     }
@@ -60,7 +60,7 @@ class UserServiceTest {
     @Test
     void givenSavedUser_whenGivenUsername_returnUser() throws UserNotFoundException {
         User user = setupUser();
-        String username = service.saveUser(user).getUsername();
+        String username = service.saveUser(user, true).getUsername();
 
         assertNotNull(service.getUserByUsername(username));
     }
@@ -68,7 +68,7 @@ class UserServiceTest {
     @Test
     void givenSavedUsers_whenAllUsersFetched_returnUsers() {
         User user = setupUser();
-        service.saveUser(user);
+        service.saveUser(user, true);
 
         assertNotEquals(service.getAllUsers().size(), 0);
     }
@@ -76,10 +76,10 @@ class UserServiceTest {
     @Test
     void givenSavedUser_whenSavingAgain_updateUser() {
         User user = setupUser();
-        user = service.saveUser(user);
+        user = service.saveUser(user, true);
         String userLastName = "updatedLastName";
         user.setLastName(userLastName);
-        user = service.saveUser(user);
+        user = service.saveUser(user, true);
 
         assertEquals(user.getLastName(), userLastName);
     }
@@ -87,7 +87,7 @@ class UserServiceTest {
     @Test
     void givenUserId_whenDeleteIsAsked_deleteUser() throws UserNotFoundException {
         User user = setupUser();
-        long id = service.saveUser(user).getId();
+        long id = service.saveUser(user, true).getId();
         service.deleteUser(id);
 
         assertThrows(UserNotFoundException.class, () -> service.getUserById(id));
@@ -99,8 +99,8 @@ class UserServiceTest {
         User admin = setupUser();
         admin.setRole("ROLE_ADMIN");
 
-        service.saveUser(user);
-        service.saveUser(admin);
+        service.saveUser(user, true);
+        service.saveUser(admin, true);
 
         assertFalse(service.getAllNonAdminUsers().contains(admin));
     }

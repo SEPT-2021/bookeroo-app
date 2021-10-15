@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.bookeroo.microservice.login.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.login.security.SecurityConstant.JWT_SCHEME;
+
 /**
  * REST Controller to hold the microservice's user endpoint implementations.
  */
@@ -35,7 +38,7 @@ public class UserController {
     private final UserValidator userValidator;
     private final ValidationErrorService validationErrorService;
     private final AuthenticationManager authenticationManager;
-    private final JWTTokenProvider tokenProvider;
+    private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
     public UserController(UserService userService,
@@ -49,7 +52,7 @@ public class UserController {
         this.userValidator = userValidator;
         this.validationErrorService = validationErrorService;
         this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
+        this.jwtTokenProvider = tokenProvider;
     }
 
     @PostMapping("/register")
@@ -60,7 +63,7 @@ public class UserController {
             return errorMap;
 
         try {
-            user = userService.saveUser(user);
+            user = userService.saveUser(user, true);
         } catch (Exception exception) {
             if (exception.getMessage().contains("UK"))
                 throw new UsernameAlreadyExistsException(
@@ -69,7 +72,7 @@ public class UserController {
                 throw new UserFieldValidationException(exception.getMessage());
         }
 
-        String jwt = tokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
+        String jwt = jwtTokenProvider.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
         return new ResponseEntity<>(new AuthenticationResponse(user, jwt), HttpStatus.CREATED);
     }
 
@@ -85,24 +88,11 @@ public class UserController {
                 authenticationRequest.getPassword()
         ));
 
-        String jwt = tokenProvider.generateToken(
+        String jwt = jwtTokenProvider.generateToken(
                 userDetailsService.loadUserByUsername(authenticationRequest.getUsername()));
         return new ResponseEntity<>(new AuthenticationResponse(
                 userService.getUserByUsername(authenticationRequest.getUsername()), jwt), HttpStatus.OK);
     }
-
-
-    @PostMapping("/update")
-    public ResponseEntity<?> updateprofile(@RequestBody String name){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        User target = userService.getUserByUsername(userDetails.getUsername());
-        target.setFirstName(name);
-
-        userService.saveUser(target);
-        return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);
-    }
-
 
     @GetMapping("/profile")
     public ResponseEntity<?> viewProfile() throws UserNotFoundException {
@@ -110,5 +100,21 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
+                                        @RequestBody User updatedUser,
+                                        BindingResult result) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        String jwt = tokenHeader.substring(JWT_SCHEME.length());
+
+        User user = userService.updateUser(jwtTokenProvider.extractUsername(jwt), updatedUser);
+        userValidator.validate(user, result);
+        ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
+        if (errorMap != null)
+            return errorMap;
+
+        return new ResponseEntity<>(userService.saveUser(user, false), HttpStatus.OK);
+    }
 
 }
