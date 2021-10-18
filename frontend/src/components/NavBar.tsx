@@ -48,9 +48,14 @@ function NavBar({ classes }: NavBarProps) {
           {user ? (
             <Box display="flex" alignItems="center">
               <Person />
-                <Link to="/UserDetails">
-                    <Button>  <Typography variant="subtitle2">{user?.firstName}</Typography> </Button>
-                </Link>
+              <Link to="/UserDetails">
+                <Button>
+                  {" "}
+                  <Typography variant="subtitle2">
+                    {user?.firstName}
+                  </Typography>{" "}
+                </Button>
+              </Link>
               <Button variant="contained" onClick={onSignOut}>
                 Sign out
               </Button>

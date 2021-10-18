@@ -62,18 +62,17 @@ export const loginUser = makeTypedAPICall<
 >((args) => api.post(getRouteURL("users", "login"), args));
 
 export const updateUser = makeTypedAPICall<
-    {
-
-        firstName: string;
-        lastName: string;
-        addressLine1: string;
-        addressLine2: string;
-        city: string;
-        state: string;
-        postalCode: string;
-    },
-    TokenProps & { user: User }
-    >((args) => api.put(getRouteURL("users", "update"), args));
+  {
+    firstName: string;
+    lastName: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+  },
+  TokenProps & { user: User }
+>((args) => api.put(getRouteURL("users", "update"), args));
 
 export const addBook = makeTypedAPICall<
   {
