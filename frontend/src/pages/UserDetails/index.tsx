@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Redirect } from "react-router-dom";
 import {Person} from "@material-ui/icons";
 
@@ -23,7 +23,7 @@ import logo from "../../assets/logo.svg";
 
 function UserDetails({ classes }: UserDetailsProps) {
     const {user} = useContext(GlobalContext);
-    const { isLoading, mutate, isSuccess } = useMutation(updateUser);
+    const { isLoading, mutate, isSuccess, error } = useMutation(updateUser);
 
 
     const [firstName, setFirstName] = useState("");
@@ -33,8 +33,21 @@ function UserDetails({ classes }: UserDetailsProps) {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [postalCode, setPostalCode] = useState("");
-    const onSubmit = async () => {
 
+    useEffect(() => {
+        if(!user)
+            return;
+        setFirstName(user?.firstName);
+        setLastName(user?.lastName);
+        setAddressLine1(user?.addressLine1);
+        setAddressLine2(user?.addressLine2);
+        setCity(user?.city);
+        setState(user?.state);
+        setPostalCode(user?.postalCode);
+    }, [user]);
+
+
+    const onSubmit = async () => {
         mutate({
             firstName,
             lastName,
@@ -47,7 +60,7 @@ function UserDetails({ classes }: UserDetailsProps) {
     };
 
     if (isSuccess) {
-        return <Redirect to="/UserDetails" />;
+        return <Redirect to="/" />;
     }
 
     return (
@@ -84,8 +97,10 @@ function UserDetails({ classes }: UserDetailsProps) {
                     <Box mt={2}>
 
                         <FormField
+                            errors={error?.response?.data}
+
                             name="firstName"
-                            label={user?.firstName}
+                            label="First Name"
                             defaultValue={user?.firstName}
 
                             autoComplete={user?.firstName}
@@ -93,8 +108,10 @@ function UserDetails({ classes }: UserDetailsProps) {
 
                         />
                         <FormField
+                            errors={error?.response?.data}
+
                             name="lastName"
-                            label={user?.lastName}
+                            label="Last Name"
                             defaultValue={user?.lastName}
 
 
@@ -102,8 +119,10 @@ function UserDetails({ classes }: UserDetailsProps) {
                             onChange={setLastName}
                         />
                         <FormField
+                            errors={error?.response?.data}
+
                             name="addressLine1"
-                            label={user?.addressLine1}
+                            label="Address Line 1"
                             defaultValue={user?.addressLine1}
 
 
@@ -111,8 +130,10 @@ function UserDetails({ classes }: UserDetailsProps) {
                             onChange={setAddressLine1}
                         />
                         <FormField
+                            errors={error?.response?.data}
+
                             name="addressLine2"
-                            label={user?.addressLine2}
+                            label="Address Line 2"
                             defaultValue={user?.addressLine2}
 
 
@@ -120,8 +141,10 @@ function UserDetails({ classes }: UserDetailsProps) {
                             onChange={setAddressLine2}
                         />
                         <FormField
+                            errors={error?.response?.data}
+
                             name="city"
-                            label={user?.city}
+                            label="City"
                             defaultValue={user?.city}
 
 
@@ -129,16 +152,20 @@ function UserDetails({ classes }: UserDetailsProps) {
                             onChange={setCity}
                         />
                         <FormField
+                            errors={error?.response?.data}
+
                             name="state"
-                            label={user?.state}
+                            label="State"
                             defaultValue={user?.state}
 
                             autoComplete={user?.state}
                             onChange={setState}
                         />
                         <FormField
+                            errors={error?.response?.data}
+
                             name="postalCode"
-                            label={user?.postalCode}
+                            label="Postal code"
                             defaultValue={user?.postalCode}
 
 
