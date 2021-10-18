@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from "react";
-import { Redirect } from "react-router-dom";
 import {Person} from "@material-ui/icons";
 
 import { useMutation } from "react-query";
@@ -23,7 +22,7 @@ import logo from "../../assets/logo.svg";
 
 function UserDetails({ classes }: UserDetailsProps) {
     const {user} = useContext(GlobalContext);
-    const { isLoading, mutate, isSuccess, error } = useMutation(updateUser);
+    const { isLoading, mutate, isSuccess, error} = useMutation(updateUser);
 
 
     const [firstName, setFirstName] = useState("");
@@ -57,10 +56,15 @@ function UserDetails({ classes }: UserDetailsProps) {
             state,
             postalCode,
         });
+
     };
 
+
+
+
     if (isSuccess) {
-        return <Redirect to="/" />;
+        window.location.reload(false);
+
     }
 
     return (
