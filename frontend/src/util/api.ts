@@ -205,3 +205,7 @@ export const registerSeller = makeTypedAPICall<RegisterAsSellerType, unknown>(
 export const getSellers = makeTypedAPICall<unknown, User[]>(() =>
   api.get(getRouteURL("admins", "inspect-sellers"))
 );
+
+export const viewTransactions = makeTypedAPICall<unknown, unknown>(() =>
+  api.get(getRouteURL("orders", "transactions"))
+);
