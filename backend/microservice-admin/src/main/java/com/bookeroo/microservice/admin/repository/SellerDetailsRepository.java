@@ -18,6 +18,6 @@ public interface SellerDetailsRepository extends JpaRepository<SellerDetails, Lo
     List<SellerDetails> findAllByUser_RoleAndUser_RoleNot(String role, String roleNot);
 
     @Transactional
-    void deleteByUser_Id(long id);
+    void deleteById(long id);
 
 }

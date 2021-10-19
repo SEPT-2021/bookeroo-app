@@ -4,11 +4,14 @@ import com.bookeroo.microservice.admin.exception.SellerNotFoundException;
 import com.bookeroo.microservice.admin.exception.UserNotFoundException;
 import com.bookeroo.microservice.admin.model.User;
 import com.bookeroo.microservice.admin.model.User.UserRole;
+import com.bookeroo.microservice.admin.repository.SellerDetailsRepository;
 import com.bookeroo.microservice.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service layer for the {@link User} JPA entity.
@@ -17,23 +20,24 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SellerDetailsRepository sellerDetailsRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, SellerDetailsRepository sellerDetailsRepository) {
         this.userRepository = userRepository;
+        this.sellerDetailsRepository = sellerDetailsRepository;
     }
 
     public User getUserById(long id) throws UserNotFoundException {
-        User user;
-        if ((user = userRepository.findById(id)) == null)
-            throw new UserNotFoundException(String.format("User by id %d not found", id));
+        Optional<User> user = userRepository.findById(id);
+        user.orElseThrow(() -> new UserNotFoundException(String.format("User by id %d not found", id)));
 
-        return user;
+        return user.get();
     }
 
     public User getSellerById(long id) throws SellerNotFoundException {
-        User user;
-        if ((user = userRepository.findById(id)) == null || !user.getRole().contains(UserRole.SELLER.name()))
+        User user = getUserById(id);
+        if (!user.getRole().contains(UserRole.SELLER.name()))
             throw new UserNotFoundException(String.format("Seller by id %d not found", id));
 
         return user;
@@ -43,6 +47,12 @@ public class UserService {
         User user = getUserById(id);
         user.setRole("ROLE_" + UserRole.SELLER.name());
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void rejectSeller(long id) {
+        User user = getUserById(id);
+        sellerDetailsRepository.deleteById(user.getId());
     }
 
     public User getUserByUsername(String username) throws UserNotFoundException {
