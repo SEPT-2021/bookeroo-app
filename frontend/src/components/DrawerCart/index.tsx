@@ -3,7 +3,7 @@ import { Badge, Button, Drawer, Grid, IconButton } from "@material-ui/core";
 import styled from "styled-components";
 import { ShoppingCartOutlined } from "@material-ui/icons";
 import { Box, BoxProps } from "@mui/material";
-import CartItem from "../CartItem/CartItem";
+import CartItem from "../CartItem";
 import Link from "../../util/Link";
 import { BookItemType } from "../../util/types";
 import { GlobalContext } from "../GlobalContext";

@@ -8,7 +8,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
-import Link from "../util/Link";
+import Link from "../../util/Link";
 
 function NavBarDropDown({ classes }: NavBarDropDownProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

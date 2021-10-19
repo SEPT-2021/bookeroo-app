@@ -1,9 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
-import BookCard from "./BookCard";
-import useWindowPosition from "../hook/useWindowPosition";
-import { BookItemType } from "../util/types";
+import BookCard from "../Books";
+import useWindowPosition from "../../hook/useWindowPosition";
+import { BookItemType } from "../../util/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {

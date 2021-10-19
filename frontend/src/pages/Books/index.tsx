@@ -5,7 +5,7 @@ import styled from "styled-components";
 import DrawerCart from "../../components/DrawerCart";
 import { getBookBySearchTerm } from "../../util/api";
 import BookList from "../../components/BookList";
-import SearchBar from "../../components/searchBar";
+import SearchBar from "../../components/SearchBar";
 import { GlobalContext } from "../../components/GlobalContext";
 
 const Wrapper = styled.div`

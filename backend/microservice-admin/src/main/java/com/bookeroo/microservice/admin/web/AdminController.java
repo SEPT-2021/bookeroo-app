@@ -63,7 +63,8 @@ public class AdminController {
 
     @PostMapping("/reject-seller/{id}")
     public ResponseEntity<?> rejectSeller(@PathVariable long id) {
-        return new ResponseEntity<>(userService.rejectSeller(id), HttpStatus.OK);
+        sellerDetailsService.rejectSeller(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-users/{id}")

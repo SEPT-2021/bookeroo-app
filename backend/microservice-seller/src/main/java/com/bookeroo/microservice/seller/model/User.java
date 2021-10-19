@@ -1,5 +1,7 @@
 package com.bookeroo.microservice.seller.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -28,8 +30,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
+    @JsonManagedReference
     private SellerDetails sellerDetails;
     @NotBlank(message = "Username cannot be blank")
     @Email(message = "Username needs to be an email address")

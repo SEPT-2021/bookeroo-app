@@ -1,5 +1,7 @@
 package com.bookeroo.microservice.admin.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,7 @@ public class SellerDetails {
     @MapsId
     @JoinColumn
     @NotNull(message = "User cannot be null")
+    @JsonBackReference
     private User user;
     @NotBlank(message = "ABN cannot be blank")
     private String abn;

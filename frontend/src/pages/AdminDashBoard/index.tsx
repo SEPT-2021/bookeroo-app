@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   CircularProgress,
@@ -23,9 +23,10 @@ import {
   banUnBanUser,
   deleteUserByID,
   getAllUsers,
+  getSellers,
   rejectSeller,
 } from "../../util/api";
-import { Role, User } from "../../components/GlobalContext";
+import { User } from "../../components/GlobalContext";
 
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -176,18 +177,20 @@ function UserRow({
 }
 
 function UsersList() {
-  const [sellers, setSellers] = useState([] as User[]);
   const {
     data: sampleUsers,
     isLoading,
     error,
     refetch,
   } = useQuery("users", getAllUsers);
-  useEffect(() => {
-    setSellers(sampleUsers?.filter((u) => u.role !== Role.ROLE_SELLER) || []);
-  }, [sampleUsers]);
 
-  if (isLoading) {
+  const {
+    data: sellers,
+    isLoading: isLoadingSellers,
+    refetch: refetchSellers,
+  } = useQuery("admins", getSellers);
+
+  if (isLoadingSellers || isLoading) {
     return <LinearProgress style={{ marginTop: "80px" }} />;
   }
   if (error) {
@@ -202,7 +205,10 @@ function UsersList() {
             <UserRow
               user={user}
               key={user.id}
-              onChange={refetch}
+              onChange={() => {
+                refetchSellers();
+                refetch();
+              }}
               mode="banUnban"
             />
           ))
@@ -214,14 +220,14 @@ function UsersList() {
         Approve/Reject Sellers
       </Typography>
       <List>
-        {sellers.length ? (
-          sellers?.map((user) => (
+        {sellers?.length ? (
+          sellers.map((user) => (
             <UserRow
               user={user}
               key={user.id}
               mode="approveReject"
               onChange={() => {
-                setSellers(sellers.filter((s) => s.id !== user.id));
+                refetchSellers();
                 refetch();
               }}
             />

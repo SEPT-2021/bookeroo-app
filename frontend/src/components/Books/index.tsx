@@ -17,10 +17,10 @@ import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
 import { CardActionArea } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import { BookItemType } from "../util/types";
-import { GlobalContext, Role } from "./GlobalContext";
-import { deleteBookById } from "../util/api";
-import Link from "../util/Link";
+import { BookItemType } from "../../util/types";
+import { GlobalContext, Role } from "../GlobalContext";
+import { deleteBookById } from "../../util/api";
+import Link from "../../util/Link";
 
 const useStyles = makeStyles((theme) => ({
   card: {
