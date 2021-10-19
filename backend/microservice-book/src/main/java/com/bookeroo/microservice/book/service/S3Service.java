@@ -51,8 +51,7 @@ public class S3Service {
 
     public String uploadFile(URL fileUrl, String fileName) throws IOException {
         BufferedInputStream inputStream = new BufferedInputStream(fileUrl.openStream());
-        File file = new File(getCleanFileName(fileName)
-                + "." + StringUtils.getFilenameExtension(fileUrl.getFile()));
+        File file = new File(getCleanFileName(fileName) + "." + "jpg");
         FileOutputStream outputStream = new FileOutputStream(file);
 
         byte[] buffer = new byte[1024];

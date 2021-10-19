@@ -33,8 +33,4 @@ public class SellerDetailsService {
         return sellers;
     }
 
-    public void rejectSeller(long id) {
-        sellerDetailsRepository.deleteByUser_Id(id);
-    }
-
 }
