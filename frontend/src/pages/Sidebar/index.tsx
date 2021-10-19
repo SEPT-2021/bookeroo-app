@@ -4,6 +4,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import RegisterAsASeller from "../RegisterAsASeller";
+import UserDetails from "../UserDetails";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,7 +70,7 @@ export default function VerticalTabs() {
         <Tab label="Delete Account" {...a11yProps(4)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        # MAT PAGE
+        <UserDetails />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <RegisterAsASeller />
