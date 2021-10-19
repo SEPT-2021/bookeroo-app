@@ -38,4 +38,10 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<?> handleSellerExists(SellerExistsException exception) {
+        SellerExistsResponse exceptionResponse = new SellerExistsResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
 }

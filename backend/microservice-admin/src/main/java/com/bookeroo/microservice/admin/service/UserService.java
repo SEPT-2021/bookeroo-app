@@ -45,12 +45,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User rejectSeller(long id) {
-        // TODO emailClient.send(user.getUsername(), "Seller request rejected", "Cause ...");
-
-        return null;
-    }
-
     public User getUserByUsername(String username) throws UserNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->

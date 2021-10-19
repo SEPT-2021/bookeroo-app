@@ -32,7 +32,7 @@ export interface User {
   enabled: boolean;
   createdAt: string;
   updatedAt: string | null;
-  phonenumber: string
+  phonenumber: string;
 }
 
 interface GlobalContextType {

@@ -12,9 +12,9 @@ import {
 } from "@material-ui/core";
 import { Person } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-import logo from "../assets/logo.svg";
-import Link from "../util/Link";
-import { GlobalContext, Role } from "./GlobalContext";
+import logo from "../../assets/logo.svg";
+import Link from "../../util/Link";
+import { GlobalContext, Role } from "../GlobalContext";
 
 function NavBar({ classes }: NavBarProps) {
   const { user, signOut } = useContext(GlobalContext);
@@ -48,9 +48,14 @@ function NavBar({ classes }: NavBarProps) {
           {user ? (
             <Box display="flex" alignItems="center">
               <Person />
-                <Link to="/UserDetails">
-                    <Button>  <Typography variant="subtitle2">{user?.firstName}</Typography> </Button>
-                </Link>
+              <Link to="/UserDetails">
+                <Button>
+                  {" "}
+                  <Typography variant="subtitle2">
+                    {user?.firstName}
+                  </Typography>{" "}
+                </Button>
+              </Link>
               <Button variant="contained" onClick={onSignOut}>
                 Sign out
               </Button>
