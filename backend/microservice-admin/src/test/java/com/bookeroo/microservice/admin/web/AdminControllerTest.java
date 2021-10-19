@@ -225,8 +225,7 @@ class AdminControllerTest {
                         .header(AUTHORIZATION_HEADER, JWT_SCHEME + token))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        User responseBody = objectMapper.readValue(response, User.class);
-        assertNotEquals(responseBody.getRole(), User.UserRole.SELLER.name);
+        assertNotEquals(userRepository.getById(seller.getId()).getRole(), User.UserRole.SELLER.name);
         assertFalse(sellerDetailsRepository.findById(sellerDetails.getId()).isPresent());
     }
 

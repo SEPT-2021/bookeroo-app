@@ -129,9 +129,14 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/transactions/{buyerId}")
-    public ResponseEntity<?> getTransactionsByBuyer(@PathVariable long buyerId) {
-        return new ResponseEntity<>(transactionService.getTransactionsByBuyer(buyerId), HttpStatus.OK);
+    @GetMapping("/transactions")
+    public ResponseEntity<?> getTransactionsByBuyer(
+            @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        String jwt = tokenHeader.substring(JWT_SCHEME.length());
+        User buyer = userRepository.getByUsername(jwtTokenProvider.extractUsername(jwt));
+        return new ResponseEntity<>(transactionService.getTransactionsByBuyer(buyer.getId()), HttpStatus.OK);
     }
 
 }
