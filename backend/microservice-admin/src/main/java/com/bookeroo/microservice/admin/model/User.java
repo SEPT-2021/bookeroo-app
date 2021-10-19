@@ -1,11 +1,14 @@
 package com.bookeroo.microservice.admin.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * User JPA entity to represent the user data model.
@@ -28,8 +31,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @PrimaryKeyJoinColumn
+    @JsonManagedReference(value = "User_SellerDetails")
     private SellerDetails sellerDetails;
     @NotBlank(message = "Username cannot be blank")
     @Email(message = "Username needs to be an email address")
@@ -201,6 +205,51 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = new Date();
+    }
+
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        User user = (User) object;
+
+        if (id != user.id) return false;
+        if (enabled != user.enabled) return false;
+        if (!Objects.equals(sellerDetails, user.sellerDetails)) return false;
+        if (!username.equals(user.username)) return false;
+        if (!password.equals(user.password)) return false;
+        if (!firstName.equals(user.firstName)) return false;
+        if (!lastName.equals(user.lastName)) return false;
+        if (!addressLine1.equals(user.addressLine1)) return false;
+        if (!addressLine2.equals(user.addressLine2)) return false;
+        if (!city.equals(user.city)) return false;
+        if (!state.equals(user.state)) return false;
+        if (!postalCode.equals(user.postalCode)) return false;
+        if (!phoneNumber.equals(user.phoneNumber)) return false;
+        return role.equals(user.role);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (sellerDetails != null ? sellerDetails.hashCode() : 0);
+        result = 31 * result + username.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + addressLine1.hashCode();
+        result = 31 * result + addressLine2.hashCode();
+        result = 31 * result + city.hashCode();
+        result = 31 * result + state.hashCode();
+        result = 31 * result + postalCode.hashCode();
+        result = 31 * result + phoneNumber.hashCode();
+        result = 31 * result + role.hashCode();
+        result = 31 * result + (enabled ? 1 : 0);
+        result = 31 * result + createdAt.hashCode();
+        result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+        return result;
     }
 
     @Override

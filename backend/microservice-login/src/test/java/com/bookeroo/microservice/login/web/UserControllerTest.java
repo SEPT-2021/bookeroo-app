@@ -25,10 +25,8 @@ class UserControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     UserService userService;
 
