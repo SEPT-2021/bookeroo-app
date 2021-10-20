@@ -4,12 +4,10 @@ import com.bookeroo.microservice.book.exception.BookFormDataValidationException;
 import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.exception.S3UploadFailureException;
 import com.bookeroo.microservice.book.exception.UserNotFoundException;
-import com.bookeroo.microservice.book.model.Book;
-import com.bookeroo.microservice.book.model.BookFormData;
-import com.bookeroo.microservice.book.model.Listing;
-import com.bookeroo.microservice.book.model.User;
+import com.bookeroo.microservice.book.model.*;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import com.bookeroo.microservice.book.repository.ListingRepository;
+import com.bookeroo.microservice.book.repository.ReviewRepository;
 import com.bookeroo.microservice.book.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,16 +28,19 @@ public class BookService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final ListingRepository listingRepository;
+    private final ReviewRepository reviewRepository;
     private final S3Service s3Service;
 
     @Autowired
     public BookService(BookRepository bookRepository,
                        UserRepository userRepository,
                        ListingRepository listingRepository,
+                       ReviewRepository reviewRepository,
                        S3Service s3Service) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
         this.listingRepository = listingRepository;
+        this.reviewRepository = reviewRepository;
         this.s3Service = s3Service;
     }
 
@@ -136,6 +137,19 @@ public class BookService {
             throw new BookNotFoundException(String.format("Book by id %s not found", id));
 
         bookRepository.deleteById(id);
+    }
+
+    public Review addReview(long bookId, Review review) {
+        Book book = getBook(bookId);
+        review.setBook(book);
+        Review saved = reviewRepository.save(review);
+
+        // Fetch updated
+        book = getBook(bookId);
+        book.setRating(String.valueOf(reviewRepository.getAverageByBook_Id(bookId)));
+        bookRepository.save(book);
+
+        return review;
     }
 
     public List<Book> searchBookByTitle(String title) {

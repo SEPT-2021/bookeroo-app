@@ -72,6 +72,10 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "Book_Listing")
     private List<Listing> listings;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "Book_Review")
+    private List<Review> reviews;
+    private String rating = "Not yet rated";
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
@@ -151,6 +155,22 @@ public class Book {
 
     public void setListings(List<Listing> listings) {
         this.listings = listings;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public Date getCreatedAt() {
