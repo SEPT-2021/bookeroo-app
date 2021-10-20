@@ -21,6 +21,11 @@ public class Review {
     @JoinColumn(name = "book_id")
     @JsonBackReference(value = "Book_Review")
     private Book book;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "User_Review")
+    private User user;
+    private String userFullName;
     @Size(max = 280, message = "Text must not be longer than 280 characters")
     private String text;
     private int rating;
@@ -42,6 +47,22 @@ public class Review {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public void setUserFullName(String reviewer) {
+        this.userFullName = reviewer;
     }
 
     public String getText() {

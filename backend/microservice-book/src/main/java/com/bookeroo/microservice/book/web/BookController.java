@@ -95,13 +95,19 @@ public class BookController {
     }
 
     @PostMapping("/{id}/review")
-    public ResponseEntity<?> postReview(@PathVariable long id, @Valid @RequestBody Review review, BindingResult result) {
+    public ResponseEntity<?> postReview(@PathVariable long id,
+                                        @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
+                                        @Valid @RequestBody Review review, BindingResult result) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
         reviewValidator.validate(review, result);
         ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
         if (errorMap != null)
             return errorMap;
 
-        return new ResponseEntity<>(bookService.addReview(id, review), HttpStatus.OK);
+        String username = jwtTokenProvider.extractUsername(tokenHeader.substring(JWT_SCHEME.length()));
+        return new ResponseEntity<>(bookService.addReview(id, username, review), HttpStatus.OK);
     }
 
     @GetMapping

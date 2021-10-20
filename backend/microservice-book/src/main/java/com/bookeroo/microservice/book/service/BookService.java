@@ -82,6 +82,7 @@ public class BookService {
 
         Listing listing = new Listing();
         listing.setUser(user.get());
+        listing.setUserFullName(user.get().getFirstName() + " " + user.get().getFirstName());
         listing.setBook(book);
         listing.setPrice(formData.getPrice());
         listing.setBookCondition(formData.getCondition().name());
@@ -139,9 +140,14 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    public Review addReview(long bookId, Review review) {
+    public Review addReview(long bookId, String username, Review review) {
         Book book = getBook(bookId);
+        Optional<User> user = userRepository.findByUsername(username);
+        user.orElseThrow(() -> new UserNotFoundException(String.format("User by username %s not found", username)));
+
         review.setBook(book);
+        review.setUser(user.get());
+        review.setUserFullName(user.get().getFirstName() + " " + user.get().getFirstName());
         Review saved = reviewRepository.save(review);
 
         // Fetch updated
@@ -149,7 +155,7 @@ public class BookService {
         book.setRating(String.valueOf(reviewRepository.getAverageByBook_Id(bookId)));
         bookRepository.save(book);
 
-        return review;
+        return saved;
     }
 
     public List<Book> searchBookByTitle(String title) {

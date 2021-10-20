@@ -62,6 +62,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "User_Listing")
     private List<Listing> listings;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "User_Review")
+    private List<Review> reviews;
     private Date createdAt;
     private Date updatedAt;
 
@@ -178,6 +181,14 @@ public class User {
 
     public void setListings(List<Listing> listings) {
         this.listings = listings;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public Date getCreatedAt() {
