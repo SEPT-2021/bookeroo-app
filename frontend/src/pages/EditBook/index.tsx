@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -20,14 +20,8 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import {
-  CircularProgress,
-  IconButton,
-  LinearProgress,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
-import { Bookmark, Delete } from "@material-ui/icons";
+import { LinearProgress, withStyles, WithStyles } from "@material-ui/core";
+import { Bookmark } from "@material-ui/icons";
 import { deleteBookById, editBook, findBookById } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";

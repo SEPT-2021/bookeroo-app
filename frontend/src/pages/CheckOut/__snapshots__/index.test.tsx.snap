@@ -9,7 +9,7 @@ exports[`CheckOut matches snapshot render CheckOut 1`] = `
       class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-tn5ix5-MuiGrid-root"
     >
       <div
-        class="MuiBox-root css-tkshk9"
+        class="MuiBox-root css-1jc04hb"
       >
         <main
           class="MuiContainer-root MuiContainer-maxWidthSm css-nicjba-MuiContainer-root"
@@ -570,7 +570,7 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
       class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-tn5ix5-MuiGrid-root"
     >
       <div
-        class="MuiBox-root css-tkshk9"
+        class="MuiBox-root css-1jc04hb"
       >
         <main
           class="MuiContainer-root MuiContainer-maxWidthSm css-nicjba-MuiContainer-root"
