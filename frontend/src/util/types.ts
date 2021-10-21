@@ -16,11 +16,40 @@ export type BookItemType = {
   author: string;
   pageCount: string;
   isbn: string;
+  price: number;
   description: string;
   cover: string;
-  price: number;
   amount: number;
+  listings: Array<Listing>;
+  reviews: unknown[];
+  bookCategory: BookCategory;
 };
+
+export interface Listing {
+  id: number;
+  userFullName: string | null;
+  price: string;
+  bookCondition: BookCondition;
+  available: boolean;
+}
+
+export enum BookCondition {
+  SPECULATIVE_FICTION = "SPECULATIVE_FICTION",
+}
+
+export enum BookCategory {
+  VERY_GOOD = "VERY_GOOD",
+}
+
+export interface AddEditBookType {
+  title: string;
+  author: string;
+  pageCount: string;
+  isbn: string;
+  category: string;
+  description: string;
+  coverFile: File | unknown;
+}
 
 export type DataItemType = {
   book: BookItemType;

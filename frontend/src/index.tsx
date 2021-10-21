@@ -21,6 +21,7 @@ import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
 import UsersList from "./pages/AdminDashBoard/UsersList";
 import SingleBook from "./pages/SingleBook";
+import EditBook from "./pages/EditBook";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,9 @@ ReactDOM.render(
               <Route path="/addBook">
                 <AddBook />
               </Route>
-
+              <Route path="/editBook/:id">
+                <EditBook />
+              </Route>
               <Route path="/book/:id">
                 <SingleBook />
               </Route>

@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { Add, ArrowBack } from "@material-ui/icons";
-import { Button, LinearProgress } from "@material-ui/core";
+import { Add, ArrowBack, Edit } from "@material-ui/icons";
+import { Button, IconButton, LinearProgress } from "@material-ui/core";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
 import { GlobalContext } from "../../components/GlobalContext";
@@ -32,11 +32,18 @@ function SingleBook() {
     <>
       <DrawerCart />
       <Container sx={{ marginTop: "100px" }}>
-        <Link to="/allBooks">
-          <Button color="primary" startIcon={<ArrowBack />}>
-            Back to All Books
-          </Button>
-        </Link>
+        <Box display="flex" justifyContent="space-between" mr={5}>
+          <Link to="/allBooks">
+            <Button color="primary" startIcon={<ArrowBack />}>
+              Back to All Books
+            </Button>
+          </Link>
+          <Link to={`/editBook/${book.id}`}>
+            <IconButton color="secondary">
+              <Edit />
+            </IconButton>
+          </Link>
+        </Box>
         <Grid container spacing={8}>
           <Grid item md={4}>
             <img

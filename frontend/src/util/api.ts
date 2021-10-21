@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import type { User } from "../components/GlobalContext";
-import { BookItemType, CartType, TokenProps } from "./types";
+import { AddEditBookType, BookItemType, CartType, TokenProps } from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
@@ -62,17 +62,7 @@ export const loginUser = makeTypedAPICall<
 >((args) => api.post(getRouteURL("users", "login"), args));
 
 export const addBook = makeTypedAPICall<
-  {
-    title: string;
-    author: string;
-    pageCount: string;
-    isbn: string;
-    price: string;
-    condition: string;
-    category: string;
-    description: string;
-    coverFile: File | unknown;
-  },
+  AddEditBookType & { price: string; condition: string },
   unknown
 >((args) => {
   const data = new FormData();
@@ -90,6 +80,19 @@ export const addBook = makeTypedAPICall<
     headers: {
       "Content-Type": `multipart/form-data`,
     },
+  });
+});
+export const editBook = makeTypedAPICall<
+  AddEditBookType & { id: string },
+  unknown
+>(({ title, author, category, id, description, isbn, pageCount }) => {
+  return api.put(getRouteURL("books", id), {
+    title,
+    author,
+    category,
+    description,
+    isbn,
+    pageCount,
   });
 });
 
