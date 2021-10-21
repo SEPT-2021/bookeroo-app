@@ -21,6 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 import { withStyles, WithStyles } from "@material-ui/core";
+import { Bookmark } from "@material-ui/icons";
 import { addBook } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
@@ -121,7 +122,9 @@ function AddBook({ classes }: AddBookProps) {
       justifyContent="center"
     >
       <div className={classes.paper}>
-        <Avatar className={classes.avatar} />
+        <Avatar className={classes.avatar}>
+          <Bookmark />
+        </Avatar>
         <Typography component="h1" variant="h5">
           Add A Book
         </Typography>

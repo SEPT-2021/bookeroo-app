@@ -37,6 +37,11 @@ const theme = createTheme({
           color: "white",
         },
       },
+      containedSecondary: {
+        "& span": {
+          color: "white",
+        },
+      },
       text: {
         "& span": {
           color: "black",

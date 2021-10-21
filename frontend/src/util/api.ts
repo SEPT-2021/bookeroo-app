@@ -62,7 +62,11 @@ export const loginUser = makeTypedAPICall<
 >((args) => api.post(getRouteURL("users", "login"), args));
 
 export const addBook = makeTypedAPICall<
-  AddEditBookType & { price: string; condition: string },
+  AddEditBookType & {
+    price: string;
+    condition: string;
+    coverFile: File | unknown;
+  },
   unknown
 >((args) => {
   const data = new FormData();
@@ -83,7 +87,7 @@ export const addBook = makeTypedAPICall<
   });
 });
 export const editBook = makeTypedAPICall<
-  AddEditBookType & { id: string },
+  AddEditBookType & { id: string; cover?: string },
   unknown
 >(({ title, author, category, id, description, isbn, pageCount }) => {
   return api.put(getRouteURL("books", id), {

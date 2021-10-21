@@ -48,7 +48,6 @@ export interface AddEditBookType {
   isbn: string;
   category: string;
   description: string;
-  coverFile: File | unknown;
 }
 
 export type DataItemType = {

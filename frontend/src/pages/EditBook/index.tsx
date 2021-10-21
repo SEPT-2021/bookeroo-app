@@ -20,8 +20,15 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import { LinearProgress, withStyles, WithStyles } from "@material-ui/core";
-import { editBook, findBookById } from "../../util/api";
+import {
+  CircularProgress,
+  IconButton,
+  LinearProgress,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core";
+import { Bookmark, Delete } from "@material-ui/icons";
+import { deleteBookById, editBook, findBookById } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
 
@@ -35,13 +42,20 @@ function EditBook({ classes }: AddBookProps) {
   const [author, setAuthor] = useState("");
   const [isbn, setIsbn] = useState("");
   const [pageCount, setPageCount] = useState("");
-  const [coverFile, setCoverFile] = useState<File>();
-  const [isCoverFilePicked, setIsCoverFilePicked] = useState(false);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [openCategory, setOpenCategory] = useState(false);
-  const [openCondition, setOpenCondition] = useState(false);
-  const { mutate, isSuccess, error, isLoading } = useMutation(editBook);
+  const {
+    mutate: editMutate,
+    isSuccess: isEditSuccess,
+    error,
+    isLoading: isEditLoading,
+  } = useMutation(editBook);
+  const {
+    mutate: deleteMutate,
+    isLoading: isDeleteLoading,
+    isSuccess: isDeleteSuccess,
+  } = useMutation(deleteBookById);
 
   useEffect(() => {
     if (book) {
@@ -57,7 +71,7 @@ function EditBook({ classes }: AddBookProps) {
   }, [book]);
 
   const onSubmit = async () => {
-    mutate({
+    editMutate({
       id,
       title,
       author,
@@ -65,30 +79,18 @@ function EditBook({ classes }: AddBookProps) {
       isbn,
       category,
       description,
-      coverFile,
     });
   };
-
-  if (isSuccess) {
+  const isLoading = isDeleteLoading || isEditLoading;
+  if (isEditSuccess) {
     return <Redirect to={`/book/${id}`} />;
+  }
+  if (isDeleteSuccess) {
+    return <Redirect to="/allBooks" />;
   }
   if (isBookLoading) {
     return <LinearProgress style={{ marginTop: "80px" }} />;
   }
-  const makeData = async () => {
-    if (isCoverFilePicked) {
-      const formData = new FormData();
-      formData.append("image", coverFile as File);
-    }
-  };
-
-  const changeIsCoverFilePickedState = () => setIsCoverFilePicked(true);
-
-  const uploadCoverFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target || !event.target.files) return;
-    await setCoverFile(event.target.files[0]);
-    await makeData();
-  };
 
   const handleChangeBookCategory = (
     event: SelectChangeEvent<typeof category>
@@ -96,21 +98,8 @@ function EditBook({ classes }: AddBookProps) {
     setCategory(event.target.value || "");
   };
 
-  const handleClickOpenCondition = () => {
-    setOpenCondition(true);
-  };
-
   const handleClickOpenCategory = () => {
     setOpenCategory(true);
-  };
-
-  const handleCloseCondition = (
-    event: React.SyntheticEvent<unknown>,
-    reason?: string
-  ) => {
-    if (reason !== "backdropClick") {
-      setOpenCondition(false);
-    }
   };
 
   const handleCloseCategory = (
@@ -130,7 +119,9 @@ function EditBook({ classes }: AddBookProps) {
       justifyContent="center"
     >
       <div className={classes.paper}>
-        <Avatar className={classes.avatar} />
+        <Avatar className={classes.avatar}>
+          <Bookmark />
+        </Avatar>
         <Typography component="h1" variant="h5">
           Edit a Book
         </Typography>
@@ -250,6 +241,15 @@ function EditBook({ classes }: AddBookProps) {
             onClick={onSubmit}
           >
             Save Book
+          </LoadingButton>
+          <LoadingButton
+            loading={isLoading}
+            fullWidth
+            variant="contained"
+            color="secondary"
+            onClick={() => deleteMutate({ id: String(id) })}
+          >
+            Delete Book
           </LoadingButton>
 
           <Box mt={5}>

@@ -6,13 +6,13 @@ import { Add, ArrowBack, Edit } from "@material-ui/icons";
 import { Button, IconButton, LinearProgress } from "@material-ui/core";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
-import { GlobalContext } from "../../components/GlobalContext";
+import { GlobalContext, Role } from "../../components/GlobalContext";
 import DrawerCart from "../../components/DrawerCart";
 import Link from "../../util/Link";
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
-  const { addToCart } = useContext(GlobalContext);
+  const { addToCart, user } = useContext(GlobalContext);
   const {
     data: book,
     isLoading,
@@ -32,18 +32,11 @@ function SingleBook() {
     <>
       <DrawerCart />
       <Container sx={{ marginTop: "100px" }}>
-        <Box display="flex" justifyContent="space-between" mr={5}>
-          <Link to="/allBooks">
-            <Button color="primary" startIcon={<ArrowBack />}>
-              Back to All Books
-            </Button>
-          </Link>
-          <Link to={`/editBook/${book.id}`}>
-            <IconButton color="secondary">
-              <Edit />
-            </IconButton>
-          </Link>
-        </Box>
+        <Link to="/allBooks">
+          <Button color="primary" startIcon={<ArrowBack />}>
+            Back to All Books
+          </Button>
+        </Link>
         <Grid container spacing={8}>
           <Grid item md={4}>
             <img
@@ -71,6 +64,13 @@ function SingleBook() {
               >
                 Add to cart
               </Button>
+              {user?.role === Role.ROLE_ADMIN && (
+                <Link to={`/editBook/${book.id}`}>
+                  <IconButton color="secondary">
+                    <Edit />
+                  </IconButton>
+                </Link>
+              )}
             </Paper>
           </Grid>
         </Grid>
