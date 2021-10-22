@@ -209,3 +209,7 @@ export const getSellers = makeTypedAPICall<unknown, User[]>(() =>
 export const viewTransactions = makeTypedAPICall<unknown, unknown>(() =>
   api.get(getRouteURL("orders", "transactions"))
 );
+
+export const deleteUser = makeTypedAPICall<unknown, unknown>(() =>
+  api.delete(getRouteURL("users", ""))
+);

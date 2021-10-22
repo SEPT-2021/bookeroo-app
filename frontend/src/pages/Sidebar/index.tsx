@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import RegisterAsASeller from "../RegisterAsASeller";
 import UserDetails from "../UserDetails";
+import DeleteUser from "../DeleteUser";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -82,7 +83,7 @@ export default function VerticalTabs() {
         Item Four
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        <DeleteUser />
       </TabPanel>
     </Box>
   );
