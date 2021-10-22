@@ -1,12 +1,17 @@
 import axios, { AxiosResponse } from "axios";
-import type { User } from "../components/GlobalContext";
-import { AddEditBookType, BookItemType, CartType, TokenProps } from "./types";
+import {
+  AddEditBookType,
+  BookItemType,
+  CartType,
+  TokenProps,
+  User,
+} from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins" | "newsletter",
+  service: "books" | "listings" | "users" | "orders" | "admins" | "newsletter",
   route: string
 ) {
   const port = (() => {
@@ -15,6 +20,7 @@ function getRouteURL(
       case "newsletter":
         return 8080;
       case "books":
+      case "listings":
         return 8081;
       case "orders":
         return 8082;
@@ -113,6 +119,10 @@ export const deleteBookById = makeTypedAPICall<
   },
   unknown
 >((args) => api.delete(getRouteURL("books", args.id)));
+
+export const deleteListingById = makeTypedAPICall<{ id: string }, unknown>(
+  ({ id }) => api.delete(getRouteURL("listings", id))
+);
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {

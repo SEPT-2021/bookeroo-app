@@ -24,8 +24,8 @@ import {
   getAllUsers,
   rejectSeller,
 } from "../../util/api";
-import { Role, User } from "../../components/GlobalContext";
 import LinearLoading from "../../util/LinearLoading";
+import { Role, User } from "../../util/types";
 
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,

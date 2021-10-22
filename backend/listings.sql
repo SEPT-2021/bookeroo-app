@@ -1,0 +1,8 @@
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (35, 'NEW', '2021-10-22 14:54:24.569000', true, '85.68', null, null, 35, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (36, 'FINE', '2021-10-22 14:54:26.650000', true, '27.59', null, null, 36, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (37, 'FINE', '2021-10-22 14:54:28.148000', true, '81.06', null, null, 37, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (38, 'NEW', '2021-10-22 14:54:29.533000', true, '83.94', null, null, 38, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (39, 'POOR', '2021-10-22 14:54:31.924000', true, '6.30', null, null, 39, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (40, 'FINE', '2021-10-22 14:54:33.481000', true, '4.46', null, null, 40, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (41, 'VERY_GOOD', '2021-10-22 14:54:35.379000', true, '39.11', null, null, 41, 27);
+INSERT INTO listing.listing (id, book_condition, created_at, is_available, price, updated_at, user_full_name, book_id, user_id) VALUES (42, 'NEW', '2021-10-22 14:54:36.467000', true, '2.16', null, null, 42, 27);

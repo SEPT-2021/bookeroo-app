@@ -2,26 +2,21 @@ import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import {
-  ArrowBack,
-  Check,
-  Clear,
-  Edit,
-  ShoppingCartOutlined,
-} from "@material-ui/icons";
-import { Button, IconButton } from "@material-ui/core";
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import { ArrowBack, Edit } from "@material-ui/icons";
+import { Button } from "@material-ui/core";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
-import { GlobalContext, Role } from "../../components/GlobalContext";
+import { GlobalContext } from "../../components/GlobalContext";
 import DrawerCart from "../../components/DrawerCart";
 import Link from "../../util/Link";
 import { snakeCaseToNormalString } from "../../util/string-util";
 import LinearLoading from "../../util/LinearLoading";
+import ListingsTable from "./ListingsTable";
+import { Role } from "../../util/types";
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
-  const { addToCart, user } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
   const {
     data: book,
     isLoading,
@@ -33,49 +28,6 @@ function SingleBook() {
   if (isLoading || !book) {
     return <LinearLoading />;
   }
-  const listingCols: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 100 },
-    {
-      field: "userFullName",
-      headerName: "Seller Name",
-      width: 200,
-      valueFormatter: (val) => val.value || "No Name",
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      width: 150,
-      sortable: true,
-      valueFormatter: (val) => Number(val.value),
-    },
-    {
-      field: "bookCondition",
-      headerName: "Book Condition",
-      width: 200,
-      valueFormatter: ({ value }) =>
-        typeof value === "string" ? snakeCaseToNormalString(value) : value,
-    },
-    {
-      field: "available",
-      headerName: "Available",
-      width: 150,
-      renderCell: ({ value }) => (value ? <Check /> : <Clear />),
-    },
-    {
-      field: "",
-      headerName: "Add to Cart",
-      width: 150,
-      sortable: false,
-      renderCell: () => {
-        return (
-          <IconButton>
-            <ShoppingCartOutlined />
-          </IconButton>
-        );
-      },
-    },
-  ];
-  const listingRows: GridRowsProp = book.listings || [];
 
   return (
     <>
@@ -125,7 +77,7 @@ function SingleBook() {
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Listings
           </Typography>
-          <DataGrid columns={listingCols} rows={listingRows} />
+          <ListingsTable listings={book.listings || []} />
         </Box>
       </Container>
     </>
