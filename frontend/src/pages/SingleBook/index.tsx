@@ -90,24 +90,7 @@ function SingleBook() {
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Reviews
           </Typography>
-          <Reviews
-            reviews={[
-              {
-                text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi dignissimos maiores nisi porro totam. Consequatur dolores incidunt obcaecati repellendus similique.",
-                id: "AWD",
-                userId: "AWD",
-                userFullName: "AWDWDAWD",
-                rating: 5,
-              },
-              {
-                text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi dignissimos maiores nisi porro totam. Consequatur dolores incidunt obcaecati repellendus similique.",
-                id: "AWD",
-                userId: "AWD",
-                userFullName: "AWDWDAWD",
-                rating: 1,
-              },
-            ]}
-          />
+          <Reviews reviews={book.reviews || []} />
         </Box>
       </Container>
     </>

@@ -21,8 +21,8 @@ export type BookItemType = {
   description: string;
   cover: string;
   amount: number;
-  listings: Array<Listing>;
-  reviews: unknown[];
+  listings?: Array<Listing>;
+  reviews?: Review[];
   bookCategory: BookCategory;
 };
 
@@ -81,4 +81,11 @@ export interface User {
   enabled: boolean;
   createdAt: string;
   updatedAt: string | null;
+}
+
+export interface Review {
+  id: number;
+  text: string;
+  userFullName: string;
+  rating: number;
 }

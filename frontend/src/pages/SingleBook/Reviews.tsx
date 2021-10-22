@@ -1,16 +1,17 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
+  Avatar,
+  Box,
+  Divider,
   List,
   ListItem,
-  Divider,
-  ListItemText,
   ListItemAvatar,
-  Avatar,
+  ListItemText,
   Typography,
-  Box,
 } from "@material-ui/core";
 import { Rating } from "@mui/material";
+import { Review } from "../../util/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,13 +25,6 @@ const useStyles = makeStyles((theme) => ({
     display: "inline",
   },
 }));
-interface Review {
-  id: string;
-  text: string;
-  userFullName: string;
-  rating: number;
-  userId: string;
-}
 
 // Based on: https://github.com/gunasai/material-ui-comments/blob/master/src/components/Comment.js
 export default function Reviews({ reviews }: { reviews: Review[] }) {
