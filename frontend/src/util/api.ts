@@ -11,7 +11,14 @@ export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins" | "newsletter" | "sellers",
+  service:
+    | "books"
+    | "users"
+    | "orders"
+    | "admins"
+    | "newsletter"
+    | "sellers"
+    | "listings",
   route: string
 ) {
   const port = (() => {
@@ -19,7 +26,7 @@ function getRouteURL(
       case "users":
       case "newsletter":
         return 8080;
-      case "books":
+      case "books" || "listings":
         return 8081;
       case "orders":
         return 8082;
@@ -208,6 +215,10 @@ export const getSellers = makeTypedAPICall<unknown, User[]>(() =>
 
 export const viewTransactions = makeTypedAPICall<unknown, unknown>(() =>
   api.get(getRouteURL("orders", "transactions"))
+);
+
+export const viewListings = makeTypedAPICall<unknown, unknown>(() =>
+  api.get(getRouteURL("listings", "user"))
 );
 
 export const deleteUser = makeTypedAPICall<unknown, unknown>(() =>
