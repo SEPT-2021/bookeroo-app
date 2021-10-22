@@ -97,7 +97,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void inspectAllUsers() throws Exception {
+    void givenUsersPresent_whenRequested_returnAllNonAdminUsers() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
@@ -117,7 +117,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void inspectUser() throws Exception {
+    void givenUserPresent_whenGivenUserId_returnUser() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
@@ -133,7 +133,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void banUser() throws Exception {
+    void givenNonBannedUser_whenRequestedBan_banUser() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
@@ -148,8 +148,26 @@ class AdminControllerTest {
         assertFalse(responseBody.isEnabled());
     }
 
+
     @Test
-    void deleteUser() throws Exception {
+    void givenBannedUser_whenRequestedUnban_unbanUser() throws Exception {
+        User admin = setupAdmin();
+        admin = userRepository.save(admin);
+        String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
+        User user = setupUser();
+        user.setEnabled(false);
+        user = userRepository.save(user);
+
+        String response = mockMvc.perform(post("/api/admins/toggle-ban/" + user.getId())
+                        .header(AUTHORIZATION_HEADER, JWT_SCHEME + token))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        User responseBody = objectMapper.readValue(response, User.class);
+        assertTrue(responseBody.isEnabled());
+    }
+
+    @Test
+    void givenExistingUser_whenGivenUserId_deleteUser() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
@@ -165,32 +183,32 @@ class AdminControllerTest {
 
     @Test
     @Transactional
-    void inspectAllSellers() throws Exception {
+    void givenSellerRequests_whenRequested_returnAllSellerDetails() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
-        List<SellerDetails> sellerDetailsList = new ArrayList<>();
+        List<User> sellers = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             User seller = setupUser();
             seller = userRepository.save(seller);
+            sellers.add(seller);
 
             SellerDetails sellerDetails = setupSellerDetails();
             sellerDetails.setUser(seller);
-            sellerDetails = sellerDetailsRepository.save(sellerDetails);
-            sellerDetailsList.add(sellerDetails);
+            sellerDetailsRepository.save(sellerDetails);
         }
 
         String response = mockMvc.perform(get("/api/admins/inspect-sellers")
                         .header(AUTHORIZATION_HEADER, JWT_SCHEME + token))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        List<SellerDetails> responseBody = Arrays.asList(objectMapper.readValue(response, SellerDetails[].class));
-        assertTrue(responseBody.containsAll(sellerDetailsList));
+        List<User> responseBody = Arrays.asList(objectMapper.readValue(response, User[].class));
+        assertTrue(responseBody.containsAll(sellers) && !responseBody.contains(admin));
     }
 
     @Test
     @Transactional
-    void approveSeller() throws Exception {
+    void givenSellerRequest_whenRequestApproved_updateUserToSeller() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));
@@ -211,7 +229,7 @@ class AdminControllerTest {
 
     @Test
     @Transactional
-    void rejectSeller() throws Exception {
+    void givenSellerRequest_whenRequestRejected_keepUserAsIs() throws Exception {
         User admin = setupAdmin();
         admin = userRepository.save(admin);
         String token = jwtTokenProvider.generateToken(new CustomUserDetails(admin));

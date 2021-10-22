@@ -1,6 +1,5 @@
 package com.bookeroo.microservice.book.web;
 
-import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Listing;
 import com.bookeroo.microservice.book.model.User;
 import com.bookeroo.microservice.book.repository.UserRepository;
@@ -10,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.bookeroo.microservice.book.security.SecurityConstant.AUTHORIZATION_HEADER;
 import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEME;
@@ -47,6 +49,14 @@ public class ListingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/book")
+    public ResponseEntity<?> getBookForListing(@PathVariable long id) {
+        Listing listing = listingService.getById(id);
+        Map<String, Long> bookId = new HashMap<>();
+        bookId.put("id", listing.getBook().getId());
+        return new ResponseEntity<>(bookId, HttpStatus.OK);
+    }
+
     @GetMapping("/book/{id}")
     public ResponseEntity<?> getAllByBook(@PathVariable("id") long id) {
         return new ResponseEntity<>(listingService.getAllByBook(id), HttpStatus.OK);
@@ -55,16 +65,12 @@ public class ListingController {
     @GetMapping("/user")
     public ResponseEntity<?> getAllByUser(
         @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader) {
-        try {
-            if (tokenHeader == null)
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-            String jwt = tokenHeader.substring(JWT_SCHEME.length());
-            User user = userRepository.getByUsername(jwtTokenProvider.extractUsername(jwt));
-            return new ResponseEntity<>(listingService.getAllByUser(user.getId()), HttpStatus.OK);
-        } catch (BookNotFoundException exception) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        String jwt = tokenHeader.substring(JWT_SCHEME.length());
+        User user = userRepository.getByUsername(jwtTokenProvider.extractUsername(jwt));
+        return new ResponseEntity<>(listingService.getAllByUser(user.getId()), HttpStatus.OK);
     }
 
 }

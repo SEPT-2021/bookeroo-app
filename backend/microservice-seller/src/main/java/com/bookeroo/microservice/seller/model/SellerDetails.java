@@ -93,4 +93,26 @@ public class SellerDetails {
         this.updatedAt = new Date();
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        SellerDetails that = (SellerDetails) object;
+
+        if (id != that.id) return false;
+        if (!abn.equals(that.abn)) return false;
+        if (!businessName.equals(that.businessName)) return false;
+        return businessPhone.equals(that.businessPhone);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (abn != null ? abn.hashCode() : 0);
+        result = 31 * result + (businessName != null ? businessName.hashCode() : 0);
+        result = 31 * result + (businessPhone != null ? businessPhone.hashCode() : 0);
+        return result;
+    }
+
 }

@@ -116,4 +116,5 @@ public class SellerDetails {
         result = 31 * result + (businessPhone != null ? businessPhone.hashCode() : 0);
         return result;
     }
+
 }

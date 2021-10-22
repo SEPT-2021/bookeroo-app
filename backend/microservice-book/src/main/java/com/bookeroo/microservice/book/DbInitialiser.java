@@ -101,6 +101,7 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
 
                     Listing listing = new Listing();
                     listing.setUser(user);
+                    listing.setUserFullName(faker.funnyName().name());
                     listing.setBook(book);
                     listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
                     listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
