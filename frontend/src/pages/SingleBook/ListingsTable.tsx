@@ -74,5 +74,5 @@ export default function ListingsTable({ listings }: { listings: Listing[] }) {
         ]
       : []),
   ];
-  return <DataGrid columns={listingCols} rows={listings} />;
+  return <DataGrid autoHeight columns={listingCols} rows={listings} />;
 }

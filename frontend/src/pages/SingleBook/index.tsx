@@ -13,6 +13,7 @@ import { snakeCaseToNormalString } from "../../util/string-util";
 import LinearLoading from "../../util/LinearLoading";
 import ListingsTable from "./ListingsTable";
 import { Role } from "../../util/types";
+import Reviews from "./Reviews";
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
@@ -73,11 +74,34 @@ function SingleBook() {
           </Grid>
         </Grid>
 
-        <Box height={300} mt={3}>
+        <Box mt={3}>
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Listings
           </Typography>
           <ListingsTable listings={book.listings || []} />
+        </Box>
+        <Box height={300} mt={3}>
+          <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
+            Reviews
+          </Typography>
+          <Reviews
+            reviews={[
+              {
+                text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi dignissimos maiores nisi porro totam. Consequatur dolores incidunt obcaecati repellendus similique.",
+                id: "AWD",
+                userId: "AWD",
+                userFullName: "AWDWDAWD",
+                rating: 5,
+              },
+              {
+                text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi dignissimos maiores nisi porro totam. Consequatur dolores incidunt obcaecati repellendus similique.",
+                id: "AWD",
+                userId: "AWD",
+                userFullName: "AWDWDAWD",
+                rating: 1,
+              },
+            ]}
+          />
         </Box>
       </Container>
     </>
