@@ -27,10 +27,10 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline />
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <GlobalContextProvider>
           <BrowserRouter>
             <NavBar />

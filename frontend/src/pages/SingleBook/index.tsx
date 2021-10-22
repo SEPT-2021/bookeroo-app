@@ -1,9 +1,17 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Box, Container, Grid, Paper, Rating, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  Button,
+  CssBaseline,
+} from "@material-ui/core";
 import { ArrowBack, Edit } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
+import { Rating } from "@mui/material";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
 import { GlobalContext } from "../../components/GlobalContext";
@@ -33,7 +41,7 @@ function SingleBook() {
   return (
     <>
       <DrawerCart />
-      <Container sx={{ marginTop: "100px" }}>
+      <Container style={{ marginTop: "100px" }}>
         <Link to="/allBooks">
           <Button color="primary" startIcon={<ArrowBack />}>
             Back to All Books
@@ -48,7 +56,7 @@ function SingleBook() {
             />
           </Grid>
           <Grid item md={8} xs={12} sm={12}>
-            <Paper sx={{ width: "100%", height: "100%", padding: 3 }}>
+            <Paper style={{ width: "100%", height: "100%", padding: 3 }}>
               <Typography variant="h3">{book.title}</Typography>
               <Typography variant="h5" gutterBottom>
                 by {book.author}
@@ -86,7 +94,7 @@ function SingleBook() {
           </Typography>
           <ListingsTable listings={book.listings || []} />
         </Box>
-        <Box height={300} mt={3}>
+        <Box mt={3}>
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Reviews
           </Typography>
