@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
+import { Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
 import { CardActionArea } from "@mui/material";
 import { useHistory } from "react-router-dom";
@@ -34,13 +34,19 @@ const useStyles = makeStyles((theme) => ({
 type BookProps = {
   book: BookItemType;
   checked: boolean;
-  onCartClick: () => void;
 };
 
 export default function BookCard({
-  book: { cover: imageUrl, id, title, description, author, pageCount, price },
+  book: {
+    cover: imageUrl,
+    id,
+    title,
+    description,
+    author,
+    pageCount,
+    listings,
+  },
   checked,
-  onCartClick,
 }: BookProps) {
   const classes = useStyles();
   const link = `/book/${id}`;
@@ -86,14 +92,24 @@ export default function BookCard({
             <Typography variant="body2" color="textSecondary" component="p">
               Page Count: {pageCount}
               <br />
-              Price: {price}
+              {listings?.length ? (
+                <>
+                  Price:{" "}
+                  {listings
+                    .map((val) => val.price)
+                    .reduce((previousValue, currentValue) =>
+                      currentValue < previousValue
+                        ? currentValue
+                        : previousValue
+                    )}
+                </>
+              ) : (
+                "No stock"
+              )}
             </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites" onClick={onCartClick}>
-            <AddShoppingCart />
-          </IconButton>
           <Link to={link}>
             <IconButton aria-label="share">
               <Launch />

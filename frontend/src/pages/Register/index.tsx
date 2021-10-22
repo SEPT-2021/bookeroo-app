@@ -47,7 +47,7 @@ function Register({ classes }: RegisterProps) {
       password,
       firstName,
       lastName,
-      roles: Role.ROLE_USER,
+      role: Role.ROLE_USER,
       addressLine1,
       addressLine2,
       city,

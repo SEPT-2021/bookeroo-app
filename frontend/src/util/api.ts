@@ -50,7 +50,7 @@ export const registerUser = makeTypedAPICall<
     password: string;
     firstName: string;
     lastName: string;
-    roles: string;
+    role: string;
     addressLine1: string;
     addressLine2: string;
     city: string;
@@ -71,7 +71,7 @@ export const addBook = makeTypedAPICall<
   AddEditBookType & {
     price: string;
     condition: string;
-    coverFile: File | unknown;
+    coverFile?: File | unknown;
   },
   unknown
 >((args) => {
@@ -105,6 +105,13 @@ export const editBook = makeTypedAPICall<
     pageCount,
   });
 });
+
+export const reviewBook = makeTypedAPICall<
+  { text: string; rating: number; id: string },
+  unknown
+>(({ text, rating, id }) =>
+  api.post(getRouteURL("books", `${id}/review`), { text, rating })
+);
 
 export const findBookById = makeTypedAPICall<
   {

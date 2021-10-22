@@ -1,3 +1,6 @@
+import { MenuItem } from "@material-ui/core";
+import React from "react";
+
 export interface TokenProps {
   jwt: string;
 }
@@ -17,12 +20,10 @@ export type BookItemType = {
   pageCount: string;
   rating: number;
   isbn: string;
-  price: number;
   description: string;
   cover: string;
-  amount: number;
-  listings: Array<Listing>;
-  reviews: unknown[];
+  listings?: Array<Listing>;
+  reviews?: Review[];
   bookCategory: BookCategory;
 };
 
@@ -35,11 +36,15 @@ export interface Listing {
 }
 
 export enum BookCondition {
-  SPECULATIVE_FICTION = "SPECULATIVE_FICTION",
+  NEW = "NEW",
+  FINE = "FINE",
+  VERY_GOOD = "VERY_GOOD",
+  FAIR = "FAIR",
+  POOR = "POOR",
 }
 
 export enum BookCategory {
-  VERY_GOOD = "VERY_GOOD",
+  SPECULATIVE_FICTION = "SPECULATIVE_FICTION",
 }
 
 export interface AddEditBookType {
@@ -51,12 +56,8 @@ export interface AddEditBookType {
   description: string;
 }
 
-export type DataItemType = {
-  book: BookItemType;
-  quantity: number;
-};
 export type CartType = {
-  orderItems: DataItemType[];
+  orderItems: Listing[];
   shippingAddress?: ShippingItemType;
 };
 
@@ -81,4 +82,11 @@ export interface User {
   enabled: boolean;
   createdAt: string;
   updatedAt: string | null;
+}
+
+export interface Review {
+  id: number;
+  text: string;
+  userFullName: string;
+  rating: number;
 }

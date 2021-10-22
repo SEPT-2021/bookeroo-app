@@ -8,8 +8,13 @@ import React, {
 } from "react";
 import { useQuery } from "react-query";
 import { api, profile } from "../util/api";
-import { BookItemType, TokenProps, User } from "../util/types";
+import { BookItemType, Listing, TokenProps, User } from "../util/types";
 import useStickyState from "../util/useStickyState";
+
+export interface CartItem {
+  listing: Listing;
+  book: BookItemType;
+}
 
 interface GlobalContextType {
   user?: User;
@@ -20,9 +25,9 @@ interface GlobalContextType {
 
   cartOpen: boolean;
   setCartOpen: Dispatch<SetStateAction<boolean>>;
-  cartItems: BookItemType[];
+  cartItems: CartItem[];
 
-  addToCart(b: BookItemType): void;
+  addToCart(b: CartItem): void;
 
   removeFromCart(id: number): void;
 }
@@ -32,33 +37,23 @@ export const GlobalContext = createContext<GlobalContextType>({} as never);
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   const [token, setToken] = useState<string>();
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useStickyState<BookItemType[]>([], "cart");
-  const addToCart = (clickedItem: BookItemType) => {
+  const [cartItems, setCartItems] = useStickyState<CartItem[]>([], "cart");
+  const addToCart = (clickedItem: CartItem) => {
     setCartItems((prev) => {
       // 1. Is the item already added in the cart?
-      const isItemInCart = prev.find((item) => item.id === clickedItem.id);
+      const isItemInCart = prev.find(
+        (item) => item.listing.id === clickedItem.listing.id
+      );
 
       if (isItemInCart) {
-        return prev.map((item) =>
-          item.id === clickedItem.id
-            ? { ...item, amount: item.amount + 1 }
-            : item
-        );
+        return cartItems;
       }
       // First time the item is added
-      return [...prev, { ...clickedItem, amount: 1 }];
+      return [...prev, clickedItem];
     });
   };
   const removeFromCart = (id: number) => {
-    setCartItems((prev) =>
-      prev.reduce((ack, item) => {
-        if (item.id === id) {
-          if (item.amount === 1) return ack;
-          return [...ack, { ...item, amount: item.amount - 1 }];
-        }
-        return [...ack, item];
-      }, [] as BookItemType[])
-    );
+    setCartItems((prev) => prev.filter((l) => l.listing.id !== id));
   };
   const {
     data: userData,

@@ -1,9 +1,16 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Box, Container, Grid, Paper, Rating, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 import { ArrowBack, Edit } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
+import { Rating } from "@mui/material";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
 import { GlobalContext } from "../../components/GlobalContext";
@@ -14,6 +21,7 @@ import LinearLoading from "../../util/LinearLoading";
 import ListingsTable from "./ListingsTable";
 import { Role } from "../../util/types";
 import Reviews from "./Reviews";
+import AddListingDialog from "./AddListingDialog";
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
@@ -33,7 +41,7 @@ function SingleBook() {
   return (
     <>
       <DrawerCart />
-      <Container sx={{ marginTop: "100px" }}>
+      <Container style={{ marginTop: "100px" }}>
         <Link to="/allBooks">
           <Button color="primary" startIcon={<ArrowBack />}>
             Back to All Books
@@ -48,7 +56,7 @@ function SingleBook() {
             />
           </Grid>
           <Grid item md={8} xs={12} sm={12}>
-            <Paper sx={{ width: "100%", height: "100%", padding: 3 }}>
+            <Paper style={{ width: "100%", height: "100%", padding: 3 }}>
               <Typography variant="h3">{book.title}</Typography>
               <Typography variant="h5" gutterBottom>
                 by {book.author}
@@ -81,33 +89,22 @@ function SingleBook() {
         </Grid>
 
         <Box mt={3}>
-          <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
-            Listings
-          </Typography>
-          <ListingsTable listings={book.listings || []} />
+          <Box display="flex" alignItems="center" mb={2}>
+            <Typography
+              variant="h4"
+              style={{ fontWeight: "bold", marginRight: 20 }}
+            >
+              Listings
+            </Typography>
+            {user && <AddListingDialog book={book} />}
+          </Box>
+          <ListingsTable book={book} listings={book.listings || []} />
         </Box>
-        <Box height={300} mt={3}>
+        <Box mt={3}>
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Reviews
           </Typography>
-          <Reviews
-            reviews={[
-              {
-                text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi dignissimos maiores nisi porro totam. Consequatur dolores incidunt obcaecati repellendus similique.",
-                id: "AWD",
-                userId: "AWD",
-                userFullName: "AWDWDAWD",
-                rating: 5,
-              },
-              {
-                text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi dignissimos maiores nisi porro totam. Consequatur dolores incidunt obcaecati repellendus similique.",
-                id: "AWD",
-                userId: "AWD",
-                userFullName: "AWDWDAWD",
-                rating: 1,
-              },
-            ]}
-          />
+          <Reviews reviews={book.reviews || []} bookId={id} />
         </Box>
       </Container>
     </>
