@@ -37,3 +37,25 @@ export type RegisterAsSellerType = {
   businessName: string;
   businessPhone: string;
 };
+
+export type ListingType = {
+  id: string;
+  price: string;
+  bookCondition: string;
+};
+
+export type TransactionType = {
+  id: {
+    listingId: number;
+    buyerId: number;
+  };
+  listing: {
+    id: number;
+    userFullName: string;
+    price: string;
+    bookCondition: string;
+    createdAt: string;
+    updatedAt: string;
+    available: boolean;
+  };
+};
