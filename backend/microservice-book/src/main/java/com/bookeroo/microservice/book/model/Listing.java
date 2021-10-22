@@ -16,6 +16,7 @@ public class Listing {
     @JoinColumn(name = "user_id")
     @JsonBackReference(value = "User_Listing")
     private User user;
+    private String userFullName;
     @ManyToOne
     @JoinColumn(name = "book_id")
     @JsonBackReference(value = "Book_Listing")
@@ -45,6 +46,14 @@ public class Listing {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 
     public Book getBook() {

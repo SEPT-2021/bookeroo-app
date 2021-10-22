@@ -221,9 +221,9 @@ class AdminControllerTest {
         sellerDetails.setUser(seller);
         sellerDetails = sellerDetailsRepository.save(sellerDetails);
 
-        String response = mockMvc.perform(post("/api/admins/reject-seller/" + seller.getId())
+        mockMvc.perform(post("/api/admins/reject-seller/" + seller.getId())
                         .header(AUTHORIZATION_HEADER, JWT_SCHEME + token))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isOk());
 
         assertNotEquals(userRepository.getById(seller.getId()).getRole(), User.UserRole.SELLER.name);
         assertFalse(sellerDetailsRepository.findById(sellerDetails.getId()).isPresent());

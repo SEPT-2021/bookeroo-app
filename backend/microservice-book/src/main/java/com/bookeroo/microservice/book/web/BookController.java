@@ -2,11 +2,13 @@ package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.BookFormData;
+import com.bookeroo.microservice.book.model.Review;
 import com.bookeroo.microservice.book.security.JWTTokenProvider;
 import com.bookeroo.microservice.book.service.BookService;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
 import com.bookeroo.microservice.book.validator.BookDataValidator;
 import com.bookeroo.microservice.book.validator.BookFormDataValidator;
+import com.bookeroo.microservice.book.validator.ReviewValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class BookController {
     private final BookService bookService;
     private final BookDataValidator bookDataValidator;
     private final BookFormDataValidator bookFormDataValidator;
+    private final ReviewValidator reviewValidator;
     private final ValidationErrorService validationErrorService;
     private final JWTTokenProvider jwtTokenProvider;
 
@@ -35,11 +38,13 @@ public class BookController {
     public BookController(BookService bookService,
                           BookDataValidator bookDataValidator,
                           BookFormDataValidator bookFormDataValidator,
+                          ReviewValidator reviewValidator,
                           ValidationErrorService validationErrorService,
                           JWTTokenProvider jwtTokenProvider) {
         this.bookService = bookService;
         this.bookDataValidator = bookDataValidator;
         this.bookFormDataValidator = bookFormDataValidator;
+        this.reviewValidator = reviewValidator;
         this.validationErrorService = validationErrorService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -87,6 +92,22 @@ public class BookController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllBooks() {
         return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/review")
+    public ResponseEntity<?> postReview(@PathVariable long id,
+                                        @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
+                                        @Valid @RequestBody Review review, BindingResult result) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        reviewValidator.validate(review, result);
+        ResponseEntity<?> errorMap = validationErrorService.mapValidationErrors(result);
+        if (errorMap != null)
+            return errorMap;
+
+        String username = jwtTokenProvider.extractUsername(tokenHeader.substring(JWT_SCHEME.length()));
+        return new ResponseEntity<>(bookService.addReview(id, username, review), HttpStatus.OK);
     }
 
     @GetMapping
