@@ -26,7 +26,9 @@ function getRouteURL(
       case "users":
       case "newsletter":
         return 8080;
-      case "books" || "listings":
+      case "books":
+        return 8081;
+      case "listings":
         return 8081;
       case "orders":
         return 8082;
