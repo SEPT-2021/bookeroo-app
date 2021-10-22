@@ -15,6 +15,7 @@ export type BookItemType = {
   title: string;
   author: string;
   pageCount: string;
+  rating: number;
   isbn: string;
   price: number;
   description: string;

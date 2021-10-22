@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, Grid, Paper, Rating, Typography } from "@mui/material";
 import { ArrowBack, Edit } from "@material-ui/icons";
 import { Button } from "@material-ui/core";
 import { findBookById } from "../../util/api";
@@ -53,6 +53,12 @@ function SingleBook() {
               <Typography variant="h5" gutterBottom>
                 by {book.author}
               </Typography>
+              {book.rating ? (
+                <Rating readOnly value={book.rating} precision={0.2} />
+              ) : (
+                "No reviews yet"
+              )}
+              <br />
               <Typography variant="caption">
                 Page Count: {book.pageCount}
               </Typography>
