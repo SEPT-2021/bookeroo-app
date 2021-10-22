@@ -6,6 +6,8 @@ import Box from "@mui/material/Box";
 import RegisterAsASeller from "../RegisterAsASeller";
 import UserDetails from "../UserDetails";
 import DeleteUser from "../DeleteUser";
+import ViewTransactions from "../ViewTransactions";
+import ViewListings from "../ViewListings";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -77,10 +79,10 @@ export default function VerticalTabs() {
         <RegisterAsASeller />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <ViewTransactions />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <ViewListings />
       </TabPanel>
       <TabPanel value={value} index={4}>
         <DeleteUser />
