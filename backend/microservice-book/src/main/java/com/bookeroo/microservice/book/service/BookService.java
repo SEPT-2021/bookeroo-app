@@ -152,7 +152,7 @@ public class BookService {
 
         // Fetch updated
         book = getBook(bookId);
-        book.setRating(String.valueOf(reviewRepository.getAverageByBook_Id(bookId)));
+        book.setRating(reviewRepository.getAverageByBook_Id(bookId));
         bookRepository.save(book);
 
         return saved;

@@ -75,7 +75,7 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "Book_Review")
     private List<Review> reviews;
-    private String rating = "Not yet rated";
+    private float rating = 0.0f;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
@@ -165,11 +165,11 @@ public class Book {
         this.reviews = reviews;
     }
 
-    public String getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
