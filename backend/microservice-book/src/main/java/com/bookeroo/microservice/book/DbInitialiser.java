@@ -5,9 +5,11 @@ import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.Book.BookCondition;
 import com.bookeroo.microservice.book.model.Listing;
+import com.bookeroo.microservice.book.model.Review;
 import com.bookeroo.microservice.book.model.User;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import com.bookeroo.microservice.book.repository.ListingRepository;
+import com.bookeroo.microservice.book.repository.ReviewRepository;
 import com.bookeroo.microservice.book.repository.UserRepository;
 import com.bookeroo.microservice.book.service.S3Service;
 import com.github.javafaker.Faker;
@@ -30,19 +32,23 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
     private final ListingRepository listingRepository;
     private final S3Service s3Service;
     private BCryptPasswordEncoder passwordEncoder;
+    private final Faker faker = new Faker(new Locale("en-AU"));
 
     @Value("#{new Boolean('${db.initialise}')}")
     private boolean postConstruct;
 
     public DbInitialiser(BookRepository bookRepository,
                          UserRepository userRepository,
+                         ReviewRepository reviewRepository,
                          ListingRepository listingRepository,
                          S3Service s3Service) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
         this.listingRepository = listingRepository;
         this.s3Service = s3Service;
     }
@@ -76,11 +82,23 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
             userRepository.save(user);
 
             bookRepository.deleteAll();
-            listingRepository.deleteAll();
             Random random = new Random();
             for (int i = 0; i < 8; i++) {
                 try {
                     Book book = bookRepository.save(getRandomBook());
+                    for (int j = 0; j < (random.nextInt(5) + 1); j++) {
+                        Review review = new Review();
+                        User reviewer = getRandomReviewer();
+                        review.setUser(reviewer);
+                        review.setUserFullName(faker.funnyName().name());
+                        review.setBook(book);
+                        review.setText(faker.yoda().quote());
+                        review.setRating(random.nextInt(5) + 1);
+                        reviewRepository.save(review);
+                    }
+                    book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
+                    book = bookRepository.save(book);
+
                     Listing listing = new Listing();
                     listing.setUser(user);
                     listing.setBook(book);
@@ -95,7 +113,6 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
 
     private Book getRandomBook() {
         Random random = new Random();
-        Faker faker = new Faker(new Locale("en-AU"));
         Book book = new Book();
         book.setTitle(faker.book().title());
         book.setAuthor(faker.book().author());
@@ -107,6 +124,25 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
             book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
         } catch (IOException ignore) {}
         return book;
+    }
+
+    private User getRandomReviewer() {
+        User reviewer = new User();
+        reviewer.setUsername(faker.internet().emailAddress());
+        reviewer.setFirstName(faker.name().firstName());
+        reviewer.setLastName(faker.name().lastName());
+        reviewer.setPassword(passwordEncoder.encode("password"));
+        reviewer.setState("VIC");
+        reviewer.setCity("Melbourne");
+        reviewer.setAddressLine1("123 Bookeroo St");
+        reviewer.setAddressLine2("Apartment 1");
+        reviewer.setPostalCode("3001");
+        reviewer.setPhoneNumber("+(61) 411 170 399");
+        reviewer.setRole("ROLE_USER");
+        reviewer.setEnabled(true);
+        userRepository.deleteUserByUsername(reviewer.getUsername());
+        reviewer = userRepository.save(reviewer);
+        return reviewer;
     }
 
 }
