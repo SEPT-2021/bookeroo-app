@@ -90,7 +90,7 @@ function SingleBook() {
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Reviews
           </Typography>
-          <Reviews reviews={book.reviews || []} />
+          <Reviews reviews={book.reviews || []} bookId={id} />
         </Box>
       </Container>
     </>

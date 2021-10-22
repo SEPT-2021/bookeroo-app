@@ -106,6 +106,13 @@ export const editBook = makeTypedAPICall<
   });
 });
 
+export const reviewBook = makeTypedAPICall<
+  { text: string; rating: number; id: string },
+  unknown
+>(({ text, rating, id }) =>
+  api.post(getRouteURL("books", `${id}/review`), { text, rating })
+);
+
 export const findBookById = makeTypedAPICall<
   {
     id: string;
