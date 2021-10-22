@@ -78,8 +78,8 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
             user.setPhoneNumber("+(61) 411 170 399");
             user.setRole("ROLE_USER");
             user.setEnabled(true);
-            userRepository.deleteUserByUsername(user.getUsername());
-            userRepository.save(user);
+            if (!userRepository.findByUsername(user.getUsername()).isPresent())
+                userRepository.save(user);
 
             bookRepository.deleteAll();
             Random random = new Random();
