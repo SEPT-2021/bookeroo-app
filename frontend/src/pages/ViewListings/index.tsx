@@ -1,54 +1,30 @@
-import React from "react";
-import {
-  Box,
-  createStyles,
-  Grid,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
+import * as React from "react";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
-import { viewTransactions } from "../../util/api";
-import theme from "../../theme";
+import { viewListings } from "../../util/api";
 
-function ViewListings({ classes }: ViewTransactionsProps) {
-  const { data, isLoading, error } = useQuery("orders", viewTransactions);
+const columns: GridColDef[] = [
+  { field: "id", headerName: "ID", width: 70 },
+  { field: "price", headerName: "Price", width: 130 },
+  { field: "bookCondition", headerName: "Book Condition", width: 130 },
+];
+
+export default function ViewListings() {
+  const { data, isLoading, error } = useQuery("orders", viewListings);
 
   console.log(data);
 
+  const rows = [{ id: 1, price: 11, bookCondition: "NEW" }];
+
   return (
-    <Grid container component="main" className={classes.root}>
-      <Grid container spacing={2} justifyContent="center">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <form className={classes.box} noValidate autoComplete="off">
-            <Box>
-              <h1>data</h1>
-            </Box>
-          </form>
-        </div>
-      </Grid>
-    </Grid>
+    <div style={{ height: 400, width: "100%" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        checkboxSelection
+      />
+    </div>
   );
 }
-
-const styles = () =>
-  createStyles({
-    root: {
-      height: "30vh",
-    },
-    box: {
-      "& > *": {
-        margin: theme.spacing(1),
-        width: "25ch",
-      },
-    },
-  });
-
-type ViewTransactionsProps = WithStyles<typeof styles>;
-
-export default withStyles(styles)(ViewListings);
