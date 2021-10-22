@@ -92,7 +92,7 @@ function SingleBook() {
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
             Listings
           </Typography>
-          <ListingsTable listings={book.listings || []} />
+          <ListingsTable book={book} listings={book.listings || []} />
         </Box>
         <Box mt={3}>
           <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>

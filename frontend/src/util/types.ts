@@ -17,10 +17,8 @@ export type BookItemType = {
   pageCount: string;
   rating: number;
   isbn: string;
-  price: number;
   description: string;
   cover: string;
-  amount: number;
   listings?: Array<Listing>;
   reviews?: Review[];
   bookCategory: BookCategory;
@@ -51,12 +49,8 @@ export interface AddEditBookType {
   description: string;
 }
 
-export type DataItemType = {
-  book: BookItemType;
-  quantity: number;
-};
 export type CartType = {
-  orderItems: DataItemType[];
+  orderItems: Listing[];
   shippingAddress?: ShippingItemType;
 };
 

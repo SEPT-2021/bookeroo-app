@@ -23,11 +23,9 @@ const useStyles = makeStyles((theme) => ({
 export default function BookList({
   books,
   checked: argChecked = false,
-  onClick,
 }: {
   books: BookItemType[];
   checked?: boolean;
-  onClick: (clicked: BookItemType) => void;
 }) {
   const classes = useStyles();
   const hookChecked = useWindowPosition("header");
@@ -45,12 +43,7 @@ export default function BookList({
             className={classes.gridItem}
             key={book.id}
           >
-            <BookCard
-              book={book}
-              key={book.title}
-              checked={checked}
-              onCartClick={() => onClick(book)}
-            />
+            <BookCard book={book} key={book.title} checked={checked} />
           </Grid>
         ))}
       </Grid>

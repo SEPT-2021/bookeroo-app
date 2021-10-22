@@ -5,8 +5,7 @@ import { ShoppingCartOutlined } from "@material-ui/icons";
 import { Box, BoxProps } from "@mui/material";
 import CartItem from "../CartItem/CartItem";
 import Link from "../../util/Link";
-import { BookItemType } from "../../util/types";
-import { GlobalContext } from "../GlobalContext";
+import { CartItem as CartItemType, GlobalContext } from "../GlobalContext";
 
 export const Cart: React.FC<BoxProps & { hideCheckoutButton?: boolean }> = ({
   sx,
@@ -15,8 +14,8 @@ export const Cart: React.FC<BoxProps & { hideCheckoutButton?: boolean }> = ({
 }) => {
   const { cartItems, addToCart, removeFromCart, setCartOpen } =
     useContext(GlobalContext);
-  const calculateTotal = (items: BookItemType[]) =>
-    items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
+  const calculateTotal = (items: CartItemType[]) =>
+    items.reduce((ack: number, item) => ack + Number(item.listing.price), 0);
 
   return (
     <Box
@@ -31,12 +30,7 @@ export const Cart: React.FC<BoxProps & { hideCheckoutButton?: boolean }> = ({
       <h2>Your Shopping Cart</h2>
       {cartItems.length === 0 ? <p>No items in cart.</p> : null}
       {cartItems.map((item) => (
-        <CartItem
-          key={item.id}
-          item={item}
-          addToCart={addToCart}
-          removeFromCart={removeFromCart}
-        />
+        <CartItem key={item.listing.id} item={item} />
       ))}
       <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
       {!hideCheckoutButton && (
@@ -66,8 +60,7 @@ const StyledButton = styled(IconButton)`
 export default function DrawerCart() {
   const { cartItems, setCartOpen, cartOpen } = useContext(GlobalContext);
 
-  const getTotalItems = (items: BookItemType[]) =>
-    items.reduce((ack: number, item) => ack + item.amount, 0);
+  const getTotalItems = (items: CartItemType[]) => items.length;
   return (
     <>
       <StyledButton onClick={() => setCartOpen(true)}>

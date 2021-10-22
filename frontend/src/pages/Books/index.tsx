@@ -48,7 +48,7 @@ const Books = () => {
               />
             </Box>
             {!data || (data?.length === 0 && <h3>No books found!</h3>)}
-            <BookList books={data || []} onClick={addToCart} checked />
+            <BookList books={data || []} checked />
           </Container>
         </Wrapper>
       )}
