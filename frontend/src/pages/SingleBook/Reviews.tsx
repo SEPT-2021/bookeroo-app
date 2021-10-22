@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   List,
   ListItem,

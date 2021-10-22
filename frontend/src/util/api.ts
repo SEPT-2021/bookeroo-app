@@ -50,7 +50,7 @@ export const registerUser = makeTypedAPICall<
     password: string;
     firstName: string;
     lastName: string;
-    roles: string;
+    role: string;
     addressLine1: string;
     addressLine2: string;
     city: string;
