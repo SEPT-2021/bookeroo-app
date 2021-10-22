@@ -4,7 +4,7 @@ import { Check, Clear, Delete, ShoppingCartOutlined } from "@material-ui/icons";
 import { CircularProgress, IconButton } from "@material-ui/core";
 import { useMutation, useQueryClient } from "react-query";
 import { snakeCaseToNormalString } from "../../util/string-util";
-import { CartItem, GlobalContext } from "../../components/GlobalContext";
+import { GlobalContext } from "../../components/GlobalContext";
 import { BookItemType, Listing, Role } from "../../util/types";
 import { deleteListingById } from "../../util/api";
 

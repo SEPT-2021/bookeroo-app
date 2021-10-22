@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { AddShoppingCart, Book, Delete, Launch } from "@material-ui/icons";
+import { Book, Delete, Launch } from "@material-ui/icons";
 import { useMutation, useQueryClient } from "react-query";
 import { CardActionArea } from "@mui/material";
 import { useHistory } from "react-router-dom";

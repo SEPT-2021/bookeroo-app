@@ -12,8 +12,7 @@ export const Cart: React.FC<BoxProps & { hideCheckoutButton?: boolean }> = ({
   hideCheckoutButton,
   ...rest
 }) => {
-  const { cartItems, addToCart, removeFromCart, setCartOpen } =
-    useContext(GlobalContext);
+  const { cartItems, setCartOpen } = useContext(GlobalContext);
   const calculateTotal = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + Number(item.listing.price), 0);
 

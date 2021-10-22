@@ -3,13 +3,13 @@
 exports[`Rendering page AddBook renders without crashing 1`] = `
 <div>
   <main
-    class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-undefined AddBook-root-1 css-1lym95h-MuiGrid-root"
+    class="MuiGrid-root AddBook-root-1 MuiGrid-container MuiGrid-justify-content-xs-center"
   >
     <div
       class="AddBook-paper-3"
     >
       <div
-        class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault AddBook-avatar-4 css-2s90m6-MuiAvatar-root"
+        class="MuiAvatar-root MuiAvatar-circular AddBook-avatar-4 MuiAvatar-colorDefault"
       >
         <svg
           aria-hidden="true"
@@ -23,12 +23,12 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
         </svg>
       </div>
       <h1
-        class="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-h5"
       >
         Add A Book
       </h1>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root MuiBox-root-7"
       >
         <div
           class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
@@ -60,10 +60,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
             />
             <fieldset
               aria-hidden="true"
-              class="PrivateNotchedOutline-root-7 MuiOutlinedInput-notchedOutline"
+              class="PrivateNotchedOutline-root-8 MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="PrivateNotchedOutline-legendLabelled-9"
+                class="PrivateNotchedOutline-legendLabelled-10"
               >
                 <span>
                   Book Title
@@ -103,10 +103,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
             />
             <fieldset
               aria-hidden="true"
-              class="PrivateNotchedOutline-root-7 MuiOutlinedInput-notchedOutline"
+              class="PrivateNotchedOutline-root-8 MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="PrivateNotchedOutline-legendLabelled-9"
+                class="PrivateNotchedOutline-legendLabelled-10"
               >
                 <span>
                   Author Name
@@ -146,10 +146,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
             />
             <fieldset
               aria-hidden="true"
-              class="PrivateNotchedOutline-root-7 MuiOutlinedInput-notchedOutline"
+              class="PrivateNotchedOutline-root-8 MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="PrivateNotchedOutline-legendLabelled-9"
+                class="PrivateNotchedOutline-legendLabelled-10"
               >
                 <span>
                   ISBN
@@ -189,10 +189,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
             />
             <fieldset
               aria-hidden="true"
-              class="PrivateNotchedOutline-root-7 MuiOutlinedInput-notchedOutline"
+              class="PrivateNotchedOutline-root-8 MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="PrivateNotchedOutline-legendLabelled-9"
+                class="PrivateNotchedOutline-legendLabelled-10"
               >
                 <span>
                   Page Count
@@ -232,10 +232,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
             />
             <fieldset
               aria-hidden="true"
-              class="PrivateNotchedOutline-root-7 MuiOutlinedInput-notchedOutline"
+              class="PrivateNotchedOutline-root-8 MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="PrivateNotchedOutline-legendLabelled-9"
+                class="PrivateNotchedOutline-legendLabelled-10"
               >
                 <span>
                   Price
@@ -275,10 +275,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
             />
             <fieldset
               aria-hidden="true"
-              class="PrivateNotchedOutline-root-7 MuiOutlinedInput-notchedOutline"
+              class="PrivateNotchedOutline-root-8 MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="PrivateNotchedOutline-legendLabelled-9"
+                class="PrivateNotchedOutline-legendLabelled-10"
               >
                 <span>
                   Description
@@ -290,20 +290,28 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
         </div>
         <div>
           <button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-text"
             tabindex="0"
             type="button"
           >
-            Select Book Condition
+            <span
+              class="MuiButton-label"
+            >
+              Select Book Condition
+            </span>
           </button>
         </div>
         <div>
           <button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-text"
             tabindex="0"
             type="button"
           >
-            Select Book Category
+            <span
+              class="MuiButton-label"
+            >
+              Select Book Category
+            </span>
           </button>
         </div>
         <div>
@@ -329,10 +337,10 @@ exports[`Rendering page AddBook renders without crashing 1`] = `
           </span>
         </button>
         <div
-          class="MuiBox-root css-y1gt6f"
+          class="MuiBox-root MuiBox-root-12"
         >
           <span
-            class="MuiTypography-root MuiTypography-caption css-1sn4lm3-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-caption"
           >
             Disclaimer: This application was built for SEPT 2021, and is a university project. Please do not provide valuable data into this application.
           </span>

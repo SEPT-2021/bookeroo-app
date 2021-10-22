@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { Box, Container } from "@material-ui/core";
 import styled from "styled-components";
@@ -6,7 +6,6 @@ import DrawerCart from "../../components/DrawerCart";
 import { getBookBySearchTerm } from "../../util/api";
 import BookList from "../../components/BookList";
 import SearchBar from "../../components/searchBar";
-import { GlobalContext } from "../../components/GlobalContext";
 import LinearLoading from "../../util/LinearLoading";
 
 const Wrapper = styled.div`
@@ -14,7 +13,6 @@ const Wrapper = styled.div`
 `;
 
 const Books = () => {
-  const { addToCart } = useContext(GlobalContext);
   const [search, setSearch] = useState("");
   const { data, isFetching, isLoading, error, refetch } = useQuery(
     "books",

@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Button, IconButton } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
-import { BookItemType, Listing } from "../../util/types";
 import { CartItem as CartItemType, GlobalContext } from "../GlobalContext";
 
 const Wrapper = styled.div`
