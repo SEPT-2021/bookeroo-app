@@ -41,20 +41,7 @@ public class BookFormDataValidator implements Validator {
             errors.rejectValue("pageCount", "Value",
                     String.format("Page count cannot be larger than %d", MAXIMUM_PAGE_COUNT));
 
-        try {
-            double price = Double.parseDouble(data.getPrice());
-            if (price < MINIMUM_BOOK_PRICE)
-                errors.rejectValue("price", "Value",
-                        String.format("Price must be at least %.2f AUD", MINIMUM_BOOK_PRICE));
-
-            if (price > MAXIMUM_BOOK_PRICE)
-                errors.rejectValue("price", "Value",
-                        String.format("Price must be less than %.2f AUD", MAXIMUM_BOOK_PRICE));
-        } catch (NumberFormatException exception) {
-            errors.rejectValue("price", "Value",
-                    "Price must be a number");
-        }
-
+        ListingFormDataValidator.validatePrice(data.getPrice(), errors);
     }
 
 }
