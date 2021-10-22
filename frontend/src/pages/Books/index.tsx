@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
-import { Box, Container, LinearProgress } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import styled from "styled-components";
 import DrawerCart from "../../components/DrawerCart";
 import { getBookBySearchTerm } from "../../util/api";
 import BookList from "../../components/BookList";
 import SearchBar from "../../components/searchBar";
 import { GlobalContext } from "../../components/GlobalContext";
+import LinearLoading from "../../util/LinearLoading";
 
 const Wrapper = styled.div`
   margin-top: 80px;
@@ -15,8 +16,9 @@ const Wrapper = styled.div`
 const Books = () => {
   const { addToCart } = useContext(GlobalContext);
   const [search, setSearch] = useState("");
-  const { data, isLoading, error, refetch } = useQuery("books", () =>
-    getBookBySearchTerm({ searchTerm: search })
+  const { data, isFetching, isLoading, error, refetch } = useQuery(
+    "books",
+    () => getBookBySearchTerm({ searchTerm: search })
   );
   const onSearch = () => {
     refetch();
@@ -31,29 +33,26 @@ const Books = () => {
       </Wrapper>
     );
   }
-
-  if (isLoading)
-    return (
-      <Wrapper>
-        <LinearProgress />
-      </Wrapper>
-    );
-
   return (
-    <Wrapper>
-      <DrawerCart />
-      <Container>
-        <Box display="flex" justifyContent="space-evenly">
-          <SearchBar
-            searchTerm={search}
-            setSearchTerm={setSearch}
-            search={onSearch}
-          />
-        </Box>
-        {!data || (data?.length === 0 && <h3>No books found!</h3>)}
-        <BookList books={data || []} onClick={addToCart} checked />
-      </Container>
-    </Wrapper>
+    <>
+      {isFetching && <LinearLoading />}
+      {!isLoading && (
+        <Wrapper>
+          <DrawerCart />
+          <Container>
+            <Box display="flex" justifyContent="space-evenly">
+              <SearchBar
+                searchTerm={search}
+                setSearchTerm={setSearch}
+                search={onSearch}
+              />
+            </Box>
+            {!data || (data?.length === 0 && <h3>No books found!</h3>)}
+            <BookList books={data || []} onClick={addToCart} checked />
+          </Container>
+        </Wrapper>
+      )}
+    </>
   );
 };
 

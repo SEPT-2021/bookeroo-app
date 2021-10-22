@@ -3,14 +3,13 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import {
-  Add,
   ArrowBack,
   Check,
   Clear,
   Edit,
   ShoppingCartOutlined,
 } from "@material-ui/icons";
-import { Button, IconButton, LinearProgress } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import { findBookById } from "../../util/api";
 import NotFoundPage from "../NotFoundPage";
@@ -18,6 +17,7 @@ import { GlobalContext, Role } from "../../components/GlobalContext";
 import DrawerCart from "../../components/DrawerCart";
 import Link from "../../util/Link";
 import { snakeCaseToNormalString } from "../../util/string-util";
+import LinearLoading from "../../util/LinearLoading";
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
@@ -31,11 +31,7 @@ function SingleBook() {
     return <NotFoundPage />;
   }
   if (isLoading || !book) {
-    return (
-      <Box marginTop="80px">
-        <LinearProgress />
-      </Box>
-    );
+    return <LinearLoading />;
   }
   const listingCols: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
@@ -45,7 +41,13 @@ function SingleBook() {
       width: 200,
       valueFormatter: (val) => val.value || "No Name",
     },
-    { field: "price", headerName: "Price", width: 150 },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 150,
+      sortable: true,
+      valueFormatter: (val) => Number(val.value),
+    },
     {
       field: "bookCondition",
       headerName: "Book Condition",
@@ -104,19 +106,15 @@ function SingleBook() {
               <p>Book ISBN: {book.isbn}</p>
               <p>Book Description: {book.description}</p>
               <p>Book Category: {snakeCaseToNormalString(book.bookCategory)}</p>
-              <Button
-                onClick={() => addToCart(book)}
-                startIcon={<Add />}
-                variant="contained"
-                color="primary"
-              >
-                Add to cart
-              </Button>
               {user?.role === Role.ROLE_ADMIN && (
                 <Link to={`/editBook/${book.id}`}>
-                  <IconButton color="secondary">
-                    <Edit />
-                  </IconButton>
+                  <Button
+                    startIcon={<Edit />}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Manage Book
+                  </Button>
                 </Link>
               )}
             </Paper>

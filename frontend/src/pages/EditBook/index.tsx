@@ -20,11 +20,12 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import { LinearProgress, withStyles, WithStyles } from "@material-ui/core";
+import { withStyles, WithStyles } from "@material-ui/core";
 import { Bookmark } from "@material-ui/icons";
 import { deleteBookById, editBook, findBookById } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
+import LinearLoading from "../../util/LinearLoading";
 
 function EditBook({ classes }: AddBookProps) {
   const { id } = useParams<{ id: string }>();
@@ -83,7 +84,7 @@ function EditBook({ classes }: AddBookProps) {
     return <Redirect to="/allBooks" />;
   }
   if (isBookLoading) {
-    return <LinearProgress style={{ marginTop: "80px" }} />;
+    return <LinearLoading />;
   }
 
   const handleChangeBookCategory = (
