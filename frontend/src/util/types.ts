@@ -1,3 +1,6 @@
+import { MenuItem } from "@material-ui/core";
+import React from "react";
+
 export interface TokenProps {
   jwt: string;
 }
@@ -33,11 +36,15 @@ export interface Listing {
 }
 
 export enum BookCondition {
-  SPECULATIVE_FICTION = "SPECULATIVE_FICTION",
+  NEW = "NEW",
+  FINE = "FINE",
+  VERY_GOOD = "VERY_GOOD",
+  FAIR = "FAIR",
+  POOR = "POOR",
 }
 
 export enum BookCategory {
-  VERY_GOOD = "VERY_GOOD",
+  SPECULATIVE_FICTION = "SPECULATIVE_FICTION",
 }
 
 export interface AddEditBookType {

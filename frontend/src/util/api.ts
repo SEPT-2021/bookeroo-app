@@ -71,7 +71,7 @@ export const addBook = makeTypedAPICall<
   AddEditBookType & {
     price: string;
     condition: string;
-    coverFile: File | unknown;
+    coverFile?: File | unknown;
   },
   unknown
 >((args) => {

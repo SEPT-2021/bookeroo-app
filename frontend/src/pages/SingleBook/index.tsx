@@ -21,6 +21,7 @@ import LinearLoading from "../../util/LinearLoading";
 import ListingsTable from "./ListingsTable";
 import { Role } from "../../util/types";
 import Reviews from "./Reviews";
+import AddListingDialog from "./AddListingDialog";
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
@@ -88,9 +89,15 @@ function SingleBook() {
         </Grid>
 
         <Box mt={3}>
-          <Typography gutterBottom variant="h4" style={{ fontWeight: "bold" }}>
-            Listings
-          </Typography>
+          <Box display="flex" alignItems="center" mb={2}>
+            <Typography
+              variant="h4"
+              style={{ fontWeight: "bold", marginRight: 20 }}
+            >
+              Listings
+            </Typography>
+            {user && <AddListingDialog book={book} />}
+          </Box>
           <ListingsTable book={book} listings={book.listings || []} />
         </Box>
         <Box mt={3}>
