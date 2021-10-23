@@ -14,7 +14,9 @@ import { Person } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import Link from "../../util/Link";
-import { GlobalContext, Role } from "../GlobalContext";
+import { GlobalContext } from "../GlobalContext";
+import { Role } from "../util/types";
+import { DARK_MODE } from "../theme";
 
 function NavBar({ classes }: NavBarProps) {
   const { user, signOut } = useContext(GlobalContext);
@@ -86,7 +88,7 @@ const styles = (theme: Theme) =>
       height: 60,
     },
     appbar: {
-      background: "white",
+      background: DARK_MODE ? theme.palette.background.default : "white",
     },
     appbarWrapper: {
       width: "80%",

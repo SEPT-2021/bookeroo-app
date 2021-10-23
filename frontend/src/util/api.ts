@@ -1,11 +1,14 @@
 import axios, { AxiosResponse } from "axios";
-import type { User } from "../components/GlobalContext";
 import {
+  AddEditBookType,
+  BookCondition,
   BookItemType,
   CartType,
   RegisterAsSellerType,
   TokenProps,
+  User,
 } from "./types";
+import type { User } from "../components/GlobalContext";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
@@ -13,12 +16,12 @@ const backendUrl = process.env.REACT_APP_BACKEND;
 function getRouteURL(
   service:
     | "books"
+    | "listings"
     | "users"
     | "orders"
     | "admins"
     | "newsletter"
-    | "sellers"
-    | "listings",
+    | "sellers",
   route: string
 ) {
   const port = (() => {
@@ -27,7 +30,6 @@ function getRouteURL(
       case "newsletter":
         return 8080;
       case "books":
-        return 8081;
       case "listings":
         return 8081;
       case "orders":
@@ -60,7 +62,7 @@ export const registerUser = makeTypedAPICall<
     password: string;
     firstName: string;
     lastName: string;
-    roles: string;
+    role: string;
     addressLine1: string;
     addressLine2: string;
     city: string;
@@ -91,16 +93,10 @@ export const updateUser = makeTypedAPICall<
 >((args) => api.put(getRouteURL("users", "update"), args));
 
 export const addBook = makeTypedAPICall<
-  {
-    title: string;
-    author: string;
-    pageCount: string;
-    isbn: string;
+  AddEditBookType & {
     price: string;
     condition: string;
-    category: string;
-    description: string;
-    coverFile: File | unknown;
+    coverFile?: File | unknown;
   },
   unknown
 >((args) => {
@@ -121,6 +117,26 @@ export const addBook = makeTypedAPICall<
     },
   });
 });
+export const editBook = makeTypedAPICall<
+  AddEditBookType & { id: string; cover?: string },
+  unknown
+>(({ title, author, category, id, description, isbn, pageCount }) => {
+  return api.put(getRouteURL("books", id), {
+    title,
+    author,
+    category,
+    description,
+    isbn,
+    pageCount,
+  });
+});
+
+export const reviewBook = makeTypedAPICall<
+  { text: string; rating: number; id: string },
+  unknown
+>(({ text, rating, id }) =>
+  api.post(getRouteURL("books", `${id}/review`), { text, rating })
+);
 
 export const findBookById = makeTypedAPICall<
   {
@@ -135,6 +151,14 @@ export const deleteBookById = makeTypedAPICall<
   },
   unknown
 >((args) => api.delete(getRouteURL("books", args.id)));
+
+export const deleteListingById = makeTypedAPICall<{ id: string }, unknown>(
+  ({ id }) => api.delete(getRouteURL("listings", id))
+);
+export const addListing = makeTypedAPICall<
+  { bookId: string; price: string; condition: BookCondition },
+  unknown
+>((args) => api.post(getRouteURL("listings", "add"), args));
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {

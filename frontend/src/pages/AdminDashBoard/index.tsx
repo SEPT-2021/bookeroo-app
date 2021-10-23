@@ -5,7 +5,6 @@ import {
   Container,
   FormControlLabel,
   IconButton,
-  LinearProgress,
   List,
   ListItem,
   ListItemAvatar,
@@ -26,7 +25,8 @@ import {
   getSellers,
   rejectSeller,
 } from "../../util/api";
-import { User } from "../../components/GlobalContext";
+import LinearLoading from "../../util/LinearLoading";
+import { User } from "../../util/types";
 
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -191,7 +191,7 @@ function UsersList() {
   } = useQuery("admins", getSellers);
 
   if (isLoadingSellers || isLoading) {
-    return <LinearProgress style={{ marginTop: "80px" }} />;
+    return <LinearLoading />;
   }
   if (error) {
     return <div style={{ marginTop: "80px" }}>Failed to load data</div>;

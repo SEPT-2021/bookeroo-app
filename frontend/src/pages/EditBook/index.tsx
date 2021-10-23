@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useState } from "react";
-import { Redirect } from "react-router-dom";
-import { useMutation } from "react-query";
+import React, { useEffect, useState } from "react";
+import { Redirect, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
 import {
   Avatar,
   Box,
@@ -10,96 +10,91 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
-  SelectProps,
+  SelectChangeEvent,
   Theme,
   Typography,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
+} from "@mui/material";
+import { withStyles, WithStyles } from "@material-ui/core";
 import { Bookmark } from "@material-ui/icons";
-import { FormControl } from "@mui/material";
-import { addBook } from "../../util/api";
+import { deleteBookById, editBook, findBookById } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
+import LinearLoading from "../../util/LinearLoading";
 
-function AddBook({ classes }: AddBookProps) {
-  const bookSelection = false;
+function EditBook({ classes }: AddBookProps) {
+  const { id } = useParams<{ id: string }>();
+  const { data: book, isLoading: isBookLoading } = useQuery("editBook", () =>
+    findBookById({ id })
+  );
+
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [isbn, setIsbn] = useState("");
   const [pageCount, setPageCount] = useState("");
-  const [coverFile, setCoverFile] = useState<File>();
-  const [isCoverFilePicked, setIsCoverFilePicked] = useState(bookSelection);
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [condition, setCondition] = useState("");
   const [category, setCategory] = useState("");
-  const [openCategory, setOpenCategory] = React.useState(false);
-  const [openCondition, setOpenCondition] = React.useState(false);
+  const [openCategory, setOpenCategory] = useState(false);
+  const {
+    mutate: editMutate,
+    isSuccess: isEditSuccess,
+    error,
+    isLoading: isEditLoading,
+  } = useMutation(editBook);
+  const {
+    mutate: deleteMutate,
+    isLoading: isDeleteLoading,
+    isSuccess: isDeleteSuccess,
+  } = useMutation(deleteBookById);
 
-  const { error, isSuccess, isLoading, mutate } = useMutation(addBook);
+  useEffect(() => {
+    if (book) {
+      setTitle(book.title);
+      setAuthor(book.author);
+      setIsbn(book.isbn);
+      setPageCount(book.pageCount);
+      setDescription(book.description);
+      setCategory(book.bookCategory);
+      // eslint-disable-next-line no-console
+      console.log(book);
+    }
+  }, [book]);
 
   const onSubmit = async () => {
-    mutate({
+    editMutate({
+      id,
       title,
       author,
       pageCount,
       isbn,
-      price,
-      condition,
       category,
       description,
-      coverFile,
     });
   };
-
-  if (isSuccess) {
+  const isLoading = isDeleteLoading || isEditLoading;
+  if (isEditSuccess) {
+    return <Redirect to={`/book/${id}`} />;
+  }
+  if (isDeleteSuccess) {
     return <Redirect to="/allBooks" />;
   }
+  if (isBookLoading) {
+    return <LinearLoading />;
+  }
 
-  const makeData = async () => {
-    if (isCoverFilePicked) {
-      const formData = new FormData();
-      formData.append("image", coverFile as File);
-    }
-  };
-
-  const changeIsCoverFilePickedState = () => setIsCoverFilePicked(true);
-
-  const uploadCoverFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target || !event.target.files) return;
-    await setCoverFile(event.target.files[0]);
-    await makeData();
-  };
-
-  const handleChangeBookCondition: SelectProps["onChange"] = (event) => {
-    setCondition((event.target.value as string) || "");
-  };
-
-  const handleChangeBookCategory: SelectProps["onChange"] = (event) => {
-    setCategory((event.target.value as string) || "");
-  };
-
-  const handleClickOpenCondition = () => {
-    setOpenCondition(true);
+  const handleChangeBookCategory = (
+    event: SelectChangeEvent<typeof category>
+  ) => {
+    setCategory(event.target.value || "");
   };
 
   const handleClickOpenCategory = () => {
     setOpenCategory(true);
-  };
-
-  const handleCloseCondition = (
-    event: React.SyntheticEvent<unknown>,
-    reason?: string
-  ) => {
-    if (reason !== "backdropClick") {
-      setOpenCondition(false);
-    }
   };
 
   const handleCloseCategory = (
@@ -123,10 +118,11 @@ function AddBook({ classes }: AddBookProps) {
           <Bookmark />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Add A Book
+          Edit a Book
         </Typography>
         <Box>
           <FormField
+            value={title}
             errors={error?.response?.data}
             label="Book Title"
             name="title"
@@ -139,6 +135,7 @@ function AddBook({ classes }: AddBookProps) {
             label="Author Name"
             autoComplete="firstName"
             onChange={setAuthor}
+            value={author}
           />
           <FormField
             errors={error?.response?.data}
@@ -146,6 +143,7 @@ function AddBook({ classes }: AddBookProps) {
             label="ISBN"
             autoComplete="isbn"
             onChange={setIsbn}
+            value={isbn}
           />
           <FormField
             errors={error?.response?.data}
@@ -153,13 +151,7 @@ function AddBook({ classes }: AddBookProps) {
             label="Page Count"
             autoComplete="pageCount"
             onChange={setPageCount}
-          />
-          <FormField
-            errors={error?.response?.data}
-            name="price"
-            label="Price"
-            autoComplete="price"
-            onChange={setPrice}
+            value={pageCount}
           />
           <FormField
             errors={error?.response?.data}
@@ -167,52 +159,8 @@ function AddBook({ classes }: AddBookProps) {
             label="Description"
             autoComplete="description"
             onChange={setDescription}
+            value={description}
           />
-
-          <div>
-            <Button onClick={handleClickOpenCondition}>
-              Select Book Condition
-            </Button>
-            <Dialog
-              disableEscapeKeyDown
-              open={openCondition}
-              onClose={handleCloseCondition}
-            >
-              <DialogTitle>Fill the form</DialogTitle>
-              <DialogContent>
-                <Box
-                  component="form"
-                  sx={{ display: "flex", flexWrap: "wrap" }}
-                >
-                  <FormControl sx={{ m: 1, minWidth: 200 }}>
-                    <InputLabel id="demo-dialog-select-label">
-                      Book Condition
-                    </InputLabel>
-                    <Select
-                      labelId="demo-dialog-select-label"
-                      id="demo-dialog-select"
-                      value={condition}
-                      onChange={handleChangeBookCondition}
-                      input={<OutlinedInput label="Book Condition" />}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="NEW">New</MenuItem>
-                      <MenuItem value="FINE">Fine</MenuItem>
-                      <MenuItem value="VERY_GOOD">Very Good</MenuItem>
-                      <MenuItem value="FAIR">Fair</MenuItem>
-                      <MenuItem value="POOR">Poor</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseCondition}>Cancel</Button>
-                <Button onClick={handleCloseCondition}>Ok</Button>
-              </DialogActions>
-            </Dialog>
-          </div>
 
           <div>
             <Button onClick={handleClickOpenCategory}>
@@ -279,17 +227,6 @@ function AddBook({ classes }: AddBookProps) {
             </Dialog>
           </div>
 
-          <div>
-            <form encType="multipart/form-data" action="">
-              <input
-                type="file"
-                name="file"
-                onChange={uploadCoverFile}
-                onClick={changeIsCoverFilePickedState}
-              />
-            </form>
-          </div>
-
           <LoadingButton
             loading={isLoading}
             fullWidth
@@ -298,7 +235,16 @@ function AddBook({ classes }: AddBookProps) {
             className={classes.submit}
             onClick={onSubmit}
           >
-            Add My Book
+            Save Book
+          </LoadingButton>
+          <LoadingButton
+            loading={isLoading}
+            fullWidth
+            variant="contained"
+            color="secondary"
+            onClick={() => deleteMutate({ id: String(id) })}
+          >
+            Delete Book
           </LoadingButton>
 
           <Box mt={5}>
@@ -350,4 +296,4 @@ const styles = (theme: Theme) =>
 
 type AddBookProps = WithStyles<typeof styles>;
 
-export default withStyles(styles)(AddBook);
+export default withStyles(styles)(EditBook);

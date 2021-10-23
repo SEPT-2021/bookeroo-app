@@ -32,10 +32,7 @@ function Checkout() {
   const [state, setState] = useState(userData?.state);
   const [postalCode, setPostalCode] = useState(userData?.postalCode);
   const getItems = () => {
-    return cartItems.map((obj) => ({
-      book: obj,
-      quantity: obj.amount,
-    }));
+    return cartItems.map((item) => item.listing);
   };
   const { data: checkoutData, mutate, error, reset } = useMutation(checkout);
 
@@ -64,7 +61,7 @@ function Checkout() {
   }
 
   return (
-    <Grid container>
+    <Grid container style={{ marginTop: 120 }}>
       <Grid item md={6}>
         <Box
           sx={{
@@ -210,7 +207,7 @@ function Checkout() {
         </Box>
       </Grid>
       <Grid item md={6}>
-        <Cart sx={{ marginTop: "100px" }} hideCheckoutButton />
+        <Cart hideCheckoutButton />
       </Grid>
     </Grid>
   );
