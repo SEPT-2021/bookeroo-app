@@ -1,6 +1,3 @@
-import { MenuItem } from "@material-ui/core";
-import React from "react";
-
 export interface TokenProps {
   jwt: string;
 }

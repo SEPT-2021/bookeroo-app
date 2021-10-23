@@ -17,7 +17,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { BookCondition, BookItemType } from "../../util/types";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
-import { addBook } from "../../util/api";
+import { addListing } from "../../util/api";
 
 function AddListingDialog({ book }: { book: BookItemType }) {
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ function AddListingDialog({ book }: { book: BookItemType }) {
     setCondition((event.target.value as BookCondition) || BookCondition.NEW);
   };
   const client = useQueryClient();
-  const { mutate, isLoading, isSuccess } = useMutation(addBook, {
+  const { mutate, isLoading, isSuccess, error } = useMutation(addListing, {
     onSuccess: () => {
       client.invalidateQueries("singleBook");
     },
@@ -78,6 +78,7 @@ function AddListingDialog({ book }: { book: BookItemType }) {
             <FormField
               onChange={setPrice}
               value={price}
+              errors={error?.response?.data}
               label="Price"
               name="price"
             />
@@ -85,7 +86,11 @@ function AddListingDialog({ book }: { book: BookItemType }) {
           <LoadingButton
             loading={isLoading}
             onClick={() =>
-              mutate({ ...book, price, condition, category: book.bookCategory })
+              mutate({
+                bookId: String(book.id),
+                price,
+                condition,
+              })
             }
             variant="contained"
             color="primary"

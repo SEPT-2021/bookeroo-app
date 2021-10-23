@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import {
   AddEditBookType,
+  BookCondition,
   BookItemType,
   CartType,
   TokenProps,
@@ -130,6 +131,10 @@ export const deleteBookById = makeTypedAPICall<
 export const deleteListingById = makeTypedAPICall<{ id: string }, unknown>(
   ({ id }) => api.delete(getRouteURL("listings", id))
 );
+export const addListing = makeTypedAPICall<
+  { bookId: string; price: string; condition: BookCondition },
+  unknown
+>((args) => api.post(getRouteURL("listings", "add"), args));
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {
