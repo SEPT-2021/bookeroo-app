@@ -1,7 +1,8 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { BookItemType } from "../../util/types";
+import { Button } from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
+import { CartItem as CartItemType, GlobalContext } from "../GlobalContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,41 +26,32 @@ const Wrapper = styled.div`
 `;
 
 type Props = {
-  item: BookItemType;
-  addToCart: (clickedItem: BookItemType) => void;
-  removeFromCart: (id: number) => void;
+  item: CartItemType;
 };
 
-const CartItem: React.FC<Props> = ({ item, addToCart, removeFromCart }) => (
-  <Wrapper>
-    <div>
-      <h3>{item.title}</h3>
-      <div className="information">
-        <p>Price: ${item.price}</p>
-        <p>Total: ${(item.amount * item.price).toFixed(2)}</p>
+const CartItem: React.FC<Props> = ({ item: { listing, book } }) => {
+  const { removeFromCart } = useContext(GlobalContext);
+  return (
+    <Wrapper>
+      <div>
+        <h3>{book.title}</h3>
+        <div className="information">
+          <p>Price: ${listing.price}</p>
+        </div>
+        <div className="buttons">
+          <Button
+            startIcon={<Delete />}
+            onClick={() => removeFromCart(listing.id)}
+            variant="contained"
+            color="secondary"
+          >
+            Remove from Cart
+          </Button>
+        </div>
       </div>
-      <div className="buttons">
-        <Button
-          size="small"
-          disableElevation
-          variant="contained"
-          onClick={() => removeFromCart(item.id)}
-        >
-          -
-        </Button>
-        <p>{item.amount}</p>
-        <Button
-          size="small"
-          disableElevation
-          variant="contained"
-          onClick={() => addToCart(item)}
-        >
-          +
-        </Button>
-      </div>
-    </div>
-    <img src={item.cover} alt={item.title} />
-  </Wrapper>
-);
+      <img src={book.cover} alt={book.title} />
+    </Wrapper>
+  );
+};
 
 export default CartItem;
