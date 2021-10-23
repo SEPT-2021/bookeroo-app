@@ -19,7 +19,8 @@ import Link from "../../util/Link";
 import { registerUser } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
-import { GlobalContext, Role } from "../../components/GlobalContext";
+import { GlobalContext } from "../../components/GlobalContext";
+import { Role } from "../../util/types";
 
 function Register({ classes }: RegisterProps) {
   const [username, setUsername] = useState("");
@@ -46,7 +47,7 @@ function Register({ classes }: RegisterProps) {
       password,
       firstName,
       lastName,
-      roles: Role.ROLE_USER,
+      role: Role.ROLE_USER,
       addressLine1,
       addressLine2,
       city,

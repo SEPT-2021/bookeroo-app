@@ -5,6 +5,7 @@ import com.bookeroo.microservice.book.exception.ListingNotFoundException;
 import com.bookeroo.microservice.book.exception.UserNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Listing;
+import com.bookeroo.microservice.book.model.ListingFormData;
 import com.bookeroo.microservice.book.model.User;
 import com.bookeroo.microservice.book.repository.BookRepository;
 import com.bookeroo.microservice.book.repository.ListingRepository;
@@ -50,6 +51,22 @@ public class ListingService {
         return listingRepository.findByUser_Id(id);
     }
 
+    public Listing saveListing(ListingFormData formData, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        user.orElseThrow(() -> new UserNotFoundException(String.format("User by username %s not found", username)));
+        Optional<Book> book = bookRepository.findById(formData.getBookId());
+        book.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", formData.getBookId())));
+
+        Listing listing = new Listing();
+        listing.setUser(user.get());
+        listing.setUserFullName(user.get().getFirstName() + " " + user.get().getFirstName());
+        listing.setBook(book.get());
+        listing.setPrice(formData.getPrice());
+        listing.setBookCondition(formData.getCondition().name());
+        listing.setAvailable(true);
+        return listingRepository.save(listing);
+    }
+
     public Listing updateListing(long id, Listing updatedListing) {
         Optional<Listing> existing = listingRepository.findById(id);
         existing.orElseThrow(() -> new ListingNotFoundException(String.format("Listing by id %d not found", id)));
@@ -61,7 +78,8 @@ public class ListingService {
                 field.set(listing, (!field.getType().isPrimitive() && field.get(updatedListing) != null)
                         ? field.get(updatedListing)
                         : field.get(listing));
-            } catch (IllegalAccessException ignored) {}
+            } catch (IllegalAccessException ignored) {
+            }
         }
 
         return listingRepository.save(listing);

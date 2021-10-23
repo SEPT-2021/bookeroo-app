@@ -75,7 +75,6 @@ public class PayPalService {
 
             double itemCost = Double.parseDouble(listing.getPrice());
             double shippingCost = itemCost * SHIPPING_PERCENTAGE;
-            double totalCost = itemCost + shippingCost;
             Book book = listing.getBook();
             ShippingAddress address = cartCheckout.getShippingAddress();
             PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
@@ -83,7 +82,7 @@ public class PayPalService {
                     .description(DESCRIPTION)
                     .amountWithBreakdown(new AmountWithBreakdown()
                             .currencyCode(CURRENCY_CODE)
-                            .value(String.valueOf(round(totalCost)))
+                            .value(String.valueOf(round(itemCost) + round(shippingCost)))
                             .amountBreakdown(new AmountBreakdown()
                                     .itemTotal(new Money()
                                             .currencyCode(CURRENCY_CODE).value(String.valueOf(round(itemCost))))

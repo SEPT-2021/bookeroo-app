@@ -10,18 +10,19 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
+  SelectProps,
   Theme,
   Typography,
-} from "@mui/material";
-import { withStyles, WithStyles } from "@material-ui/core";
+  withStyles,
+  WithStyles,
+} from "@material-ui/core";
 import { Bookmark } from "@material-ui/icons";
+import { FormControl } from "@mui/material";
 import { addBook } from "../../util/api";
 import LoadingButton from "../../util/LoadingButton";
 import FormField from "../../util/FormField";
@@ -76,16 +77,12 @@ function AddBook({ classes }: AddBookProps) {
     await makeData();
   };
 
-  const handleChangeBookCondition = (
-    event: SelectChangeEvent<typeof condition>
-  ) => {
-    setCondition(event.target.value || "");
+  const handleChangeBookCondition: SelectProps["onChange"] = (event) => {
+    setCondition((event.target.value as string) || "");
   };
 
-  const handleChangeBookCategory = (
-    event: SelectChangeEvent<typeof category>
-  ) => {
-    setCategory(event.target.value || "");
+  const handleChangeBookCategory: SelectProps["onChange"] = (event) => {
+    setCategory((event.target.value as string) || "");
   };
 
   const handleClickOpenCondition = () => {

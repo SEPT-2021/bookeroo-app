@@ -1,12 +1,18 @@
 import axios, { AxiosResponse } from "axios";
-import type { User } from "../components/GlobalContext";
-import { AddEditBookType, BookItemType, CartType, TokenProps } from "./types";
+import {
+  AddEditBookType,
+  BookCondition,
+  BookItemType,
+  CartType,
+  TokenProps,
+  User,
+} from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins" | "newsletter",
+  service: "books" | "listings" | "users" | "orders" | "admins" | "newsletter",
   route: string
 ) {
   const port = (() => {
@@ -15,6 +21,7 @@ function getRouteURL(
       case "newsletter":
         return 8080;
       case "books":
+      case "listings":
         return 8081;
       case "orders":
         return 8082;
@@ -44,7 +51,7 @@ export const registerUser = makeTypedAPICall<
     password: string;
     firstName: string;
     lastName: string;
-    roles: string;
+    role: string;
     addressLine1: string;
     addressLine2: string;
     city: string;
@@ -65,7 +72,7 @@ export const addBook = makeTypedAPICall<
   AddEditBookType & {
     price: string;
     condition: string;
-    coverFile: File | unknown;
+    coverFile?: File | unknown;
   },
   unknown
 >((args) => {
@@ -100,6 +107,13 @@ export const editBook = makeTypedAPICall<
   });
 });
 
+export const reviewBook = makeTypedAPICall<
+  { text: string; rating: number; id: string },
+  unknown
+>(({ text, rating, id }) =>
+  api.post(getRouteURL("books", `${id}/review`), { text, rating })
+);
+
 export const findBookById = makeTypedAPICall<
   {
     id: string;
@@ -113,6 +127,14 @@ export const deleteBookById = makeTypedAPICall<
   },
   unknown
 >((args) => api.delete(getRouteURL("books", args.id)));
+
+export const deleteListingById = makeTypedAPICall<{ id: string }, unknown>(
+  ({ id }) => api.delete(getRouteURL("listings", id))
+);
+export const addListing = makeTypedAPICall<
+  { bookId: string; price: string; condition: BookCondition },
+  unknown
+>((args) => api.post(getRouteURL("listings", "add"), args));
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {
