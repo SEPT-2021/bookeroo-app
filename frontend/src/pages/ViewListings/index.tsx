@@ -10,14 +10,14 @@ const columns: GridColDef[] = [
 ];
 
 export default function ViewListings() {
-  const { data, isLoading, error } = useQuery("orders", viewListings);
+  const { data } = useQuery("orders", viewListings);
 
   console.log(data);
 
   const rows = [{ id: 1, price: 11, bookCondition: "NEW" }];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 400, width: "350%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
