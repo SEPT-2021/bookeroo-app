@@ -15,60 +15,48 @@ function RegisterAsASeller({ classes }: RegisterAsASellerProps) {
 
   const onSubmit = () => mutate({ abn, businessName, businessPhone });
 
-  if (error?.response?.status === 409)
-    // TODO SHOW ERROR
-    console.log("ERROR DUPLICATE");
-
   return (
     <Grid container component="main" className={classes.root}>
       <Grid container spacing={2} justifyContent="center">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <form className={classes.box} noValidate autoComplete="off">
-            <Box>
-              <FormField
-                errors={error?.response?.data}
-                id="outlined-secondary"
-                name="abn"
-                label="ABN"
-                variant="outlined"
-                color="secondary"
-                onChange={setAbn}
-              />
-              <FormField
-                errors={error?.response?.data}
-                id="outlined-secondary"
-                name="businessName"
-                label="Business Name"
-                variant="outlined"
-                color="secondary"
-                onChange={setBusinessName}
-              />
-              <FormField
-                errors={error?.response?.data}
-                id="outlined-secondary"
-                name="businessPhone"
-                label="Business Phone"
-                variant="outlined"
-                color="secondary"
-                onChange={setBusinessPhone}
-              />
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                color="primary"
-                onClick={onSubmit}
-              >
-                Register As A Seller
-              </LoadingButton>
-            </Box>
-          </form>
-        </div>
+        <form className={classes.box} noValidate autoComplete="off">
+          <Box>
+            <FormField
+              errors={error?.response?.data}
+              id="outlined-secondary"
+              name="abn"
+              label="ABN"
+              variant="outlined"
+              color="secondary"
+              onChange={setAbn}
+            />
+            <FormField
+              errors={error?.response?.data}
+              id="outlined-secondary"
+              name="businessName"
+              label="Business Name"
+              variant="outlined"
+              color="secondary"
+              onChange={setBusinessName}
+            />
+            <FormField
+              errors={error?.response?.data}
+              id="outlined-secondary"
+              name="businessPhone"
+              label="Business Phone"
+              variant="outlined"
+              color="secondary"
+              onChange={setBusinessPhone}
+            />
+            <LoadingButton
+              loading={isLoading}
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+            >
+              Register As A Seller
+            </LoadingButton>
+          </Box>
+        </form>
       </Grid>
     </Grid>
   );
@@ -78,6 +66,11 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       height: "30vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column",
+      position: "absolute",
     },
     box: {
       "& > *": {
