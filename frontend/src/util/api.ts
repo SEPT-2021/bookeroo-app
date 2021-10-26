@@ -8,7 +8,6 @@ import {
   TokenProps,
   User,
 } from "./types";
-import type { User } from "../components/GlobalContext";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;

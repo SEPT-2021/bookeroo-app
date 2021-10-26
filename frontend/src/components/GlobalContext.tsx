@@ -14,7 +14,6 @@ import useStickyState from "../util/useStickyState";
 export interface CartItem {
   listing: Listing;
   book: BookItemType;
-  phonenumber: string;
 }
 
 interface GlobalContextType {

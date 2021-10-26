@@ -1,11 +1,11 @@
 import * as React from "react";
+import { useContext } from "react";
 import Button from "@mui/material/Button";
 import { createStyles, Theme } from "@mui/material";
 import { withStyles, WithStyles } from "@material-ui/core";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
-import { useContext } from "react";
+import { Delete } from "@material-ui/icons";
 import { deleteUser } from "../../util/api";
 import { GlobalContext } from "../../components/GlobalContext";
 
@@ -22,11 +22,7 @@ function DeleteUser({ classes }: DeleteAccountProps) {
 
   return (
     <div className={classes.root}>
-      <Button
-        variant="outlined"
-        startIcon={<DeleteIcon />}
-        onClick={deleteUsers}
-      >
+      <Button variant="outlined" startIcon={<Delete />} onClick={deleteUsers}>
         Delete Account
       </Button>
     </div>

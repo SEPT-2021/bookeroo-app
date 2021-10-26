@@ -7,7 +7,7 @@ import {
   Theme,
 } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { DARK_MODE } from "../theme";
+import { DARK_MODE } from "../../theme";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
