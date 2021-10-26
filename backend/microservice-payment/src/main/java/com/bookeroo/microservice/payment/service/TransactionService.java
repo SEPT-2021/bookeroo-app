@@ -42,7 +42,8 @@ public class TransactionService {
     public List<Transaction> getTransactionsByBuyer(long buyerId) {
         List<Transaction> transactions = transactionRepository.findByBuyer_Id(buyerId);
         transactions.forEach(transaction -> {
-            long elapsedTimeMillis = new Date().getTime() - transaction.getUpdatedAt().getTime();
+            long elapsedTimeMillis =
+                    new Date().getTime() - transaction.getCreatedAt().getTime();
             transaction.setRefundable(
                     TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
         });
