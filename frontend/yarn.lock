@@ -1298,6 +1298,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@charlesvien/react-animatecss@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@charlesvien/react-animatecss/-/react-animatecss-1.0.10.tgz#2c56e641b9b58f2003e38d7e58452a46d11e6239"
+  integrity sha512-LxgEumPaf1KXc/i1sXqsAJT06SAZROM+f8C04pr0MGZXF4HgTq1KurDBZf1m/9IVaG2/T66rJww38zyUWWeUNw==
+  dependencies:
+    prop-types "^15.7.2"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -3878,7 +3885,7 @@ cliui@^6.0.0:
     strip-ansi "^6.0.0"
     wrap-ansi "^6.2.0"
 
-clsx@^1.0.4, clsx@^1.1.1:
+clsx@^1.0.4, clsx@^1.1.0, clsx@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
   integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
@@ -8449,6 +8456,14 @@ normalize-url@^3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
 
+notistack@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/notistack/-/notistack-2.0.2.tgz#18361a0ce39d2c2d8c3ef58ae43cf4b30d78b800"
+  integrity sha512-Z2kD6QK9n/9V9zXQfN3ZgH22TefBWE3OZ/q74gMVslGPA9j9WGjoi+YxsgkTAOY8NqTYdUe8aijd2kXsGNYp6g==
+  dependencies:
+    clsx "^1.1.0"
+    hoist-non-react-statics "^3.3.0"
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -10267,6 +10282,11 @@ react-transition-group@^4.4.0, react-transition-group@^4.4.2:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-typing-text-animation@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-typing-text-animation/-/react-typing-text-animation-1.0.0.tgz#a01cb56c29a70157f76884a31640715582288daf"
+  integrity sha512-66axYv6Hznu/hLgsLgTgKvWa6roZubRxGpq5vEPwWTkUhwmtEAu1bk8eOOWfCYIBq8aMNkQtk11jeEOoiMH+Vg==
 
 react@^17.0.2:
   version "17.0.2"

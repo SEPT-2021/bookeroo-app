@@ -1,19 +1,32 @@
 import React from "react";
 import { createStyles, Grid, withStyles, WithStyles } from "@material-ui/core";
-import logo from "../../assets/logo.svg";
+import Animate from "@charlesvien/react-animatecss";
+import ImageAvatars from "../../components/Avatars";
 
 function AboutUs({ classes }: AboutUsProps) {
   return (
     <Grid container component="main" className={classes.root}>
-      <div className="row align-items-center my-5">
-        <div className="col-lg-7">
-          <img className="img-fluid rounded mb-4 mb-lg-0" src={logo} alt="" />
-        </div>
-        <div className="col-lg-5">
-          <h1 className="font-weight-light">About Us</h1>
-          <p>To be populated......</p>
-        </div>
-      </div>
+      <h1>
+        <Animate
+          animationIn="fadeIn"
+          animationOut="fadeOut"
+          inDuration={4000}
+          outDuration={2000}
+          visible
+        >
+          Who Are We ?
+        </Animate>
+      </h1>
+
+      <Animate
+        animationIn="fadeIn"
+        animationOut="fadeOut"
+        inDuration={2000}
+        outDuration={3000}
+        visible
+      >
+        <ImageAvatars />
+      </Animate>
     </Grid>
   );
 }
