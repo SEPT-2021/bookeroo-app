@@ -13,6 +13,7 @@ import com.bookeroo.microservice.book.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
@@ -85,6 +86,7 @@ public class ListingService {
         return listingRepository.save(listing);
     }
 
+    @Transactional
     public void removeListing(long id) {
         Optional<Listing> existing = listingRepository.findById(id);
         existing.orElseThrow(() -> new ListingNotFoundException(String.format("Listing by id %d not found", id)));
