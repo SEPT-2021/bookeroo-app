@@ -81,7 +81,12 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
             if (!userRepository.findByUsername(user.getUsername()).isPresent())
                 userRepository.save(user);
 
-            bookRepository.deleteAll();
+            try {
+                bookRepository.deleteAll();
+                listingRepository.deleteAll();
+                reviewRepository.deleteAll();
+            } catch (Exception ignore) {}
+
             Random random = new Random();
             for (int i = 0; i < 8; i++) {
                 try {

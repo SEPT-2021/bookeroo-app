@@ -3,6 +3,7 @@ package com.bookeroo.microservice.book.web;
 import com.bookeroo.microservice.book.model.Listing;
 import com.bookeroo.microservice.book.model.ListingFormData;
 import com.bookeroo.microservice.book.model.User;
+import com.bookeroo.microservice.book.repository.UserRepository;
 import com.bookeroo.microservice.book.security.JWTTokenProvider;
 import com.bookeroo.microservice.book.service.ListingService;
 import com.bookeroo.microservice.book.service.ValidationErrorService;
@@ -11,16 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -33,16 +25,19 @@ import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEM
 @RequestMapping("/api/listings")
 public class ListingController {
 
+    private final UserRepository userRepository;
     private final ListingService listingService;
     private final ListingFormDataValidator listingFormDataValidator;
     private final ValidationErrorService validationErrorService;
     private final JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public ListingController(ListingService listingService,
+    public ListingController(UserRepository userRepository,
+                             ListingService listingService,
                              ListingFormDataValidator listingFormDataValidator,
                              ValidationErrorService validationErrorService,
                              JWTTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
         this.listingService = listingService;
         this.listingFormDataValidator = listingFormDataValidator;
         this.validationErrorService = validationErrorService;
