@@ -47,7 +47,7 @@ public class ListingController {
     @PostMapping("/add")
     public ResponseEntity<?> addNewListing(
             @RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader,
-            @Valid @ModelAttribute ListingFormData formData, BindingResult result) {
+            @Valid @RequestBody ListingFormData formData, BindingResult result) {
         if (tokenHeader == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 

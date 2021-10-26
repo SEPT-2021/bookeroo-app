@@ -54,12 +54,12 @@ public class ListingService {
     public Listing saveListing(ListingFormData formData, String username) {
         Optional<User> user = userRepository.findByUsername(username);
         user.orElseThrow(() -> new UserNotFoundException(String.format("User by username %s not found", username)));
-        Optional<Book> book = bookRepository.findById(formData.getBookId());
+        Optional<Book> book = bookRepository.findById(Long.parseLong(formData.getBookId()));
         book.orElseThrow(() -> new BookNotFoundException(String.format("Book by id %s not found", formData.getBookId())));
 
         Listing listing = new Listing();
         listing.setUser(user.get());
-        listing.setUserFullName(user.get().getFirstName() + " " + user.get().getFirstName());
+        listing.setUserFullName(user.get().getFirstName() + " " + user.get().getLastName());
         listing.setBook(book.get());
         listing.setPrice(formData.getPrice());
         listing.setBookCondition(formData.getCondition().name());
