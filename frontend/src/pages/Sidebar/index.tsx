@@ -3,11 +3,16 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { useContext } from "react";
 import RegisterAsASeller from "../RegisterAsASeller";
 import UserDetails from "../UserDetails";
 import DeleteUser from "../DeleteUser";
 import ViewTransactions from "../ViewTransactions";
 import ViewListings from "../ViewListings";
+import { GlobalContext } from "../../components/GlobalContext";
+import { Role } from "../../util/types";
+import DownloadAllUsers from "../DownloadReports/AllUsers";
+import DownloadAllBooks from "../DownloadReports/AllBooks";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,6 +48,7 @@ function a11yProps(index: number) {
 }
 
 export default function VerticalTabs() {
+  const { user } = useContext(GlobalContext);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -71,6 +77,12 @@ export default function VerticalTabs() {
         <Tab label="View Transactions" {...a11yProps(2)} />
         <Tab label="View Listings" {...a11yProps(3)} />
         <Tab label="Delete Account" {...a11yProps(4)} />
+        {user?.role === Role.ROLE_ADMIN && (
+          <Tab label="Download All Users" {...a11yProps(5)} />
+        )}
+        {user?.role === Role.ROLE_ADMIN && (
+          <Tab label="Download All Books" {...a11yProps(6)} />
+        )}
       </Tabs>
       <TabPanel value={value} index={0}>
         <UserDetails />
@@ -87,6 +99,16 @@ export default function VerticalTabs() {
       <TabPanel value={value} index={4}>
         <DeleteUser />
       </TabPanel>
+      {user?.role === Role.ROLE_ADMIN && (
+        <TabPanel value={value} index={5}>
+          <DownloadAllUsers />
+        </TabPanel>
+      )}
+      {user?.role === Role.ROLE_ADMIN && (
+        <TabPanel value={value} index={6}>
+          <DownloadAllBooks />
+        </TabPanel>
+      )}
     </Box>
   );
 }
