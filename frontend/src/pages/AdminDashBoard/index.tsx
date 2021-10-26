@@ -28,6 +28,8 @@ import {
 import LinearLoading from "../../util/LinearLoading";
 import { User } from "../../util/types";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,
   "& .MuiSwitch-track": {
