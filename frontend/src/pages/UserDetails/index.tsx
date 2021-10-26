@@ -55,84 +55,76 @@ function UserDetails({ classes }: UserDetailsProps) {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid container spacing={2} justifyContent="center">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Box mt={2}>
-            <FormField
-              errors={error?.response?.data}
-              name="firstName"
-              label="First Name"
-              defaultValue={user?.firstName}
-              autoComplete={user?.firstName}
-              onChange={setFirstName}
-            />
-            <FormField
-              errors={error?.response?.data}
-              name="lastName"
-              label="Last Name"
-              defaultValue={user?.lastName}
-              autoComplete={user?.lastName}
-              onChange={setLastName}
-            />
-            <FormField
-              errors={error?.response?.data}
-              name="addressLine1"
-              label="Address Line 1"
-              defaultValue={user?.addressLine1}
-              autoComplete={user?.addressLine1}
-              onChange={setAddressLine1}
-            />
-            <FormField
-              errors={error?.response?.data}
-              name="addressLine2"
-              label="Address Line 2"
-              defaultValue={user?.addressLine2}
-              autoComplete={user?.addressLine2}
-              onChange={setAddressLine2}
-            />
-            <FormField
-              errors={error?.response?.data}
-              name="city"
-              label="City"
-              defaultValue={user?.city}
-              autoComplete={user?.city}
-              onChange={setCity}
-            />
-            <FormField
-              errors={error?.response?.data}
-              name="state"
-              label="State"
-              defaultValue={user?.state}
-              autoComplete={user?.state}
-              onChange={setState}
-            />
-            <FormField
-              errors={error?.response?.data}
-              name="postalCode"
-              label="Postal code"
-              defaultValue={user?.postalCode}
-              autoComplete={user?.postalCode}
-              onChange={setPostalCode}
-            />
+      <Grid container spacing={1} justifyContent="center">
+        <Box mt={2}>
+          <FormField
+            errors={error?.response?.data}
+            name="firstName"
+            label="First Name"
+            defaultValue={user?.firstName}
+            autoComplete={user?.firstName}
+            onChange={setFirstName}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="lastName"
+            label="Last Name"
+            defaultValue={user?.lastName}
+            autoComplete={user?.lastName}
+            onChange={setLastName}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="addressLine1"
+            label="Address Line 1"
+            defaultValue={user?.addressLine1}
+            autoComplete={user?.addressLine1}
+            onChange={setAddressLine1}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="addressLine2"
+            label="Address Line 2"
+            defaultValue={user?.addressLine2}
+            autoComplete={user?.addressLine2}
+            onChange={setAddressLine2}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="city"
+            label="City"
+            defaultValue={user?.city}
+            autoComplete={user?.city}
+            onChange={setCity}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="state"
+            label="State"
+            defaultValue={user?.state}
+            autoComplete={user?.state}
+            onChange={setState}
+          />
+          <FormField
+            errors={error?.response?.data}
+            name="postalCode"
+            label="Postal code"
+            defaultValue={user?.postalCode}
+            autoComplete={user?.postalCode}
+            onChange={setPostalCode}
+          />
 
-            <LoadingButton
-              loading={isLoading}
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={onSubmit}
-            >
-              {" "}
-              update{" "}
-            </LoadingButton>
-          </Box>
-        </div>
+          <LoadingButton
+            loading={isLoading}
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={onSubmit}
+          >
+            {" "}
+            update{" "}
+          </LoadingButton>
+        </Box>
       </Grid>
     </Grid>
   );
@@ -142,6 +134,11 @@ const styles = () =>
   createStyles({
     root: {
       height: "30vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column",
+      position: "absolute",
     },
     box: {
       "& > *": {
