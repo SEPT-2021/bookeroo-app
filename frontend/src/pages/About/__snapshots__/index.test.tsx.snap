@@ -5,29 +5,57 @@ exports[`AboutUs matches snapshot render AboutUs 1`] = `
   <main
     class="MuiGrid-root AboutUs-root-1 MuiGrid-container"
   >
+    <h1>
+      <div
+        class="null animate__animated animate__fadeIn"
+        style="animation-delay: 0ms; animation-duration: 4000ms; pointer-events: all;"
+      >
+        Who Are We ?
+      </div>
+    </h1>
     <div
-      class="row align-items-center my-5"
+      class="null animate__animated animate__fadeIn"
+      style="animation-delay: 0ms; animation-duration: 2000ms; pointer-events: all;"
     >
       <div
-        class="col-lg-7"
+        class="makeStyles-root-2"
       >
-        <img
-          alt=""
-          class="img-fluid rounded mb-4 mb-lg-0"
-          src="logo.svg"
-        />
-      </div>
-      <div
-        class="col-lg-5"
-      >
-        <h1
-          class="font-weight-light"
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
         >
-          About Us
-        </h1>
-        <p>
-          To be populated......
-        </p>
+          <img
+            alt="P1"
+            class="MuiAvatar-img"
+            src="p1.jpg"
+          />
+        </div>
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+        >
+          <img
+            alt="P2"
+            class="MuiAvatar-img"
+            src="p2.jpg"
+          />
+        </div>
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+        >
+          <img
+            alt="P3"
+            class="MuiAvatar-img"
+            src="p3.jpg"
+          />
+        </div>
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+        >
+          <img
+            alt="P4"
+            class="MuiAvatar-img"
+            src="p4.jpg"
+          />
+        </div>
       </div>
     </div>
   </main>
@@ -39,29 +67,57 @@ exports[`Rendering page About page renders without crashing 1`] = `
   <main
     class="MuiGrid-root AboutUs-root-1 MuiGrid-container"
   >
+    <h1>
+      <div
+        class="null animate__animated animate__fadeIn"
+        style="animation-delay: 0ms; animation-duration: 4000ms; pointer-events: all;"
+      >
+        Who Are We ?
+      </div>
+    </h1>
     <div
-      class="row align-items-center my-5"
+      class="null animate__animated animate__fadeIn"
+      style="animation-delay: 0ms; animation-duration: 2000ms; pointer-events: all;"
     >
       <div
-        class="col-lg-7"
+        class="makeStyles-root-2"
       >
-        <img
-          alt=""
-          class="img-fluid rounded mb-4 mb-lg-0"
-          src="logo.svg"
-        />
-      </div>
-      <div
-        class="col-lg-5"
-      >
-        <h1
-          class="font-weight-light"
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
         >
-          About Us
-        </h1>
-        <p>
-          To be populated......
-        </p>
+          <img
+            alt="P1"
+            class="MuiAvatar-img"
+            src="p1.jpg"
+          />
+        </div>
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+        >
+          <img
+            alt="P2"
+            class="MuiAvatar-img"
+            src="p2.jpg"
+          />
+        </div>
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+        >
+          <img
+            alt="P3"
+            class="MuiAvatar-img"
+            src="p3.jpg"
+          />
+        </div>
+        <div
+          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+        >
+          <img
+            alt="P4"
+            class="MuiAvatar-img"
+            src="p4.jpg"
+          />
+        </div>
       </div>
     </div>
   </main>
