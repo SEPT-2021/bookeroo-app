@@ -151,7 +151,14 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
       ),
     },
   ];
-
+  if (isLoading) {
+    return (
+      <>
+        <p>Loading...</p>
+        <CircularProgress />
+      </>
+    );
+  }
   return (
     <Grid container component="main" className={classes.root}>
       <Grid container spacing={2} justifyContent="center">
