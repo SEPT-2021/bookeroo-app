@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.payment.model;
+package com.bookeroo.microservice.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

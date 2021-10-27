@@ -26,7 +26,7 @@ public class Listing {
     private String price;
     @NotBlank(message = "Condition cannot be blank")
     private String bookCondition;
-    @OneToOne(mappedBy = "listing")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Transaction transaction;
     private boolean isAvailable;

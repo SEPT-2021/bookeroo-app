@@ -1,13 +1,10 @@
 package com.bookeroo.microservice.payment.exception;
 
-/**
- * Response body presented when {@link BookNotFoundException} is thrown.
- */
-public class BookNotFoundResponse {
+public class TransactionNotRefundableResponse {
 
     private String id;
 
-    public BookNotFoundResponse(String id) {
+    public TransactionNotRefundableResponse(String id) {
         this.id = id;
     }
 

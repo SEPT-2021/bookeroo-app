@@ -17,4 +17,10 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     @Transactional
     void deleteById(long id);
 
+    @Transactional
+    void deleteAllByUser_Username(String username);
+
+    @Transactional
+    void deleteAllByBook_Id(long id);
+
 }

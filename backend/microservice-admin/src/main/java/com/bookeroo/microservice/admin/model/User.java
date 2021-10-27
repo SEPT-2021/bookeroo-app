@@ -31,7 +31,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     @JsonManagedReference(value = "User_SellerDetails")
     private SellerDetails sellerDetails;

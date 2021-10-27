@@ -35,8 +35,8 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
     private final ReviewRepository reviewRepository;
     private final ListingRepository listingRepository;
     private final S3Service s3Service;
-    private BCryptPasswordEncoder passwordEncoder;
     private final Faker faker = new Faker(new Locale("en-AU"));
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Value("#{new Boolean('${db.initialise}')}")
     private boolean postConstruct;
@@ -63,61 +63,53 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
         initialise();
     }
 
-    private void initialise() {
+    void initialise() {
         if (postConstruct) {
-            User user = new User();
-            user.setUsername("listingUser@test.com");
-            user.setFirstName("user1FirstName");
-            user.setLastName("user1LastName");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setAddressLine1("123 Bookeroo St");
-            user.setAddressLine2("Apartment 1");
-            user.setCity("Melbourne");
-            user.setState("VIC");
-            user.setPostalCode("3001");
-            user.setPhoneNumber("+(61) 411 170 399");
-            user.setRole("ROLE_USER");
-            user.setEnabled(true);
-            if (!userRepository.findByUsername(user.getUsername()).isPresent())
-                userRepository.save(user);
-
             try {
-                bookRepository.deleteAll();
-                listingRepository.deleteAll();
                 reviewRepository.deleteAll();
-            } catch (Exception ignore) {}
+                listingRepository.deleteAll();
+                bookRepository.deleteAll();
+                userRepository.deleteAllByUsernameContaining("@random.com");
+            } catch (Exception ignore) {
+            }
 
             Random random = new Random();
             for (int i = 0; i < 8; i++) {
+                Book book;
                 try {
-                    Book book = bookRepository.save(getRandomBook());
-                    for (int j = 0; j < (random.nextInt(5) + 1); j++) {
-                        Review review = new Review();
-                        User reviewer = getRandomReviewer();
-                        review.setUser(reviewer);
-                        review.setUserFullName(faker.funnyName().name());
-                        review.setBook(book);
-                        review.setText(faker.yoda().quote());
-                        review.setRating(random.nextInt(5) + 1);
-                        reviewRepository.save(review);
-                    }
-                    book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
-                    book = bookRepository.save(book);
+                    book = bookRepository.save(getRandomBook());
+                } catch (Exception exception) {
+                    continue;
+                }
 
-                    Listing listing = new Listing();
-                    listing.setUser(user);
-                    listing.setUserFullName(faker.funnyName().name());
-                    listing.setBook(book);
-                    listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
-                    listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
-                    listing.setAvailable(true);
-                    listingRepository.save(listing);
-                } catch (Exception ignore) {}
+                for (int j = 0; j < (random.nextInt(5) + 1); j++) {
+                    Review review = new Review();
+                    User reviewer = userRepository.save(getRandomUser());
+                    review.setUser(reviewer);
+                    review.setUserFullName(faker.funnyName().name());
+                    review.setBook(book);
+                    String text = faker.yoda().quote();
+                    review.setText(text.length() < 280 ? text : text.substring(0, 280));
+                    review.setRating(random.nextInt(5) + 1);
+                    reviewRepository.save(review);
+                }
+                book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
+                book = bookRepository.save(book);
+
+                Listing listing = new Listing();
+                User seller = userRepository.save(getRandomUser());
+                listing.setUser(seller);
+                listing.setUserFullName(faker.funnyName().name());
+                listing.setBook(book);
+                listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
+                listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
+                listing.setAvailable(true);
+                listingRepository.save(listing);
             }
         }
     }
 
-    private Book getRandomBook() {
+    private Book getRandomBook() throws IOException {
         Random random = new Random();
         Book book = new Book();
         book.setTitle(faker.book().title());
@@ -126,29 +118,25 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
         book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9000_000_000_000L) + 1000_000_000_000L));
         book.setDescription(faker.yoda().quote());
         book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
-        try {
-            book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
-        } catch (IOException ignore) {}
+        book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
         return book;
     }
 
-    private User getRandomReviewer() {
-        User reviewer = new User();
-        reviewer.setUsername(faker.internet().emailAddress());
-        reviewer.setFirstName(faker.name().firstName());
-        reviewer.setLastName(faker.name().lastName());
-        reviewer.setPassword(passwordEncoder.encode("password"));
-        reviewer.setState("VIC");
-        reviewer.setCity("Melbourne");
-        reviewer.setAddressLine1("123 Bookeroo St");
-        reviewer.setAddressLine2("Apartment 1");
-        reviewer.setPostalCode("3001");
-        reviewer.setPhoneNumber("+(61) 411 170 399");
-        reviewer.setRole("ROLE_USER");
-        reviewer.setEnabled(true);
-        userRepository.deleteUserByUsername(reviewer.getUsername());
-        reviewer = userRepository.save(reviewer);
-        return reviewer;
+    private User getRandomUser() {
+        User user = new User();
+        user.setUsername(faker.name().username() + "@random.com");
+        user.setFirstName(faker.name().firstName());
+        user.setLastName(faker.name().lastName());
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setAddressLine1(faker.address().streetAddress());
+        user.setAddressLine2(faker.address().secondaryAddress());
+        user.setCity(faker.address().city());
+        user.setState(faker.address().stateAbbr());
+        user.setPostalCode(faker.address().zipCode());
+        user.setPhoneNumber("+(61) 413 170 399");
+        user.setEnabled(true);
+        user.setRole("ROLE_USER");
+        return user;
     }
 
 }

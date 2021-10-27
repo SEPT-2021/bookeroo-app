@@ -1,6 +1,9 @@
 package com.bookeroo.microservice.admin;
 
 import com.bookeroo.microservice.admin.model.User;
+import com.bookeroo.microservice.admin.repository.ListingRepository;
+import com.bookeroo.microservice.admin.repository.ReviewRepository;
+import com.bookeroo.microservice.admin.repository.TransactionRepository;
 import com.bookeroo.microservice.admin.repository.UserRepository;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +18,24 @@ import java.util.Locale;
 public class DbInitialiser {
 
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final ListingRepository listingRepository;
+    private final TransactionRepository transactionRepository;
+    private final Faker faker = new Faker(new Locale("en-AU"));
     private BCryptPasswordEncoder passwordEncoder;
 
     @Value("#{new Boolean('${db.initialise}')}")
     private boolean postConstruct;
 
     @Autowired
-    public DbInitialiser(UserRepository userRepository) {
+    public DbInitialiser(UserRepository userRepository,
+                         ReviewRepository reviewRepository,
+                         ListingRepository listingRepository,
+                         TransactionRepository transactionRepository) {
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
+        this.listingRepository = listingRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Autowired
@@ -33,35 +46,35 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            try {
-                Faker faker = new Faker(new Locale("en-AU"));
-                User admin = new User();
-                admin.setUsername("admin@test.com");
-                admin.setFirstName("adminFirstName");
-                admin.setLastName("adminLastName");
-                admin.setPassword(passwordEncoder.encode("password"));
-                admin.setAddressLine1("123 Admin St");
-                admin.setAddressLine2("Apartment 1");
-                admin.setCity("Melbourne");
-                admin.setState("VIC");
-                admin.setPostalCode("3001");
-                admin.setPhoneNumber("+(61) 413 170 399");
-                admin.setEnabled(true);
-                admin.setRole("ROLE_ADMIN");
-                userRepository.deleteUserByUsername(admin.getUsername());
-                userRepository.save(admin);
+            User admin = new User();
+            admin.setUsername("admin@test.com");
+            admin.setFirstName("adminFirstName");
+            admin.setLastName("adminLastName");
+            admin.setPassword(passwordEncoder.encode("password"));
+            admin.setAddressLine1("123 Admin St");
+            admin.setAddressLine2("Apartment 1");
+            admin.setCity("Melbourne");
+            admin.setState("VIC");
+            admin.setPostalCode("3001");
+            admin.setPhoneNumber("+(61) 413 170 399");
+            admin.setEnabled(true);
+            admin.setRole("ROLE_ADMIN");
+            userRepository.deleteUserByUsername(admin.getUsername());
+            userRepository.save(admin);
 
-                userRepository.deleteAllByUsernameContaining("random");
-                for (int i = 0; i < 4; i++) {
-                    User user = getRandomUser();
-                    userRepository.save(user);
-                }
-            } catch (Exception ignore) {}
+            listingRepository.deleteAllByUser_UsernameContaining("@random.com");
+            transactionRepository.deleteAllByBuyer_UsernameContaining("@random.com");
+            reviewRepository.deleteAllByUser_UsernameContaining("@random.com");
+            userRepository.deleteAllByUsernameContaining("@random.com");
+            try {
+                for (int i = 0; i < 4; i++)
+                    userRepository.save(getRandomUser());
+            } catch (Exception ignore) {
+            }
         }
     }
 
     private User getRandomUser() {
-        Faker faker = new Faker(new Locale("en-AU"));
         User user = new User();
         user.setUsername(faker.name().username() + "@random.com");
         user.setFirstName(faker.name().firstName());

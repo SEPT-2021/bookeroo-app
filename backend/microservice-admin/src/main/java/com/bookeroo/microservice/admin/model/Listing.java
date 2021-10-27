@@ -1,6 +1,7 @@
-package com.bookeroo.microservice.book.model;
+package com.bookeroo.microservice.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +26,9 @@ public class Listing {
     private String price;
     @NotBlank(message = "Condition cannot be blank")
     private String bookCondition;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Transaction transaction;
     private boolean isAvailable;
     private Date createdAt;
     private Date updatedAt;
@@ -80,6 +84,14 @@ public class Listing {
         this.bookCondition = bookCondition;
     }
 
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
     public boolean isAvailable() {
         return isAvailable;
     }
@@ -112,30 +124,6 @@ public class Listing {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = new Date();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-
-        Listing listing = (Listing) object;
-
-        if (id != listing.id) return false;
-        if (isAvailable != listing.isAvailable) return false;
-        if (!userFullName.equals(listing.userFullName)) return false;
-        if (!price.equals(listing.price)) return false;
-        return bookCondition.equals(listing.bookCondition);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (userFullName != null ? userFullName.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (bookCondition != null ? bookCondition.hashCode() : 0);
-        result = 31 * result + (isAvailable ? 1 : 0);
-        return result;
     }
 
 }

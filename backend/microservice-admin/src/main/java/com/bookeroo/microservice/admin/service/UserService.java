@@ -4,8 +4,7 @@ import com.bookeroo.microservice.admin.exception.SellerNotFoundException;
 import com.bookeroo.microservice.admin.exception.UserNotFoundException;
 import com.bookeroo.microservice.admin.model.User;
 import com.bookeroo.microservice.admin.model.User.UserRole;
-import com.bookeroo.microservice.admin.repository.SellerDetailsRepository;
-import com.bookeroo.microservice.admin.repository.UserRepository;
+import com.bookeroo.microservice.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +19,21 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final ListingRepository listingRepository;
+    private final TransactionRepository transactionRepository;
     private final SellerDetailsRepository sellerDetailsRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, SellerDetailsRepository sellerDetailsRepository) {
+    public UserService(UserRepository userRepository,
+                       ListingRepository listingRepository,
+                       ReviewRepository reviewRepository,
+                       TransactionRepository transactionRepository,
+                       SellerDetailsRepository sellerDetailsRepository) {
         this.userRepository = userRepository;
+        this.listingRepository = listingRepository;
+        this.reviewRepository = reviewRepository;
+        this.transactionRepository = transactionRepository;
         this.sellerDetailsRepository = sellerDetailsRepository;
     }
 
@@ -69,6 +78,9 @@ public class UserService {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found", id));
 
+        reviewRepository.deleteAllByUser_Id(id);
+        listingRepository.deleteAllByUser_Id(id);
+        transactionRepository.deleteByBuyer_Id(id);
         userRepository.deleteUserById(id);
     }
 

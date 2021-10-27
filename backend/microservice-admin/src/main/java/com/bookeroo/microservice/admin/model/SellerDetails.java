@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -16,7 +15,6 @@ public class SellerDetails {
     @OneToOne
     @MapsId
     @JoinColumn
-    @NotNull(message = "User cannot be null")
     @JsonBackReference(value = "User_SellerDetails")
     private User user;
     @NotBlank(message = "ABN cannot be blank")

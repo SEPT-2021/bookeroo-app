@@ -1,6 +1,7 @@
 package com.bookeroo.microservice.payment.service;
 
 import com.bookeroo.microservice.payment.exception.ListingNotFoundException;
+import com.bookeroo.microservice.payment.exception.TransactionNotRefundableException;
 import com.bookeroo.microservice.payment.model.*;
 import com.bookeroo.microservice.payment.repository.ListingRepository;
 import com.bookeroo.microservice.payment.repository.TransactionRepository;
@@ -139,7 +140,11 @@ public class PayPalService {
     }
 
     public HttpResponse<Refund> refundOrder(long listingId) throws IOException {
-        Transaction transaction = transactionRepository.findByListing_Id(listingId);
+        Optional<Transaction> existingTransaction = transactionRepository.findByListing_Id(listingId);
+        existingTransaction.orElseThrow(() -> new ListingNotFoundException(String.format("No transaction found for listing by id %d", listingId)));
+        Transaction transaction = existingTransaction.get();
+        if (!transaction.isRefundable())
+            throw new TransactionNotRefundableException(String.format("Transaction by id %s is not refundable", transaction.getId()));
         CapturesRefundRequest request = new CapturesRefundRequest(transaction.getCaptureId());
         request.prefer("return=representation");
         request.requestBody(buildRefundRequestBody(transaction.getListing()));

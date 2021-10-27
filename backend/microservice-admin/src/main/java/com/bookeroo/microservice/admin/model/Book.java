@@ -1,4 +1,4 @@
-package com.bookeroo.microservice.book.model;
+package com.bookeroo.microservice.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -72,10 +72,6 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "Book_Listing")
     private List<Listing> listings;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "Book_Review")
-    private List<Review> reviews;
-    private float rating = 0.0f;
     @NotBlank(message = "Books must have a cover")
     @Size(max = 1023)
     private String cover;
@@ -157,22 +153,6 @@ public class Book {
         this.listings = listings;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -208,30 +188,22 @@ public class Book {
 
         Book book = (Book) object;
 
-        if (id != book.id) return false;
-        if (!title.equals(book.title)) return false;
-        if (!author.equals(book.author)) return false;
-        if (!pageCount.equals(book.pageCount)) return false;
-        if (!isbn.equals(book.isbn)) return false;
-        if (!description.equals(book.description)) return false;
-        if (!bookCategory.equals(book.bookCategory)) return false;
-        if (rating != book.rating) return false;
+        if (id != book.id)
+            return false;
+        if (!title.equals(book.title))
+            return false;
+        if (!author.equals(book.author))
+            return false;
+        if (!pageCount.equals(book.pageCount))
+            return false;
+        if (!isbn.equals(book.isbn))
+            return false;
+        if (!description.equals(book.description))
+            return false;
+        if (!bookCategory.equals(book.bookCategory))
+            return false;
 
         return cover.equals(book.cover);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (author != null ? author.hashCode() : 0);
-        result = 31 * result + (pageCount != null ? pageCount.hashCode() : 0);
-        result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (bookCategory != null ? bookCategory.hashCode() : 0);
-        result = 31 * result + (rating != 0.0f ? Float.floatToIntBits(rating) : 0);
-        result = 31 * result + (cover != null ? cover.hashCode() : 0);
-        return result;
     }
 
     @Override
@@ -249,6 +221,3 @@ public class Book {
     }
 
 }
-
-
-
