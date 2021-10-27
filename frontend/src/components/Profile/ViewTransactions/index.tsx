@@ -21,11 +21,14 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
 
   const [availability, setAvailability] = useState("");
 
-  const { mutate: refundMutate } = useMutation(requestRefund, {
-    onSuccess: () => {
-      client.invalidateQueries("orders");
-    },
-  });
+  const { mutate: refundMutate, isLoading: isRefundLoading } = useMutation(
+    requestRefund,
+    {
+      onSuccess: () => {
+        client.invalidateQueries("orders");
+      },
+    }
+  );
 
   const rows = data || [];
 
@@ -134,11 +137,12 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
         }
         return availability;
       },
-      renderCell: (val: GridRenderCellParams) => (
+      renderCell: ({ row }: GridRenderCellParams) => (
         <IconButton
-          onClick={() => refundMutate({ listingId: val.row.listing.id })}
+          onClick={() => refundMutate({ listingId: row.listing.id })}
+          disabled={!row.refundable || isRefundLoading}
         >
-          {isLoading ? (
+          {isRefundLoading ? (
             <CircularProgress color="secondary" size={20} />
           ) : (
             <SendIcon />
@@ -160,7 +164,7 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
         >
           <form className={classes.box} noValidate autoComplete="off">
             <Box>
-              <div style={{ height: 400, width: "700%" }}>
+              <div style={{ height: 400, width: "80vw" }}>
                 <DataGrid
                   rows={rows}
                   columns={columns}

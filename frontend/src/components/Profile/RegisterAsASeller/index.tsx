@@ -70,7 +70,7 @@ const styles = (theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "column",
-      position: "absolute",
+      paddingLeft: 200,
     },
     box: {
       "& > *": {

@@ -12,7 +12,6 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
-import BookSearchType from "./pages/old/BookSearchType";
 import Books from "./pages/Books";
 import CheckOut from "./pages/CheckOut";
 import NavBar from "./components/NavBar";

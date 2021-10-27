@@ -139,6 +139,7 @@ const styles = () =>
       justifyContent: "center",
       flexDirection: "column",
       position: "absolute",
+      maxWidth: "70vw",
     },
     box: {
       "& > *": {
