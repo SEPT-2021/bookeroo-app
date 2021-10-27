@@ -1,11 +1,11 @@
-import React from "react";
+import * as React from "react";
 import { useQuery } from "react-query";
 import { CSVLink } from "react-csv";
 import { CircularProgress } from "@material-ui/core";
-import { getAllUsers } from "../../util/api";
+import { getAllBooks } from "../../../util/api";
 
-export default function DownloadAllUsers() {
-  const { data, isLoading } = useQuery("admins", getAllUsers);
+export default function DownloadAllBooks() {
+  const { data, isLoading } = useQuery("books", getAllBooks);
   if (isLoading)
     return (
       <>
@@ -13,14 +13,13 @@ export default function DownloadAllUsers() {
         <CircularProgress />
       </>
     );
-
   return !data?.length ? (
-    <p>No users found.</p>
+    <p>No books found.</p>
   ) : (
     <div>
       <h1>Click Below to Download Data</h1>
-      <CSVLink data={data} filename="AllUsers.csv">
-        Download All Users
+      <CSVLink data={data} filename="AllBooks.csv">
+        Download All Books
       </CSVLink>
     </div>
   );

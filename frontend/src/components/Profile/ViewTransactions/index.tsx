@@ -11,9 +11,9 @@ import {
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import SendIcon from "@material-ui/icons/Send";
-import { requestRefund, viewTransactions } from "../../util/api";
-import theme from "../../theme";
-import { snakeCaseToNormalString } from "../../util/string-util";
+import { requestRefund, viewTransactions } from "../../../util/api";
+import theme from "../../../theme";
+import { snakeCaseToNormalString } from "../../../util/string-util";
 
 function ViewTransactions({ classes }: ViewTransactionsProps) {
   const { data, isLoading } = useQuery("orders", viewTransactions);

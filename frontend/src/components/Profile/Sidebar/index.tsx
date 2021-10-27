@@ -9,8 +9,8 @@ import UserDetails from "../UserDetails";
 import DeleteUser from "../DeleteUser";
 import ViewTransactions from "../ViewTransactions";
 import ViewListings from "../ViewListings";
-import { GlobalContext } from "../../components/GlobalContext";
-import { Role } from "../../util/types";
+import { GlobalContext } from "../../GlobalContext";
+import { Role } from "../../../util/types";
 import DownloadAllUsers from "../DownloadReports/AllUsers";
 import DownloadAllBooks from "../DownloadReports/AllBooks";
 

@@ -6,8 +6,8 @@ import { withStyles, WithStyles } from "@material-ui/core";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { Delete } from "@material-ui/icons";
-import { deleteUser } from "../../util/api";
-import { GlobalContext } from "../../components/GlobalContext";
+import { deleteUser } from "../../../util/api";
+import { GlobalContext } from "../../GlobalContext";
 
 function DeleteUser({ classes }: DeleteAccountProps) {
   const { mutate } = useMutation(deleteUser);

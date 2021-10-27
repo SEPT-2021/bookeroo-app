@@ -2,16 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { render, cleanup } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import LoadingButton from "../../util/LoadingButton";
-import BookSearchType from "./index";
+import DeleteBook from "./index";
+import LoadingButton from "../../../util/LoadingButton";
 
 afterEach(cleanup);
-describe("Rendering page BookSearchType", () => {
+describe("Rendering page DeleteBook", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
     ReactDOM.render(
       <QueryClientProvider client={new QueryClient()}>
-        <BookSearchType />
+        <DeleteBook />
       </QueryClientProvider>,
       div
     );
@@ -20,17 +20,17 @@ describe("Rendering page BookSearchType", () => {
 });
 
 describe("LoadingButton render matches snapshot", () => {
-  test("renders button", () => {
+  test("renders LoadingButton", () => {
     const button = render(<LoadingButton />);
     expect(button).toMatchSnapshot();
   });
 });
 
-describe("BookSearchType matches snapshot", () => {
-  test("render BookSearchType", () => {
+describe("DeleteBook matches snapshot", () => {
+  test("render DeleteBook", () => {
     const { container } = render(
       <QueryClientProvider client={new QueryClient()}>
-        <BookSearchType />
+        <DeleteBook />
       </QueryClientProvider>
     );
     expect(container).toMatchSnapshot();

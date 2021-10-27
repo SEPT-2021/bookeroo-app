@@ -9,9 +9,9 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { deleteListingById, viewListings } from "../../util/api";
-import { snakeCaseToNormalString } from "../../util/string-util";
-import theme from "../../theme";
+import { deleteListingById, viewListings } from "../../../util/api";
+import { snakeCaseToNormalString } from "../../../util/string-util";
+import theme from "../../../theme";
 
 function ViewListings({ classes }: ViewListingsProps) {
   const { data } = useQuery("orders", viewListings);

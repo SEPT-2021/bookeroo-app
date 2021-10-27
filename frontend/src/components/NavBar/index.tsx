@@ -50,7 +50,7 @@ function NavBar({ classes }: NavBarProps) {
           {user ? (
             <Box display="flex" alignItems="center">
               <Person />
-              <Link to="/UserDetails">
+              <Link to="/dashboard">
                 <Button>
                   {" "}
                   <Typography variant="subtitle2">

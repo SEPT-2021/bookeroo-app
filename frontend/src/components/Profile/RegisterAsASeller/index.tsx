@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { createStyles, Theme } from "@mui/material";
 import { useMutation } from "react-query";
-import FormField from "../../util/FormField";
-import LoadingButton from "../../util/LoadingButton";
-import { registerSeller } from "../../util/api";
+import FormField from "../../../util/FormField";
+import LoadingButton from "../../../util/LoadingButton";
+import { registerSeller } from "../../../util/api";
 
 function RegisterAsASeller({ classes }: RegisterAsASellerProps) {
   const [abn, setAbn] = useState("");

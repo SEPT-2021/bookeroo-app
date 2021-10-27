@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { createStyles, Theme } from "@material-ui/core/styles";
 import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { useMutation } from "react-query";
-import { deleteBookById } from "../../util/api";
-import FormField from "../../util/FormField";
-import LoadingButton from "../../util/LoadingButton";
+import { deleteBookById } from "../../../util/api";
+import FormField from "../../../util/FormField";
+import LoadingButton from "../../../util/LoadingButton";
 
+/**
+ * @deprecated
+ */
 function DeleteBook({ classes }: DeleteBookProps) {
   const [id, setId] = useState("");
 

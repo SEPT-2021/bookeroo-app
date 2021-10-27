@@ -12,7 +12,7 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
-import BookSearchType from "./pages/BookSearchType";
+import BookSearchType from "./pages/old/BookSearchType";
 import Books from "./pages/Books";
 import CheckOut from "./pages/CheckOut";
 import NavBar from "./components/NavBar";
@@ -21,7 +21,7 @@ import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
 import UsersList from "./pages/AdminDashBoard";
 import SingleBook from "./pages/SingleBook";
-import UserDashBoard from "./pages/UserDetails/test";
+import UserDashBoard from "./components/Profile/UserDashBoard";
 import EditBook from "./pages/EditBook";
 
 const queryClient = new QueryClient();
@@ -48,9 +48,6 @@ ReactDOM.render(
               <Route path="/search">
                 <BookSearch />
               </Route>
-              <Route path="/searchType">
-                <BookSearchType />
-              </Route>
               <Route path="/addBook">
                 <AddBook />
               </Route>
@@ -64,7 +61,7 @@ ReactDOM.render(
               <Route path="/adminDashboard">
                 <UsersList />
               </Route>
-              <Route path="/UserDetails">
+              <Route path="/dashboard">
                 <UserDashBoard />
               </Route>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, withStyles, WithStyles } from "@material-ui/core";
 import { Box } from "@mui/material";
-import VerticalTabs from "../Sidebar";
+import VerticalTabs from "./Sidebar";
 
 function UserDashBoard({ classes }: UserDashBoardProps) {
   return (

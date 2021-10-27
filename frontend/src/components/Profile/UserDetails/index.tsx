@@ -8,11 +8,11 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { updateUser } from "../../util/api";
-import LoadingButton from "../../util/LoadingButton";
-import FormField from "../../util/FormField";
-import { GlobalContext } from "../../components/GlobalContext";
-import theme from "../../theme";
+import { updateUser } from "../../../util/api";
+import LoadingButton from "../../../util/LoadingButton";
+import FormField from "../../../util/FormField";
+import { GlobalContext } from "../../GlobalContext";
+import theme from "../../../theme";
 
 function UserDetails({ classes }: UserDetailsProps) {
   const { user } = useContext(GlobalContext);
