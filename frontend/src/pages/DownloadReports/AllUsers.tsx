@@ -1,15 +1,25 @@
+import React from "react";
 import { useQuery } from "react-query";
 import { CSVLink } from "react-csv";
-import * as React from "react";
-import { getAllUsersCSV } from "../../util/api";
+import { CircularProgress } from "@material-ui/core";
+import { getAllUsers } from "../../util/api";
 
 export default function DownloadAllUsers() {
-  const { data: GetAllUsers } = useQuery("admins", getAllUsersCSV);
+  const { data, isLoading } = useQuery("admins", getAllUsers);
+  if (isLoading)
+    return (
+      <>
+        <p>Loading...</p>
+        <CircularProgress />
+      </>
+    );
 
-  return (
+  return !data?.length ? (
+    <p>No users found.</p>
+  ) : (
     <div>
       <h1>Click Below to Download Data</h1>
-      <CSVLink data={GetAllUsers} filename="AllUsers.csv">
+      <CSVLink data={data} filename="AllUsers.csv">
         Download All Users
       </CSVLink>
     </div>

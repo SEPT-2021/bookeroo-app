@@ -160,10 +160,6 @@ export const getAllBooks = makeTypedAPICall<unknown, BookItemType[]>(() =>
   api.get(getRouteURL("books", "all"))
 );
 
-export const getAllBooksCSV = makeTypedAPICall<unknown, any>(() =>
-  api.get(getRouteURL("books", "all"))
-);
-
 export const profile = makeTypedAPICall<unknown, User>(() =>
   api.get(getRouteURL("users", "profile"))
 );
@@ -177,10 +173,6 @@ export const paymentCapture = makeTypedAPICall<PaymentTokenType, unknown>(
 );
 
 export const getAllUsers = makeTypedAPICall<unknown, User[]>(() =>
-  api.get(getRouteURL("admins", "inspect-users"))
-);
-
-export const getAllUsersCSV = makeTypedAPICall<unknown, any>(() =>
   api.get(getRouteURL("admins", "inspect-users"))
 );
 
