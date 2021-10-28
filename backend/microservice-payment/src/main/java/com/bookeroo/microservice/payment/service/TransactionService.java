@@ -46,12 +46,8 @@ public class TransactionService {
             long elapsedTimeMillis =
                     new Date().getTime() - transaction.getCreatedAt().getTime();
             transaction.setRefundable(
-<<<<<<< HEAD
-                    transaction.isRefundable() &&
-                    TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
-=======
-                    transaction.isRefundable() && TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
->>>>>>> origin/sp15-user-details
+                transaction.isRefundable() &&
+                TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
         });
 
         return transactions;
