@@ -1,26 +1,27 @@
 import * as React from "react";
-import { useContext, useState } from "react";
+import {useContext, useState} from "react";
 import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { useMutation } from "react-query";
-import { Box, Container, Link, Paper, Typography } from "@mui/material";
-import { Button } from "@material-ui/core";
+import {useMutation} from "react-query";
+import {Box, Container, Paper, Typography} from "@mui/material";
+import {Button} from "@material-ui/core";
 import FormField from "../../util/FormField";
-import { CartType } from "../../util/types";
-import { checkout } from "../../util/api";
-import { GlobalContext } from "../../components/GlobalContext";
-import { Cart } from "../../components/DrawerCart";
+import {CartType} from "../../util/types";
+import {checkout} from "../../util/api";
+import {GlobalContext} from "../../components/GlobalContext";
+import {Cart} from "../../components/DrawerCart";
+import Link from "../../util/Link";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" to="/">
-        Bookeroo
-      </Link>{" "}
-      {new Date().getFullYear()}.
-    </Typography>
+      <Typography variant="body2" color="text.secondary" align="center">
+        {"Copyright © "}
+        <Link color="inherit" to="/">
+          Bookeroo
+        </Link>{" "}
+        {new Date().getFullYear()}.
+      </Typography>
   );
 }
 
