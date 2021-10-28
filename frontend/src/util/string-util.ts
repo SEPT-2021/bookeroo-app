@@ -8,7 +8,9 @@ export const snakeCaseToNormalString = (str: string) =>
     )
     .join(" ");
 
-export const getBookMinPrice = (listings: BookItemType["listings"]) =>
-  listings
+export const getBookMinPrice = (listings: BookItemType["listings"]) => {
+  if (!listings?.length) return undefined;
+  return listings
     ?.map((listing) => Number(listing.price))
     .reduce((a, b) => Math.min(a, b));
+};
