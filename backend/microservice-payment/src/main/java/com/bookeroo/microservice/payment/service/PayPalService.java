@@ -78,17 +78,21 @@ public class PayPalService {
             double shippingCost = itemCost * SHIPPING_PERCENTAGE;
             Book book = listing.getBook();
             ShippingAddress address = cartCheckout.getShippingAddress();
+            String itemCostString = String.valueOf(round(itemCost));
+            String shippingCostString = String.valueOf(round(shippingCost));
+            String itemTotalString = String.valueOf(round(round(itemCost) + round(shippingCost)));
+
             PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
                     .referenceId(String.valueOf(listingId))
                     .description(DESCRIPTION)
                     .amountWithBreakdown(new AmountWithBreakdown()
                             .currencyCode(CURRENCY_CODE)
-                            .value(String.valueOf(round(itemCost) + round(shippingCost)))
+                            .value(itemTotalString)
                             .amountBreakdown(new AmountBreakdown()
                                     .itemTotal(new Money()
-                                            .currencyCode(CURRENCY_CODE).value(String.valueOf(round(itemCost))))
+                                            .currencyCode(CURRENCY_CODE).value(itemCostString))
                                     .shipping(new Money()
-                                            .currencyCode(CURRENCY_CODE).value(String.valueOf(round(shippingCost))))))
+                                            .currencyCode(CURRENCY_CODE).value(shippingCostString))))
                     .items(Collections.singletonList(
                             new Item()
                                     .name(book.getTitle())

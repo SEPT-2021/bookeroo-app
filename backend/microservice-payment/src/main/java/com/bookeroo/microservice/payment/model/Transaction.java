@@ -11,7 +11,7 @@ public class Transaction {
 
     @EmbeddedId
     private TransactionKey id;
-    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @MapsId("listingId")
     @JoinColumn(name = "listing_id")
     @NotNull(message = "Listing for transaction cannot be null")

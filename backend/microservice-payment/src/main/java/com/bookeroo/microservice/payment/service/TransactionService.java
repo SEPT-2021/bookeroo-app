@@ -1,6 +1,7 @@
 package com.bookeroo.microservice.payment.service;
 
 import com.bookeroo.microservice.payment.model.*;
+import com.bookeroo.microservice.payment.repository.ListingRepository;
 import com.bookeroo.microservice.payment.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import static com.bookeroo.microservice.payment.config.PaymentConstants.REFUND_E
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final ListingRepository listingRepository;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, ListingRepository listingRepository) {
         this.transactionRepository = transactionRepository;
+        this.listingRepository = listingRepository;
     }
 
     private void recordTransaction(Listing listing, User buyer, String orderId) {
