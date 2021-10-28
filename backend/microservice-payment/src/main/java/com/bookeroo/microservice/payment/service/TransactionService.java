@@ -48,6 +48,7 @@ public class TransactionService {
             long elapsedTimeMillis =
                     new Date().getTime() - transaction.getCreatedAt().getTime();
             transaction.setRefundable(
+                    transaction.isRefundable() &&
                     TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
         });
 
