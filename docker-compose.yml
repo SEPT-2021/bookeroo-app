@@ -40,11 +40,3 @@ services:
         image: bookeroo/micrservice-seller:latest
         ports:
             - "8084:8084"
-    # frontend:
-    #     container_name: frontend
-    #     build:
-    #         context: ./frontend
-    #         dockerfile: Dockerfile
-    #     image: bookeroo/frontend:latest
-    #     ports:
-    #         - "3000:3000"

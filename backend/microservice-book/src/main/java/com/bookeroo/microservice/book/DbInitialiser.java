@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -63,6 +64,7 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
         initialise();
     }
 
+    @Transactional
     void initialise() {
         if (postConstruct) {
             try {

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 @Component
 public class DbInitialiser {
@@ -29,7 +30,8 @@ public class DbInitialiser {
     }
 
     @PostConstruct
-    private void initialise() {
+    @Transactional
+    void initialise() {
         if (postConstruct) {
             try {
                 User admin = new User();
