@@ -78,7 +78,7 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
       width: 250,
       renderCell: ({ row }: GridRenderCellParams) => (
         <IconButton
-          onClick={() => refundMutate({ listingId: row.id?.listingId })}
+          onClick={() => refundMutate({ listingId: row.listingId })}
           disabled={!row.refundable || isRefundLoading}
         >
           {isRefundLoading ? (
