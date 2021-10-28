@@ -22,6 +22,8 @@ import UsersList from "./pages/AdminDashBoard";
 import SingleBook from "./pages/SingleBook";
 import UserDashBoard from "./components/Profile/UserDashBoard";
 import EditBook from "./pages/EditBook";
+import AboutUs from "./pages/About";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +81,13 @@ ReactDOM.render(
               <Route path="/users">
                 <UsersList />
               </Route>
+              <Route path="/about">
+                <AboutUs />
+              </Route>
+              <Route path="/contact">
+                <Contact />
+              </Route>
+
               <Route component={NotFoundPage} />
             </Switch>
           </BrowserRouter>
