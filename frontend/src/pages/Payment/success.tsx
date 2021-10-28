@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   CircularProgress,
@@ -13,14 +13,19 @@ import { useMutation } from "react-query";
 import { Check, Clear } from "@material-ui/icons";
 import { paymentCapture } from "../../util/api";
 import Link from "../../util/Link";
+import { GlobalContext } from "../../components/GlobalContext";
 
 function PaymentSuccess({ classes }: PaymentSuccessProps) {
   const loc = useLocation();
+  const { clearCart } = useContext(GlobalContext);
   const { mutate, isLoading, isError } = useMutation(paymentCapture);
   const token = new URLSearchParams(loc.search).get("token");
   useEffect(() => {
     if (token) mutate({ token });
   }, [mutate, token]);
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
 
   return (
     <Grid container component="main" className={classes.root}>

@@ -26,6 +26,7 @@ interface GlobalContextType {
 
   cartOpen: boolean;
   setCartOpen: Dispatch<SetStateAction<boolean>>;
+  clearCart(): void;
   cartItems: CartItem[];
 
   addToCart(b: CartItem): void;
@@ -101,6 +102,9 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
         signOut,
         cartOpen,
         setCartOpen,
+        clearCart() {
+          setCartItems([]);
+        },
         cartItems,
         addToCart,
         removeFromCart,
