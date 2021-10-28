@@ -1,73 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AboutUs matches snapshot render AboutUs 1`] = `
-<div>
-  <main
-    class="MuiGrid-root AboutUs-root-1 MuiGrid-container"
-  >
-    <h1>
-      <div
-        class="null animate__animated animate__fadeIn"
-        style="animation-delay: 0ms; animation-duration: 4000ms; pointer-events: all;"
-      >
-        Who Are We ?
-      </div>
-    </h1>
-    <div
-      class="null animate__animated animate__fadeIn"
-      style="animation-delay: 0ms; animation-duration: 2000ms; pointer-events: all;"
-    >
-      <div
-        class="makeStyles-root-2"
-      >
-        <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
-        >
-          <img
-            alt="P1"
-            class="MuiAvatar-img"
-            src="p1.jpg"
-          />
-        </div>
-        <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
-        >
-          <img
-            alt="P2"
-            class="MuiAvatar-img"
-            src="p2.jpg"
-          />
-        </div>
-        <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
-        >
-          <img
-            alt="P3"
-            class="MuiAvatar-img"
-            src="p3.jpg"
-          />
-        </div>
-        <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
-        >
-          <img
-            alt="P4"
-            class="MuiAvatar-img"
-            src="p4.jpg"
-          />
-        </div>
-      </div>
-    </div>
-  </main>
-</div>
-`;
-
 exports[`Rendering page About page renders without crashing 1`] = `
 <div>
   <main
-    class="MuiGrid-root AboutUs-root-1 MuiGrid-container"
+    class="MuiContainer-root MuiContainer-maxWidthLg AboutUs-root-1 css-1oqqzyl-MuiContainer-root"
   >
-    <h1>
+    <h1
+      class="MuiTypography-root MuiTypography-h1 css-o2w69a-MuiTypography-root"
+    >
       <div
         class="null animate__animated animate__fadeIn"
         style="animation-delay: 0ms; animation-duration: 4000ms; pointer-events: all;"
@@ -79,46 +19,108 @@ exports[`Rendering page About page renders without crashing 1`] = `
       class="null animate__animated animate__fadeIn"
       style="animation-delay: 0ms; animation-duration: 2000ms; pointer-events: all;"
     >
+      <h6
+        class="MuiTypography-root MuiTypography-h6 css-qgnfng-MuiTypography-root"
+      >
+        Bookaroo is an application developed to help anyone get online and sell books with ease. It's simple interface and colorful graphics make it easy for beginners and experienced users alike. The application also supports allowing users to leave reviews and choose which listing they want, either the cheapest one or from a well known seller.
+        <br />
+        Our goal is to make selling books as easy as possible, if you have any questions, don't hesitate to
+         
+        <a
+          class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-body2 MuiTypography-colorPrimary"
+          href="/contact"
+          style="font-size: 1.2rem;"
+        >
+          contact us.
+        </a>
+      </h6>
+      <h1>
+        Our Team
+      </h1>
       <div
-        class="makeStyles-root-2"
+        class="row"
       >
         <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+          class="column"
         >
-          <img
-            alt="P1"
-            class="MuiAvatar-img"
-            src="p1.jpg"
-          />
+          <div
+            class="card"
+          >
+            <div
+              class="container"
+            >
+              <h2>
+                Shihab Sami
+              </h2>
+              <p>
+                s3823710@student.rmit.edu.au
+              </p>
+            </div>
+          </div>
         </div>
         <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+          class="column"
         >
-          <img
-            alt="P2"
-            class="MuiAvatar-img"
-            src="p2.jpg"
-          />
+          <div
+            class="card"
+          >
+            <div
+              class="container"
+            >
+              <h2>
+                Mathew Amos Woolley
+              </h2>
+              <p>
+                s3908867@student.rmit.edu.au
+              </p>
+            </div>
+          </div>
         </div>
         <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+          class="column"
         >
-          <img
-            alt="P3"
-            class="MuiAvatar-img"
-            src="p3.jpg"
-          />
+          <div
+            class="card"
+          >
+            <div
+              class="container"
+            >
+              <h2>
+                Ryan Dineth Samarakoon
+              </h2>
+              <p>
+                s3844545@student.rmit.edu.au
+              </p>
+            </div>
+          </div>
         </div>
         <div
-          class="MuiAvatar-root MuiAvatar-circular makeStyles-large-4"
+          class="column"
         >
-          <img
-            alt="P4"
-            class="MuiAvatar-img"
-            src="p4.jpg"
-          />
+          <div
+            class="card"
+          >
+            <div
+              class="container"
+            >
+              <h2>
+                Andrew Nhan Trong Tran
+              </h2>
+              <p>
+                s3785952@student.rmit.edu.au
+              </p>
+            </div>
+          </div>
         </div>
+        <p>
+          This project was made for SEPT (COSC 2299/2428)
+        </p>
       </div>
+      <img
+        alt="preview"
+        src="img.png"
+        style="width: 100%; margin-top: 50px;"
+      />
     </div>
   </main>
 </div>

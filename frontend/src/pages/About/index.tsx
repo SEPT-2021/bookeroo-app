@@ -1,6 +1,6 @@
 import React from "react";
 import Animate from "@charlesvien/react-animatecss";
-import { createStyles, Grid, withStyles, WithStyles } from "@material-ui/core";
+import { createStyles, withStyles, WithStyles } from "@material-ui/core";
 import { Container, Typography } from "@mui/material";
 import Link from "../../util/Link";
 import img from "./img.png";
