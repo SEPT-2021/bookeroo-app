@@ -8,18 +8,18 @@ import java.util.List;
  */
 public class CartCheckout {
 
-    private List<OrderItem> orderItems;
+    private List<Listing> orderItems;
     @Valid
     private ShippingAddress shippingAddress;
 
     public CartCheckout() {
     }
 
-    public List<OrderItem> getOrderItems() {
+    public List<Listing> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
+    public void setOrderItems(List<Listing> orderItems) {
         this.orderItems = orderItems;
     }
 

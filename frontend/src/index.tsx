@@ -12,14 +12,16 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookSearch from "./pages/BookSearch";
 import AddBook from "./pages/AddBook";
-import BookSearchType from "./pages/BookSearchType";
 import Books from "./pages/Books";
 import CheckOut from "./pages/CheckOut";
 import NavBar from "./components/NavBar";
 import { GlobalContextProvider } from "./components/GlobalContext";
 import PaymentSuccess from "./pages/Payment/success";
 import PaymentFailed from "./pages/Payment/failed";
-import UsersList from "./pages/AdminDashBoard/UsersList";
+import UsersList from "./pages/AdminDashBoard";
+import SingleBook from "./pages/SingleBook";
+import UserDashBoard from "./components/Profile/UserDashBoard";
+import EditBook from "./pages/EditBook";
 import AboutUs from "./pages/About";
 import Contact from "./pages/Contact";
 
@@ -27,10 +29,10 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline />
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <GlobalContextProvider>
           <BrowserRouter>
             <NavBar />
@@ -47,15 +49,21 @@ ReactDOM.render(
               <Route path="/search">
                 <BookSearch />
               </Route>
-              <Route path="/searchType">
-                <BookSearchType />
-              </Route>
               <Route path="/addBook">
                 <AddBook />
+              </Route>
+              <Route path="/editBook/:id">
+                <EditBook />
+              </Route>
+              <Route path="/book/:id">
+                <SingleBook />
               </Route>
 
               <Route path="/adminDashboard">
                 <UsersList />
+              </Route>
+              <Route path="/dashboard">
+                <UserDashBoard />
               </Route>
 
               <Route path="/paymentSuccess">

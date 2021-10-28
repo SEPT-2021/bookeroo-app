@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -19,14 +22,23 @@ class UserServiceTest {
     @Autowired
     UserRepository repository;
 
+    final List<String> testUsers = new ArrayList<>();
+
     User setupUser() {
         User user = new User();
         user.setUsername(RandomString.make(8) + "@test.com");
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
-        user.setRoles("ROLE_USER");
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
+        user.setRole("ROLE_USER");
         user.setEnabled(true);
+        testUsers.add(user.getUsername());
         return user;
     }
 
@@ -34,13 +46,13 @@ class UserServiceTest {
     void givenUser_whenUserSaved_returnUser() {
         User user = setupUser();
 
-        assertEquals(service.saveUser(user).getUsername(), user.getUsername());
+        assertEquals(service.saveUser(user, true).getUsername(), user.getUsername());
     }
 
     @Test
     void givenSavedUser_whenGivenId_returnUser() throws UserNotFoundException {
         User user = setupUser();
-        long id = service.saveUser(user).getId();
+        long id = service.saveUser(user, true).getId();
 
         assertNotNull(service.getUserById(id));
     }
@@ -48,7 +60,7 @@ class UserServiceTest {
     @Test
     void givenSavedUser_whenGivenUsername_returnUser() throws UserNotFoundException {
         User user = setupUser();
-        String username = service.saveUser(user).getUsername();
+        String username = service.saveUser(user, true).getUsername();
 
         assertNotNull(service.getUserByUsername(username));
     }
@@ -56,7 +68,7 @@ class UserServiceTest {
     @Test
     void givenSavedUsers_whenAllUsersFetched_returnUsers() {
         User user = setupUser();
-        service.saveUser(user);
+        service.saveUser(user, true);
 
         assertNotEquals(service.getAllUsers().size(), 0);
     }
@@ -64,10 +76,10 @@ class UserServiceTest {
     @Test
     void givenSavedUser_whenSavingAgain_updateUser() {
         User user = setupUser();
-        user = service.saveUser(user);
-        String userLastName = RandomString.make(8);
+        user = service.saveUser(user, true);
+        String userLastName = "updatedLastName";
         user.setLastName(userLastName);
-        user = service.saveUser(user);
+        user = service.saveUser(user, true);
 
         assertEquals(user.getLastName(), userLastName);
     }
@@ -75,7 +87,7 @@ class UserServiceTest {
     @Test
     void givenUserId_whenDeleteIsAsked_deleteUser() throws UserNotFoundException {
         User user = setupUser();
-        long id = service.saveUser(user).getId();
+        long id = service.saveUser(user, true).getId();
         service.deleteUser(id);
 
         assertThrows(UserNotFoundException.class, () -> service.getUserById(id));
@@ -85,10 +97,10 @@ class UserServiceTest {
     void givenUsersPresent_whenNonAdminUsersFetched_doNotReturnAdmin() {
         User user = setupUser();
         User admin = setupUser();
-        admin.setRoles("ROLE_ADMIN");
+        admin.setRole("ROLE_ADMIN");
 
-        service.saveUser(user);
-        service.saveUser(admin);
+        service.saveUser(user, true);
+        service.saveUser(admin, true);
 
         assertFalse(service.getAllNonAdminUsers().contains(admin));
     }

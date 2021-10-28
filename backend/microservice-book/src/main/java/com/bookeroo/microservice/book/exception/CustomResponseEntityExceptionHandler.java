@@ -21,12 +21,6 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler
-    public final ResponseEntity<?> handleIsbnExists(ISBNAlreadyExistsException exception){
-        ISBNAlreadyExistsResponse exceptionResponse = new ISBNAlreadyExistsResponse(exception.getMessage());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
     public final ResponseEntity<?> handleS3UploadFailure(S3UploadFailureException exception){
         S3UploadFailureResponse exceptionResponse = new S3UploadFailureResponse(exception.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -35,6 +29,18 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler
     public final ResponseEntity<?> handleBookNotFound(BookNotFoundException exception){
         BookNotFoundResponse exceptionResponse = new BookNotFoundResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<?> handleUserNotFound(UserNotFoundException exception) {
+        UserNotFoundResponse exceptionResponse = new UserNotFoundResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<?> handleListingNotFound(ListingNotFoundException exception) {
+        ListingNotFoundResponse exceptionResponse = new ListingNotFoundResponse(exception.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 

@@ -3,15 +3,14 @@ package com.bookeroo.microservice.admin.service;
 import com.bookeroo.microservice.admin.exception.SellerNotFoundException;
 import com.bookeroo.microservice.admin.exception.UserNotFoundException;
 import com.bookeroo.microservice.admin.model.User;
-import com.bookeroo.microservice.admin.repository.UserRepository;
+import com.bookeroo.microservice.admin.model.User.UserRole;
+import com.bookeroo.microservice.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-
-import static com.bookeroo.microservice.admin.model.User.Role.ADMIN;
-import static com.bookeroo.microservice.admin.model.User.Role.SELLER;
+import java.util.Optional;
 
 /**
  * Service layer for the {@link User} JPA entity.
@@ -20,23 +19,34 @@ import static com.bookeroo.microservice.admin.model.User.Role.SELLER;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final ListingRepository listingRepository;
+    private final TransactionRepository transactionRepository;
+    private final SellerDetailsRepository sellerDetailsRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       ListingRepository listingRepository,
+                       ReviewRepository reviewRepository,
+                       TransactionRepository transactionRepository,
+                       SellerDetailsRepository sellerDetailsRepository) {
         this.userRepository = userRepository;
+        this.listingRepository = listingRepository;
+        this.reviewRepository = reviewRepository;
+        this.transactionRepository = transactionRepository;
+        this.sellerDetailsRepository = sellerDetailsRepository;
     }
 
     public User getUserById(long id) throws UserNotFoundException {
-        User user;
-        if ((user = userRepository.findById(id)) == null)
-            throw new UserNotFoundException(String.format("User by id %d not found", id));
+        Optional<User> user = userRepository.findById(id);
+        user.orElseThrow(() -> new UserNotFoundException(String.format("User by id %d not found", id)));
 
-        return user;
+        return user.get();
     }
 
     public User getSellerById(long id) throws SellerNotFoundException {
-        User user;
-        if ((user = userRepository.findById(id)) == null || !user.getRoles().contains(SELLER.name()))
+        User user = getUserById(id);
+        if (!user.getRole().contains(UserRole.SELLER.name()))
             throw new UserNotFoundException(String.format("Seller by id %d not found", id));
 
         return user;
@@ -44,16 +54,14 @@ public class UserService {
 
     public User approveSeller(long id) {
         User user = getUserById(id);
-        user.setRoles(user.getRoles() + ",ROLE_" + SELLER.name());
+        user.setRole("ROLE_" + UserRole.SELLER.name());
         return userRepository.save(user);
     }
 
-    public User rejectSeller(long id) {
+    @Transactional
+    public void rejectSeller(long id) {
         User user = getUserById(id);
-
-        // TODO emailClient.send(user.getUsername(), "Seller request rejected", "Cause ...");
-
-        return user;
+        sellerDetailsRepository.deleteById(user.getId());
     }
 
     public User getUserByUsername(String username) throws UserNotFoundException {
@@ -66,27 +74,18 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(User user) throws UserNotFoundException {
-        if (!userRepository.existsById(user.getId()))
-            throw new UserNotFoundException(String.format("User %s not found", user.getUsername()));
-
-        return userRepository.save(user);
-    }
-
-    @Transactional
     public void deleteUser(long id) throws UserNotFoundException {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException(String.format("User by id %d not found", id));
 
+        reviewRepository.deleteAllByUser_Id(id);
+        listingRepository.deleteAllByUser_Id(id);
+        transactionRepository.deleteByBuyer_Id(id);
         userRepository.deleteUserById(id);
     }
 
     public List<User> getAllNonAdminUsers() {
-        return userRepository.findAllByRolesNotContaining(ADMIN.name());
-    }
-
-    public List<User> getAllNonApprovedSellers() {
-        return userRepository.findAllByRolesContainingAndRolesNotContaining(ADMIN.name(), SELLER.name());
+        return userRepository.findAllByRoleNotContaining(UserRole.ADMIN.name());
     }
 
     public User toggleUserBan(long id) {

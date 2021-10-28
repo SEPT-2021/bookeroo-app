@@ -61,6 +61,11 @@ exports[`renders register page 1`] = `
             name="lastName"
           />
           <mock-formfield
+            autocomplete="phoneNumber"
+            label="Phone Number"
+            name="phoneNumber"
+          />
+          <mock-formfield
             autocomplete="current-password"
             label="Password"
             name="password"
@@ -71,6 +76,31 @@ exports[`renders register page 1`] = `
             label="Confirm Password"
             name="confirmPassword"
             type="password"
+          />
+          <mock-formfield
+            autocomplete="addressLine1"
+            label="Address Line 1"
+            name="addressLine1"
+          />
+          <mock-formfield
+            autocomplete="addressLine2"
+            label="Address Line 2"
+            name="addressLine2"
+          />
+          <mock-formfield
+            autocomplete="city"
+            label="City"
+            name="city"
+          />
+          <mock-formfield
+            autocomplete="state"
+            label="State"
+            name="state"
+          />
+          <mock-formfield
+            autocomplete="postalCode"
+            label="Postal Code"
+            name="postalCode"
           />
           <mock-loadingbutton
             classname="Register-submit-5"

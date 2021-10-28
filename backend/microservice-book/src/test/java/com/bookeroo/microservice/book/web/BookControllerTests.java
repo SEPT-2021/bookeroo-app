@@ -1,7 +1,15 @@
 package com.bookeroo.microservice.book.web;
 
 import com.bookeroo.microservice.book.model.Book;
+import com.bookeroo.microservice.book.model.Book.BookCategory;
+import com.bookeroo.microservice.book.model.Book.BookCondition;
+import com.bookeroo.microservice.book.model.BookFormData;
+import com.bookeroo.microservice.book.model.CustomUserDetails;
+import com.bookeroo.microservice.book.model.User;
+import com.bookeroo.microservice.book.repository.UserRepository;
+import com.bookeroo.microservice.book.security.JWTTokenProvider;
 import com.bookeroo.microservice.book.service.BookService;
+import com.bookeroo.microservice.book.service.S3Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
@@ -10,10 +18,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.bookeroo.microservice.book.validator.BookFormDataValidator.MINIMUM_ISBN_LENGTH;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import static com.bookeroo.microservice.book.security.SecurityConstant.AUTHORIZATION_HEADER;
+import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEME;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -22,100 +37,142 @@ public class BookControllerTests {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     BookService bookService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    S3Service s3Service;
+    @Autowired
+    JWTTokenProvider jwtTokenProvider;
+    private int uniqueId;
 
     Book setupBook() {
         Book book = new Book();
-        book.setTitle("testTitle");
-        book.setAuthor("testAuthor");
-        book.setPageCount(100);
-        book.setIsbn(RandomString.make(MINIMUM_ISBN_LENGTH));
-        book.setPrice(100.0);
+        Random random = new Random();
+        book.setTitle("testTitle" + uniqueId++);
+        book.setAuthor("testAuthor" + uniqueId++);
+        book.setPageCount("100");
+        book.setIsbn(String.valueOf((long) Math.floor(Math.random() * 9_000_000_000_000L) + 1_000_000_000_000L));
         book.setDescription("testDescription");
-        book.setCover("https://picsum.photos/200");
+        book.setBookCategory(BookCategory.values()[random.nextInt(BookCategory.values().length)].name());
+        try {
+            book.setCover(s3Service.uploadFile(new URL("https://picsum.photos/360/640"), book.getTitle()));
+        } catch (IOException ignore) {
+        }
+
         return book;
     }
 
-//    @Test
-//    void givenBookFormData_whenBookAdded_thenReturnStatusCreated() throws Exception {
-//        Book book = setupBook();
-//        BookFormData bookFormData = new BookFormData();
-//        bookFormData.setTitle(book.getTitle());
-//        bookFormData.setAuthor(book.getAuthor());
-//        bookFormData.setPageCount(book.getPageCount());
-//        bookFormData.setIsbn(book.getIsbn());
-//        bookFormData.setPrice(book.getPrice());
-//        bookFormData.setDescription(book.getDescription());
-//        bookFormData.setCoverUrl(book.getCover());
-//
-//        RequestBuilder request = post("/api/books/add")
-//                .sessionAttr("formData", new BookFormData())
-//                .param("username", book.getTitle())
-//                .param("author", book.getAuthor())
-//                .param("pageCount", String.valueOf(book.getPageCount()))
-//                .param("isbn", book.getIsbn())
-//                .param("price", String.valueOf(book.getPrice()))
-//                .param("description", book.getDescription())
-//                .param("coverUrl", book.getCover());
-//                .flashAttr("formData", new BookFormData());
-//
-//        mockMvc.perform(request).andExpect(status().isCreated());
-//    }
-//
-//    @Test
-//    void givenBookFormData_whenBookAdded_thenReturnUserAsResponseBody() throws Exception {
-//        Book book = setupBook();
-//        BookFormData bookFormData = new BookFormData();
-//        bookFormData.setTitle(book.getTitle());
-//        bookFormData.setAuthor(book.getAuthor());
-//        bookFormData.setPageCount(book.getPageCount());
-//        bookFormData.setIsbn(book.getIsbn());
-//        bookFormData.setPrice(book.getPrice());
-//        bookFormData.setDescription(book.getDescription());
-//        bookFormData.setCoverUrl(book.getCover());
-//
-//        mockMvc.perform(post("/api/books/add")
-//                        .contentType(MediaType.MULTIPART_FORM_DATA)
-//                        .content(objectMapper.writeValueAsString(bookFormData)))
-//                .andExpect(status().isCreated());
-//
-//        System.out.println(response);
-//        assertTrue(response.contains(book.getTitle()));
-//    }
+    BookFormData setupBookFormData() {
+        Book book = setupBook();
+        BookFormData bookFormData = new BookFormData();
+        Random random = new Random();
+        bookFormData.setTitle(book.getTitle());
+        bookFormData.setAuthor(book.getAuthor());
+        bookFormData.setPageCount(Long.parseLong(book.getPageCount()));
+        bookFormData.setIsbn(book.getIsbn());
+        bookFormData.setDescription(book.getDescription());
+        bookFormData.setPrice(String.valueOf(random.nextFloat() % 100.0f));
+        bookFormData.setCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)]);
+        bookFormData.setCategory(BookCategory.valueOf(book.getBookCategory()));
+        bookFormData.setCoverUrl(book.getCover());
+        return bookFormData;
+    }
+
+    User setupUser() {
+        User user = new User();
+        user.setUsername(RandomString.make(8) + "@test.com");
+        user.setFirstName("testFirstName");
+        user.setLastName("testLastName");
+        user.setPassword("testPassword");
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
+        user.setRole("ROLE_USER");
+        user.setEnabled(true);
+        return userRepository.save(user);
+    }
+
+    @Test
+    void givenBookFormData_whenBookAdded_thenReturnStatusCreated() throws Exception {
+        BookFormData bookFormData = setupBookFormData();
+        User user = setupUser();
+        String token = jwtTokenProvider.generateToken(new CustomUserDetails(user));
+        mockMvc.perform(post("/api/books/add")
+                .header(AUTHORIZATION_HEADER, JWT_SCHEME + token)
+                .param("title", bookFormData.getTitle())
+                .param("author", bookFormData.getAuthor())
+                .param("pageCount", String.valueOf(bookFormData.getPageCount()))
+                .param("isbn", bookFormData.getIsbn())
+                .param("description", bookFormData.getDescription())
+                .param("price", bookFormData.getPrice())
+                .param("condition", bookFormData.getCondition().name())
+                .param("category", bookFormData.getCategory().name())
+                .param("coverUrl", bookFormData.getCoverUrl())
+                .flashAttr("formData", bookFormData)).andExpect(status().isCreated());
+    }
+
+    @Test
+    void givenBookFormData_whenBookAdded_thenReturnBookAsResponseBody() throws Exception {
+        BookFormData bookFormData = setupBookFormData();
+        User user = setupUser();
+        String token = jwtTokenProvider.generateToken(new CustomUserDetails(user));
+        String response = mockMvc.perform(post("/api/books/add")
+                .header(AUTHORIZATION_HEADER, JWT_SCHEME + token)
+                .param("title", bookFormData.getTitle())
+                .param("author", bookFormData.getAuthor())
+                .param("pageCount", String.valueOf(bookFormData.getPageCount()))
+                .param("isbn", bookFormData.getIsbn())
+                .param("description", bookFormData.getDescription())
+                .param("price", bookFormData.getPrice())
+                .param("condition", bookFormData.getCondition().name())
+                .param("category", bookFormData.getCategory().name())
+                .param("coverUrl", bookFormData.getCoverUrl())
+                .flashAttr("formData", bookFormData)).andReturn().getResponse().getContentAsString();
+
+        assertEquals(objectMapper.readValue(response, Book.class).getTitle(), bookFormData.getTitle());
+    }
 
     @Test
     void givenSavedBook_whenGivenId_returnBook() throws Exception {
-        Book book = setupBook();
-        book = bookService.saveBook(book);
+        BookFormData formData = setupBookFormData();
+        User user = setupUser();
+        Book book = bookService.saveBook(formData, user.getUsername());
 
         String response = mockMvc.perform(get("/api/books/" + book.getId()))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(book.getTitle()));
+        Book responseBook = objectMapper.readValue(response, Book.class);
+        assertEquals(responseBook, book);
     }
 
     @Test
     void givenSavedBooks_whenAllBooksRequested_returnBooks() throws Exception {
-        Book book1 = setupBook();
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
+        BookFormData formData2 = setupBookFormData();
+        User user2 = setupUser();
+        Book book2 = bookService.saveBook(formData2, user2.getUsername());
 
         String response = mockMvc.perform(get("/api/books/all"))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(response.contains(book1.getTitle()) && response.contains(book2.getTitle()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(response, Book[].class));
+        assertTrue(books.contains(book1) && books.contains(book2));
     }
 
     @Test
     void givenBookId_whenDeleteIsRequested_deleteBook() throws Exception {
-        Book book = setupBook();
-        book = bookService.saveBook(book);
+        BookFormData formData = setupBookFormData();
+        User user = setupUser();
+        Book book = bookService.saveBook(formData, user.getUsername());
 
         mockMvc.perform(delete("/api/books/" + book.getId()))
                 .andExpect(status().isOk());
@@ -123,57 +180,60 @@ public class BookControllerTests {
 
     @Test
     void givenBooksPresent_whenSearchedByKeyword_returnMatchingBooks() throws Exception {
-        Book book1 = setupBook();
-        String searchString = "uniqueSearchedKeyword";
-        book1.setDescription(searchString);
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
+        String searchString = BookCategory.BILDUNGSROMAN.name();
+        formData1.setTitle(searchString);
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
 
         String searchResult = mockMvc.perform(get("/api/books")
                         .param("search", searchString)
                         .param("type", "keyword"))
                 .andReturn().getResponse().getContentAsString();
 
-        System.out.println(searchResult);
-
-        assertTrue(
-                searchResult.contains(
-                        book1.getDescription()) && !searchResult.contains(book2.getDescription()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
+        assertTrue(books.contains(book1));
     }
 
     @Test
     void givenBooksPresent_whenSearchedByTitle_returnMatchingBooks() throws Exception {
-        Book book1 = setupBook();
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
         String searchString = "uniqueSearchedTitle";
-        book1.setTitle(searchString);
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        formData1.setTitle(searchString);
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
 
+        BookFormData formData2 = setupBookFormData();
+        User user2 = setupUser();
+        Book book2 = bookService.saveBook(formData2, user2.getUsername());
         String searchResult = mockMvc.perform(get("/api/books")
                         .param("search", searchString)
                         .param("type", "title"))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(searchResult.contains(book1.getTitle()) && !searchResult.contains(book2.getTitle()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
+        assertTrue(books.contains(book1) && !books.contains(book2));
     }
 
     @Test
     void givenBooksPresent_whenSearchedByAuthor_returnMatchingBooks() throws Exception {
-        Book book1 = setupBook();
+        BookFormData formData1 = setupBookFormData();
+        User user1 = setupUser();
         String searchString = "uniqueSearchedAuthor";
-        book1.setAuthor(searchString);
-        book1 = bookService.saveBook(book1);
-        Book book2 = setupBook();
-        book2 = bookService.saveBook(book2);
+        formData1.setAuthor(searchString);
+        Book book1 = bookService.saveBook(formData1, user1.getUsername());
+
+        BookFormData formData2 = setupBookFormData();
+        User user2 = setupUser();
+        Book book2 = bookService.saveBook(formData2, user2.getUsername());
 
         String searchResult = mockMvc.perform(get("/api/books")
                         .param("search", searchString)
                         .param("type", "author"))
                 .andReturn().getResponse().getContentAsString();
 
-        assertTrue(searchResult.contains(book1.getAuthor()) && !searchResult.contains(book2.getAuthor()));
+        List<Book> books = Arrays.asList(objectMapper.readValue(searchResult, Book[].class));
+        assertTrue(books.contains(book1) && !books.contains(book2));
     }
 
 }

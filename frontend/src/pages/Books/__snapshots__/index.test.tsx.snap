@@ -3,19 +3,16 @@
 exports[`Books matches snapshot render Books 1`] = `
 <div>
   <div
-    class="sc-dlfnuX hPLKlV"
+    class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
+    role="progressbar"
+    style="top: 80px; position: absolute; width: 100vw;"
   >
     <div
-      class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
-      role="progressbar"
-    >
-      <div
-        class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate"
-      />
-      <div
-        class="MuiLinearProgress-bar MuiLinearProgress-bar2Indeterminate MuiLinearProgress-barColorPrimary"
-      />
-    </div>
+      class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate"
+    />
+    <div
+      class="MuiLinearProgress-bar MuiLinearProgress-bar2Indeterminate MuiLinearProgress-barColorPrimary"
+    />
   </div>
 </div>
 `;
@@ -110,19 +107,16 @@ Object {
 exports[`Rendering page Books renders without crashing 1`] = `
 <div>
   <div
-    class="sc-dlfnuX hPLKlV"
+    class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
+    role="progressbar"
+    style="top: 80px; position: absolute; width: 100vw;"
   >
     <div
-      class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
-      role="progressbar"
-    >
-      <div
-        class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate"
-      />
-      <div
-        class="MuiLinearProgress-bar MuiLinearProgress-bar2Indeterminate MuiLinearProgress-barColorPrimary"
-      />
-    </div>
+      class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate"
+    />
+    <div
+      class="MuiLinearProgress-bar MuiLinearProgress-bar2Indeterminate MuiLinearProgress-barColorPrimary"
+    />
   </div>
 </div>
 `;
