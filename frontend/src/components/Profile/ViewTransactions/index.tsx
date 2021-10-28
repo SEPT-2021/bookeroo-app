@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   CircularProgress,
@@ -19,8 +19,6 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
   const { data, isLoading } = useQuery("orders", viewTransactions);
   const client = useQueryClient();
 
-  const [availability, setAvailability] = useState("");
-
   const { mutate: refundMutate, isLoading: isRefundLoading } = useMutation(
     requestRefund,
     {
@@ -30,94 +28,43 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
     }
   );
 
-  const rows = data || [];
+  const rows =
+    data?.map((row) => ({
+      ...row,
+      id: `${row.id?.listingId} ${row.id?.buyerId}`,
+      listingId: row.id?.listingId,
+      buyerId: row.id?.buyerId,
+      listing: `${row.listing?.id} ${row.listing?.price} ${row.listing?.bookCondition}, ${row.listing?.available}`,
+      price: row.listing?.price,
+      bookCondition: row.listing?.bookCondition,
+      available: row.listing?.available,
+    })) || [];
 
   const columns: GridColDef[] = [
     {
-      field: "listingsId",
+      field: "listingId",
       headerName: "Listing ID",
       width: 150,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.id?.listingId) {
-          if (params.row.id.listingId) {
-            result.push(`${params.row.id.listingId}`);
-          }
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
     },
     {
       field: "buyerId",
       headerName: "Buyer ID",
       width: 150,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.id?.buyerId) {
-          result.push(`${params.row.id.buyerId}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
-    },
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.listing?.id) {
-          result.push(`${params?.row?.listing?.id}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
     },
     {
       field: "price",
       headerName: "Price",
       width: 110,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.listing?.price) {
-          result.push(`${params.row.listing.price}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
     },
     {
       field: "available",
       headerName: "Availability",
       width: 150,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.listing?.available) {
-          result.push(`${params.row.listing.available}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
     },
     {
       field: "bookCondition",
       headerName: "Book Condition",
       width: 170,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.listing?.bookCondition) {
-          result.push(`${params.row.listing.bookCondition}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
       valueFormatter: ({ value }) =>
         typeof value === "string" ? snakeCaseToNormalString(value) : value,
     },
@@ -129,17 +76,9 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
       field: "Request For Refund",
       headerName: "Request For Refund",
       width: 250,
-      valueGetter: (params) => {
-        if (params?.row?.listing?.available) {
-          setAvailability(`${params.row.listing.available}`);
-        } else {
-          setAvailability("No Data");
-        }
-        return availability;
-      },
       renderCell: ({ row }: GridRenderCellParams) => (
         <IconButton
-          onClick={() => refundMutate({ listingId: row.listing.id })}
+          onClick={() => refundMutate({ listingId: row.listingId })}
           disabled={!row.refundable || isRefundLoading}
         >
           {isRefundLoading ? (
