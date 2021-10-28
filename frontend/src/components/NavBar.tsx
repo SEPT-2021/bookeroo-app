@@ -15,6 +15,8 @@ import { useHistory } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import Link from "../util/Link";
 import { GlobalContext } from "./GlobalContext";
+import { Role } from "../util/types";
+import { DARK_MODE } from "../theme";
 
 function NavBar({ classes }: NavBarProps) {
   const { user, signOut } = useContext(GlobalContext);
@@ -38,9 +40,9 @@ function NavBar({ classes }: NavBarProps) {
           <Link to="/addBook">
             <Button>Add Book</Button>
           </Link>
-          {user?.roles === "ROLE_ADMIN" && (
+          {user?.role === Role.ROLE_ADMIN && (
             <Link to="/adminDashboard">
-              <Button>Manager Users</Button>
+              <Button>Manage Users</Button>
             </Link>
           )}
         </Box>
@@ -79,7 +81,7 @@ const styles = (theme: Theme) =>
       height: 60,
     },
     appbar: {
-      background: "white",
+      background: DARK_MODE ? theme.palette.background.default : "white",
     },
     appbarWrapper: {
       width: "80%",

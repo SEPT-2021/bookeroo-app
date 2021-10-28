@@ -1,30 +1,60 @@
-import React, { createContext, FC, useEffect, useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { useQuery } from "react-query";
 import { api, profile } from "../util/api";
-import { TokenProps } from "../util/types";
+import { BookItemType, Listing, TokenProps, User } from "../util/types";
+import useStickyState from "../util/useStickyState";
 
-export interface User {
-  id: number;
-  username: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  roles: "ROLE_USER" | "ROLE_ADMIN";
-  enabled: boolean;
-  createdAt: string;
-  updatedAt: string | null;
+export interface CartItem {
+  listing: Listing;
+  book: BookItemType;
 }
 
 interface GlobalContextType {
   user?: User;
+
   login(data: TokenProps): void;
+
   signOut(): void;
+
+  cartOpen: boolean;
+  setCartOpen: Dispatch<SetStateAction<boolean>>;
+  cartItems: CartItem[];
+
+  addToCart(b: CartItem): void;
+
+  removeFromCart(id: number): void;
 }
 
 export const GlobalContext = createContext<GlobalContextType>({} as never);
 
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   const [token, setToken] = useState<string>();
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useStickyState<CartItem[]>([], "cart");
+  const addToCart = (clickedItem: CartItem) => {
+    setCartItems((prev) => {
+      // 1. Is the item already added in the cart?
+      const isItemInCart = prev.find(
+        (item) => item.listing.id === clickedItem.listing.id
+      );
+
+      if (isItemInCart) {
+        return cartItems;
+      }
+      // First time the item is added
+      return [...prev, clickedItem];
+    });
+  };
+  const removeFromCart = (id: number) => {
+    setCartItems((prev) => prev.filter((l) => l.listing.id !== id));
+  };
   const {
     data: userData,
     refetch,
@@ -64,6 +94,11 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
           setToken(data.jwt);
         },
         signOut,
+        cartOpen,
+        setCartOpen,
+        cartItems,
+        addToCart,
+        removeFromCart,
       }}
     >
       {children}

@@ -7,16 +7,22 @@ import {
   Theme,
 } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
+import { DARK_MODE } from "../theme";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     search: {
       display: "flex",
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.grey["100"],
+      backgroundColor: DARK_MODE
+        ? alpha(theme.palette.common.white, 0.25)
+        : theme.palette.grey["100"],
       marginTop: 15,
       "&:hover": {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
+        backgroundColor: alpha(
+          theme.palette.common.white,
+          DARK_MODE ? 0.4 : 0.25
+        ),
       },
       marginLeft: 0,
       width: "100%",

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   CircularProgress,
@@ -12,13 +12,20 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { Delete, Person } from "@material-ui/icons";
-import { useMutation } from "react-query";
+import { Check, Clear, Delete, Person } from "@material-ui/icons";
+import { useMutation, useQuery } from "react-query";
 import FormGroup from "@mui/material/FormGroup";
 import { styled, Switch } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { banUnBanUser, deleteUserByID, getAllUsers } from "../../util/api";
-import { User } from "../../components/GlobalContext";
+import {
+  approveSeller,
+  banUnBanUser,
+  deleteUserByID,
+  getAllUsers,
+  rejectSeller,
+} from "../../util/api";
+import LinearLoading from "../../util/LinearLoading";
+import { Role, User } from "../../util/types";
 
 const OnOffSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -55,21 +62,54 @@ const OnOffSwitch = styled(Switch)(({ theme }) => ({
 
 function UserRow({
   user,
-  loading,
-  onDelete,
+  onChange,
+  mode,
 }: {
   user: User;
-  loading?: boolean;
-  onDelete: () => void;
+  onChange?: () => void;
+  mode: "banUnban" | "approveReject";
 }) {
   const [switchChecked, setSwitchChecked] = useState<boolean>(user.enabled);
-
-  const { mutate: unBanMutate } = useMutation(banUnBanUser);
-
-  const unbanUser = async (userId: number) => {
-    unBanMutate({ userId });
+  const mutateOptions = {
+    onSuccess: onChange,
   };
+  const { mutate: unBanMutate, isLoading: isBanUnbanLoading } = useMutation(
+    banUnBanUser,
+    mutateOptions
+  );
+  const { mutate: deleteUserMutate, isLoading: isDeleteLoading } = useMutation(
+    deleteUserByID,
+    mutateOptions
+  );
+  const { mutate: approveSellerMutate, isLoading: isApproveSellerLoading } =
+    useMutation(approveSeller, mutateOptions);
 
+  const { mutate: rejectSellerMutate, isLoading: isRejectSellerLoading } =
+    useMutation(rejectSeller, mutateOptions);
+
+  const isLoading =
+    isDeleteLoading ||
+    isBanUnbanLoading ||
+    isApproveSellerLoading ||
+    isRejectSellerLoading;
+  const isBanMode = mode === "banUnban";
+  const userAction = async (
+    action: "approve" | "reject" | "banUnban" | "delete"
+    // eslint-disable-next-line consistent-return
+  ) => {
+    const args = { userId: user.id };
+    // eslint-disable-next-line default-case
+    switch (action) {
+      case "approve":
+        return approveSellerMutate(args);
+      case "reject":
+        return rejectSellerMutate(args);
+      case "banUnban":
+        return unBanMutate(args);
+      case "delete":
+        return deleteUserMutate(args);
+    }
+  };
   return (
     <ListItem divider>
       <ListItemAvatar>
@@ -82,7 +122,7 @@ function UserRow({
         secondary={
           <>
             <Typography variant="body2">
-              {user.username} - {user.roles}
+              {user.username} - {user.role}
             </Typography>
           </>
         }
@@ -90,31 +130,44 @@ function UserRow({
       <div style={{ marginRight: 16 }}>
         <FormGroup aria-label="position" row>
           <Stack direction="row" spacing={3}>
-            <FormGroup aria-label="position" row>
-              <FormControlLabel
-                control={
-                  <OnOffSwitch
-                    checked={switchChecked}
-                    onChange={() => {
-                      unbanUser(user.id).then(() =>
-                        setSwitchChecked(!switchChecked)
-                      );
-                    }}
-                  />
-                }
-                label=" "
-              />
-            </FormGroup>
+            {isBanMode ? (
+              <FormGroup aria-label="position" row>
+                <FormControlLabel
+                  control={
+                    <OnOffSwitch
+                      checked={switchChecked}
+                      onChange={() => {
+                        userAction("banUnban").then(() =>
+                          setSwitchChecked(!switchChecked)
+                        );
+                      }}
+                    />
+                  }
+                  label=" "
+                />
+              </FormGroup>
+            ) : (
+              <IconButton onClick={() => userAction("approve")}>
+                {isLoading ? (
+                  <CircularProgress color="secondary" size={20} />
+                ) : (
+                  <Check />
+                )}
+              </IconButton>
+            )}
           </Stack>
         </FormGroup>
       </div>
 
       <ListItemSecondaryAction>
-        <IconButton onClick={onDelete}>
-          {loading ? (
+        <IconButton onClick={() => userAction(isBanMode ? "delete" : "reject")}>
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {isLoading ? (
             <CircularProgress color="secondary" size={20} />
-          ) : (
+          ) : isBanMode ? (
             <Delete />
+          ) : (
+            <Clear />
           )}
         </IconButton>
       </ListItemSecondaryAction>
@@ -123,43 +176,59 @@ function UserRow({
 }
 
 function UsersList() {
-  const [sampleUsers, setSampleUsers] = useState<User[]>();
-  const { data, mutate, isSuccess } = useMutation(getAllUsers);
-  const { mutate: deleteUserMutate, isSuccess: deleteUserSuccess } =
-    useMutation(deleteUserByID);
-
-  const refreshPage = async () => {
-    window.location.reload(false);
-  };
-
-  if (deleteUserSuccess) {
-    refreshPage();
-  }
-
-  const deleteUser = async (userId: number) => {
-    deleteUserMutate({ userId });
-  };
-  const loadAllUsers = useCallback(() => {
-    if (!isSuccess) mutate({ data });
-    setSampleUsers(data);
-  }, [data, isSuccess, mutate]);
-
+  const [sellers, setSellers] = useState([] as User[]);
+  const {
+    data: sampleUsers,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery("users", getAllUsers);
   useEffect(() => {
-    loadAllUsers();
-  }, [loadAllUsers]);
+    setSellers(sampleUsers?.filter((u) => u.role !== Role.ROLE_SELLER) || []);
+  }, [sampleUsers]);
 
+  if (isLoading) {
+    return <LinearLoading />;
+  }
+  if (error) {
+    return <div style={{ marginTop: "80px" }}>Failed to load data</div>;
+  }
   return (
     <Container style={{ marginTop: 100 }}>
+      <Typography variant="h5">Ban users</Typography>
       <List>
-        {sampleUsers?.map((user) => (
-          <UserRow
-            user={user}
-            key={user.id}
-            onDelete={() => {
-              deleteUser(user.id);
-            }}
-          />
-        ))}
+        {sampleUsers?.length ? (
+          sampleUsers.map((user) => (
+            <UserRow
+              user={user}
+              key={user.id}
+              onChange={refetch}
+              mode="banUnban"
+            />
+          ))
+        ) : (
+          <Typography>No accounts exist at this time</Typography>
+        )}
+      </List>
+      <Typography variant="h5" style={{ marginTop: 40 }}>
+        Approve/Reject Sellers
+      </Typography>
+      <List>
+        {sellers.length ? (
+          sellers?.map((user) => (
+            <UserRow
+              user={user}
+              key={user.id}
+              mode="approveReject"
+              onChange={() => {
+                setSellers(sellers.filter((s) => s.id !== user.id));
+                refetch();
+              }}
+            />
+          ))
+        ) : (
+          <Typography>No new sellers at this time</Typography>
+        )}
       </List>
     </Container>
   );

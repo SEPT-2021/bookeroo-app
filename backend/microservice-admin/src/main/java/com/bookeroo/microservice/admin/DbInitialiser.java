@@ -2,13 +2,14 @@ package com.bookeroo.microservice.admin;
 
 import com.bookeroo.microservice.admin.model.User;
 import com.bookeroo.microservice.admin.repository.UserRepository;
-import net.bytebuddy.utility.RandomString;
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Locale;
 
 @Component
 public class DbInitialiser {
@@ -32,46 +33,48 @@ public class DbInitialiser {
     @PostConstruct
     private void initialise() {
         if (postConstruct) {
-            User admin = new User();
-            admin.setUsername("admin@test.com");
-            admin.setFirstName("adminFirstName");
-            admin.setLastName("adminLastName");
-            admin.setPassword(passwordEncoder.encode("password"));
-            admin.setEnabled(true);
-            admin.setRoles("ROLE_ADMIN");
-            userRepository.save(admin);
+            try {
+                Faker faker = new Faker(new Locale("en-AU"));
+                User admin = new User();
+                admin.setUsername("admin@test.com");
+                admin.setFirstName("adminFirstName");
+                admin.setLastName("adminLastName");
+                admin.setPassword(passwordEncoder.encode("password"));
+                admin.setAddressLine1("123 Admin St");
+                admin.setAddressLine2("Apartment 1");
+                admin.setCity("Melbourne");
+                admin.setState("VIC");
+                admin.setPostalCode("3001");
+                admin.setPhoneNumber("+(61) 413 170 399");
+                admin.setEnabled(true);
+                admin.setRole("ROLE_ADMIN");
+                userRepository.deleteUserByUsername(admin.getUsername());
+                userRepository.save(admin);
 
-            User user = new User();
-            user.setUsername("user@test.com");
-            user.setFirstName("userFirstName");
-            user.setLastName("userLastName");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setEnabled(true);
-            user.setRoles("ROLE_USER");
-            userRepository.save(user);
-
-            User seller = new User();
-            seller.setUsername("seller@test.com");
-            seller.setFirstName("sellerFirstName");
-            seller.setLastName("sellerLastName");
-            seller.setPassword(passwordEncoder.encode("password"));
-            seller.setEnabled(true);
-            seller.setRoles("ROLE_USER,ROLE_SELLER");
-            userRepository.save(seller);
-
-//            for (int i = 0; i < 6; i++)
-//                userRepository.save(getRandomUser());
+                userRepository.deleteAllByUsernameContaining("random");
+                for (int i = 0; i < 4; i++) {
+                    User user = getRandomUser();
+                    userRepository.save(user);
+                }
+            } catch (Exception ignore) {}
         }
     }
 
     private User getRandomUser() {
+        Faker faker = new Faker(new Locale("en-AU"));
         User user = new User();
-        user.setUsername(RandomString.make(8) + "@test.com");
-        user.setFirstName("randomFirstName");
-        user.setLastName("randomLastName");
+        user.setUsername(faker.name().username() + "@random.com");
+        user.setFirstName(faker.name().firstName());
+        user.setLastName(faker.name().lastName());
         user.setPassword(passwordEncoder.encode("password"));
+        user.setAddressLine1(faker.address().streetAddress());
+        user.setAddressLine2(faker.address().secondaryAddress());
+        user.setCity(faker.address().city());
+        user.setState(faker.address().stateAbbr());
+        user.setPostalCode(faker.address().zipCode());
+        user.setPhoneNumber(faker.phoneNumber().phoneNumber());
         user.setEnabled(true);
-        user.setRoles("ROLE_USER");
+        user.setRole("ROLE_USER");
         return user;
     }
 

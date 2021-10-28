@@ -5,18 +5,18 @@ package com.bookeroo.microservice.book.exception;
  */
 public class BookFormDataValidationResponse {
 
-    private String author;
+    private String what;
 
     public BookFormDataValidationResponse(String what) {
-        this.author = what;
+        this.what = what;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getWhat() {
+        return what;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setWhat(String what) {
+        this.what = what;
     }
 
 }

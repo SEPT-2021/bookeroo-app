@@ -25,10 +25,8 @@ class UserControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     UserService userService;
 
@@ -38,8 +36,14 @@ class UserControllerTest {
         user.setFirstName("testFirstName");
         user.setLastName("testLastName");
         user.setPassword("testPassword");
+        user.setAddressLine1("123 Bookeroo St");
+        user.setAddressLine2("Apartment 1");
+        user.setCity("Melbourne");
+        user.setState("VIC");
+        user.setPostalCode("3001");
+        user.setPhoneNumber("+(61) 413 170 399");
+        user.setRole("ROLE_USER");
         user.setEnabled(true);
-        user.setRoles("ROLE_USER");
         return user;
     }
 
@@ -78,7 +82,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenAuthenticated_thenReturnStatusOk() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
@@ -93,7 +97,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenEmailIncorrect_thenReturnUnauthorised() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername("wrongEmail@test.com");
@@ -108,7 +112,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenPasswordIncorrect_thenReturnUnauthorised() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());
@@ -123,7 +127,7 @@ class UserControllerTest {
     @Test
     void givenCredentials_whenAuthenticated_thenReturnJWTToken() throws Exception {
         User user = setupUser();
-        userService.saveUser(user);
+        userService.saveUser(user, true);
 
         AuthenticationRequest request = new AuthenticationRequest();
         request.setUsername(user.getUsername());

@@ -1,12 +1,18 @@
 import axios, { AxiosResponse } from "axios";
-import type { User } from "../components/GlobalContext";
-import { BookItemType, CartType, TokenProps } from "./types";
+import {
+  AddEditBookType,
+  BookCondition,
+  BookItemType,
+  CartType,
+  TokenProps,
+  User,
+} from "./types";
 
 export const api = axios.create({});
 const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
-  service: "books" | "users" | "orders" | "admins" | "newsletter",
+  service: "books" | "listings" | "users" | "orders" | "admins" | "newsletter",
   route: string
 ) {
   const port = (() => {
@@ -15,6 +21,7 @@ function getRouteURL(
       case "newsletter":
         return 8080;
       case "books":
+      case "listings":
         return 8081;
       case "orders":
         return 8082;
@@ -41,11 +48,17 @@ const makeTypedAPICall =
 export const registerUser = makeTypedAPICall<
   {
     username: string;
+    password: string;
     firstName: string;
     lastName: string;
-    password: string;
-    roles: string;
-    enabled: true;
+    role: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    phoneNumber: string;
+    enabled: boolean;
   },
   TokenProps & { user: User }
 >((args) => api.post(getRouteURL("users", "register"), args));
@@ -56,14 +69,10 @@ export const loginUser = makeTypedAPICall<
 >((args) => api.post(getRouteURL("users", "login"), args));
 
 export const addBook = makeTypedAPICall<
-  {
-    title: string;
-    author: string;
-    pageCount: string;
-    isbn: string;
+  AddEditBookType & {
     price: string;
-    description: string;
-    coverFile: File | unknown;
+    condition: string;
+    coverFile?: File | unknown;
   },
   unknown
 >((args) => {
@@ -73,6 +82,8 @@ export const addBook = makeTypedAPICall<
   data.append("pageCount", args.pageCount);
   data.append("isbn", args.isbn);
   data.append("price", args.price);
+  data.append("condition", args.condition);
+  data.append("category", args.category);
   data.append("description", args.description);
   data.append("coverFile", args.coverFile as File);
 
@@ -82,12 +93,32 @@ export const addBook = makeTypedAPICall<
     },
   });
 });
+export const editBook = makeTypedAPICall<
+  AddEditBookType & { id: string; cover?: string },
+  unknown
+>(({ title, author, category, id, description, isbn, pageCount }) => {
+  return api.put(getRouteURL("books", id), {
+    title,
+    author,
+    category,
+    description,
+    isbn,
+    pageCount,
+  });
+});
+
+export const reviewBook = makeTypedAPICall<
+  { text: string; rating: number; id: string },
+  unknown
+>(({ text, rating, id }) =>
+  api.post(getRouteURL("books", `${id}/review`), { text, rating })
+);
 
 export const findBookById = makeTypedAPICall<
   {
     id: string;
   },
-  unknown
+  BookItemType
 >((args) => api.get(getRouteURL("books", args.id)));
 
 export const deleteBookById = makeTypedAPICall<
@@ -96,6 +127,14 @@ export const deleteBookById = makeTypedAPICall<
   },
   unknown
 >((args) => api.delete(getRouteURL("books", args.id)));
+
+export const deleteListingById = makeTypedAPICall<{ id: string }, unknown>(
+  ({ id }) => api.delete(getRouteURL("listings", id))
+);
+export const addListing = makeTypedAPICall<
+  { bookId: string; price: string; condition: BookCondition },
+  unknown
+>((args) => api.post(getRouteURL("listings", "add"), args));
 
 export const getBookBySearchTerm = makeTypedAPICall<
   {
@@ -140,7 +179,7 @@ export const paymentCapture = makeTypedAPICall<
   unknown
 >((args) => api.post(getRouteURL("orders", `capture/${args.token}`)));
 
-export const getAllUsers = makeTypedAPICall<unknown, undefined>(() =>
+export const getAllUsers = makeTypedAPICall<unknown, User[]>(() =>
   api.get(getRouteURL("admins", "inspect-users"))
 );
 
@@ -148,6 +187,16 @@ export const banUnBanUser = makeTypedAPICall<
   { userId: number | undefined },
   unknown
 >((args) => api.post(getRouteURL("admins", `toggle-ban/${args.userId}`)));
+
+export const approveSeller = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `approve-seller/${args.userId}`)));
+
+export const rejectSeller = makeTypedAPICall<
+  { userId: number | undefined },
+  unknown
+>((args) => api.post(getRouteURL("admins", `reject-seller/${args.userId}`)));
 
 export const deleteUserByID = makeTypedAPICall<
   { userId: number | undefined },
