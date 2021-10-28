@@ -3,10 +3,11 @@ import React, {
   Dispatch,
   FC,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { api, profile } from "../util/api";
 import { BookItemType, Listing, TokenProps, User } from "../util/types";
 import useStickyState from "../util/useStickyState";
@@ -35,6 +36,7 @@ interface GlobalContextType {
 export const GlobalContext = createContext<GlobalContextType>({} as never);
 
 export const GlobalContextProvider: FC<unknown> = ({ children }) => {
+  const client = useQueryClient();
   const [token, setToken] = useState<string>();
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useStickyState<CartItem[]>([], "cart");
@@ -75,24 +77,27 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
   useEffect(() => {
     setToken(localStorage.getItem("token") || undefined);
   }, []);
-  const signOut = () => {
+  const signOut = useCallback(() => {
     localStorage.removeItem("token");
     setToken(undefined);
+    client.invalidateQueries();
+  }, [client]);
+  const login = (data: TokenProps) => {
+    localStorage.setItem("token", data.jwt as string);
+    setToken(data.jwt);
+    client.invalidateQueries();
   };
   // Clear token if error
   useEffect(() => {
     if (isError) {
       signOut();
     }
-  }, [isError]);
+  }, [isError, signOut]);
   return (
     <GlobalContext.Provider
       value={{
         user: token ? userData : undefined,
-        login: (data) => {
-          localStorage.setItem("token", data.jwt as string);
-          setToken(data.jwt);
-        },
+        login,
         signOut,
         cartOpen,
         setCartOpen,
