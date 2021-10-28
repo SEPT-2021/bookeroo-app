@@ -16,12 +16,10 @@ import static com.bookeroo.microservice.payment.config.PaymentConstants.REFUND_E
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-    private final ListingRepository listingRepository;
 
     @Autowired
     public TransactionService(TransactionRepository transactionRepository, ListingRepository listingRepository) {
         this.transactionRepository = transactionRepository;
-        this.listingRepository = listingRepository;
     }
 
     private void recordTransaction(Listing listing, User buyer, String orderId) {
@@ -48,8 +46,12 @@ public class TransactionService {
             long elapsedTimeMillis =
                     new Date().getTime() - transaction.getCreatedAt().getTime();
             transaction.setRefundable(
+<<<<<<< HEAD
                     transaction.isRefundable() &&
                     TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
+=======
+                    transaction.isRefundable() && TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
+>>>>>>> origin/sp15-user-details
         });
 
         return transactions;
