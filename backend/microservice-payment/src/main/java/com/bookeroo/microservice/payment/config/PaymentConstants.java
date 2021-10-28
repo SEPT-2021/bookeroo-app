@@ -14,8 +14,8 @@ public class PaymentConstants {
     public static final String LANDING_PAGE = "BILLING";
     public static final double SHIPPING_PERCENTAGE = 0.05;
     public static final String ITEM_CATEGORY = "PHYSICAL_GOODS";
-    public static final String RETURN_URL = "http://localhost:3000/paymentSuccess";
-    public static final String CANCEL_URL = "http://localhost:3000/paymentFailure";
+    public static final String RETURN_URL = "http://bookeroo.surge.sh/paymentSuccess";
+    public static final String CANCEL_URL = "http://bookeroo.surge.sh/paymentFailure";
     public static final int REFUND_EXPIRATION_TIME_HOURS = 2;
 
 }
