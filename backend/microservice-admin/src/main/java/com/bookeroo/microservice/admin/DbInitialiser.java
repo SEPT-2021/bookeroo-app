@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.Locale;
 
 @Component
@@ -44,7 +45,8 @@ public class DbInitialiser {
     }
 
     @PostConstruct
-    private void initialise() {
+    @Transactional
+    void initialise() {
         if (postConstruct) {
             User admin = new User();
             admin.setUsername("admin@test.com");
@@ -62,8 +64,8 @@ public class DbInitialiser {
             userRepository.deleteUserByUsername(admin.getUsername());
             userRepository.save(admin);
 
-            listingRepository.deleteAllByUser_UsernameContaining("@random.com");
             transactionRepository.deleteAllByBuyer_UsernameContaining("@random.com");
+            listingRepository.deleteAllByUser_UsernameContaining("@random.com");
             reviewRepository.deleteAllByUser_UsernameContaining("@random.com");
             userRepository.deleteAllByUsernameContaining("@random.com");
             try {
