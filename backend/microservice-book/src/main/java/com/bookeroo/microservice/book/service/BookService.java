@@ -97,6 +97,7 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
+        book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
         return bookRepository.save(book);
     }
 
@@ -130,6 +131,7 @@ public class BookService {
             }
         }
 
+        book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
         return book;
     }
 
@@ -137,6 +139,8 @@ public class BookService {
         if (!bookRepository.existsById(id))
             throw new BookNotFoundException(String.format("Book by id %s not found", id));
 
+        reviewRepository.deleteAllByBook_Id(id);
+        listingRepository.deleteAllByBook_Id(id);
         bookRepository.deleteById(id);
     }
 

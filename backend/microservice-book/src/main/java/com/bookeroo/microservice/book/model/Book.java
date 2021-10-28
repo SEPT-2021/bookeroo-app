@@ -208,22 +208,30 @@ public class Book {
 
         Book book = (Book) object;
 
-        if (id != book.id)
-            return false;
-        if (!title.equals(book.title))
-            return false;
-        if (!author.equals(book.author))
-            return false;
-        if (!pageCount.equals(book.pageCount))
-            return false;
-        if (!isbn.equals(book.isbn))
-            return false;
-        if (!description.equals(book.description))
-            return false;
-        if (!bookCategory.equals(book.bookCategory))
-            return false;
+        if (id != book.id) return false;
+        if (!title.equals(book.title)) return false;
+        if (!author.equals(book.author)) return false;
+        if (!pageCount.equals(book.pageCount)) return false;
+        if (!isbn.equals(book.isbn)) return false;
+        if (!description.equals(book.description)) return false;
+        if (!bookCategory.equals(book.bookCategory)) return false;
+        if (rating != book.rating) return false;
 
         return cover.equals(book.cover);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (pageCount != null ? pageCount.hashCode() : 0);
+        result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (bookCategory != null ? bookCategory.hashCode() : 0);
+        result = 31 * result + (rating != 0.0f ? Float.floatToIntBits(rating) : 0);
+        result = 31 * result + (cover != null ? cover.hashCode() : 0);
+        return result;
     }
 
     @Override

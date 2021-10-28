@@ -7,8 +7,8 @@ public class BookNotFoundResponse {
 
     private String id;
 
-    public BookNotFoundResponse(String what) {
-        this.id = what;
+    public BookNotFoundResponse(String id) {
+        this.id = id;
     }
 
     public String getId() {

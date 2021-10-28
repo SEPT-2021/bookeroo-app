@@ -117,4 +117,13 @@ public class UserController {
         return new ResponseEntity<>(userService.saveUser(user, false), HttpStatus.OK);
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@RequestHeader(name = AUTHORIZATION_HEADER, required = false) String tokenHeader) {
+        if (tokenHeader == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        userService.deleteUserByUsername(jwtTokenProvider.extractUsername(tokenHeader.substring(JWT_SCHEME.length())));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

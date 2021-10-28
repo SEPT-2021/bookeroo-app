@@ -59,10 +59,10 @@ public class User {
     private String role;
     @NotNull(message = "Boolean flag enable has to be set")
     private boolean enabled;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade= CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "User_Listing")
     private List<Listing> listings;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade= CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "User_Review")
     private List<Review> reviews;
     private Date createdAt;
@@ -215,6 +215,46 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = new Date();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        User user = (User) object;
+
+        if (id != user.id) return false;
+        if (enabled != user.enabled) return false;
+        if (!username.equals(user.username)) return false;
+        if (!password.equals(user.password)) return false;
+        if (!firstName.equals(user.firstName)) return false;
+        if (!lastName.equals(user.lastName)) return false;
+        if (!addressLine1.equals(user.addressLine1)) return false;
+        if (!addressLine2.equals(user.addressLine2)) return false;
+        if (!city.equals(user.city)) return false;
+        if (!state.equals(user.state)) return false;
+        if (!postalCode.equals(user.postalCode)) return false;
+        if (!phoneNumber.equals(user.phoneNumber)) return false;
+        return role.equals(user.role);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (addressLine1 != null ? addressLine1.hashCode() : 0);
+        result = 31 * result + (addressLine2 != null ? addressLine2.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (enabled ? 1 : 0);
+        return result;
     }
 
     @Override

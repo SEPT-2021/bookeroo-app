@@ -1,6 +1,7 @@
 package com.bookeroo.microservice.payment.service;
 
 import com.bookeroo.microservice.payment.exception.ListingNotFoundException;
+import com.bookeroo.microservice.payment.exception.TransactionNotRefundableException;
 import com.bookeroo.microservice.payment.model.*;
 import com.bookeroo.microservice.payment.repository.ListingRepository;
 import com.bookeroo.microservice.payment.repository.TransactionRepository;
@@ -77,17 +78,21 @@ public class PayPalService {
             double shippingCost = itemCost * SHIPPING_PERCENTAGE;
             Book book = listing.getBook();
             ShippingAddress address = cartCheckout.getShippingAddress();
+            String itemCostString = String.valueOf(round(itemCost));
+            String shippingCostString = String.valueOf(round(shippingCost));
+            String itemTotalString = String.valueOf(round(round(itemCost) + round(shippingCost)));
+
             PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
                     .referenceId(String.valueOf(listingId))
                     .description(DESCRIPTION)
                     .amountWithBreakdown(new AmountWithBreakdown()
                             .currencyCode(CURRENCY_CODE)
-                            .value(String.valueOf(round(itemCost) + round(shippingCost)))
+                            .value(itemTotalString)
                             .amountBreakdown(new AmountBreakdown()
                                     .itemTotal(new Money()
-                                            .currencyCode(CURRENCY_CODE).value(String.valueOf(round(itemCost))))
+                                            .currencyCode(CURRENCY_CODE).value(itemCostString))
                                     .shipping(new Money()
-                                            .currencyCode(CURRENCY_CODE).value(String.valueOf(round(shippingCost))))))
+                                            .currencyCode(CURRENCY_CODE).value(shippingCostString))))
                     .items(Collections.singletonList(
                             new Item()
                                     .name(book.getTitle())
@@ -139,7 +144,11 @@ public class PayPalService {
     }
 
     public HttpResponse<Refund> refundOrder(long listingId) throws IOException {
-        Transaction transaction = transactionRepository.findByListing_Id(listingId);
+        Optional<Transaction> existingTransaction = transactionRepository.findByListing_Id(listingId);
+        existingTransaction.orElseThrow(() -> new ListingNotFoundException(String.format("No transaction found for listing by id %d", listingId)));
+        Transaction transaction = existingTransaction.get();
+        if (!transaction.isRefundable())
+            throw new TransactionNotRefundableException(String.format("Transaction by id %s is not refundable", transaction.getId()));
         CapturesRefundRequest request = new CapturesRefundRequest(transaction.getCaptureId());
         request.prefer("return=representation");
         request.requestBody(buildRefundRequestBody(transaction.getListing()));

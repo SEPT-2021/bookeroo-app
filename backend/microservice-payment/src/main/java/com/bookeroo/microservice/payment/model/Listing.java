@@ -1,6 +1,7 @@
 package com.bookeroo.microservice.payment.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ public class Listing {
     @NotBlank(message = "Condition cannot be blank")
     private String bookCondition;
     @OneToOne(mappedBy = "listing")
+    @JsonIgnore
     private Transaction transaction;
     private boolean isAvailable;
     private Date createdAt;

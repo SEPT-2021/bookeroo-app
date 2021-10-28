@@ -1,6 +1,7 @@
 package com.bookeroo.microservice.payment.service;
 
 import com.bookeroo.microservice.payment.model.*;
+import com.bookeroo.microservice.payment.repository.ListingRepository;
 import com.bookeroo.microservice.payment.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, ListingRepository listingRepository) {
         this.transactionRepository = transactionRepository;
     }
 
@@ -42,9 +43,11 @@ public class TransactionService {
     public List<Transaction> getTransactionsByBuyer(long buyerId) {
         List<Transaction> transactions = transactionRepository.findByBuyer_Id(buyerId);
         transactions.forEach(transaction -> {
-            long elapsedTimeMillis = new Date().getTime() - transaction.getUpdatedAt().getTime();
+            long elapsedTimeMillis =
+                    new Date().getTime() - transaction.getCreatedAt().getTime();
             transaction.setRefundable(
-                    TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
+                transaction.isRefundable() &&
+                TimeUnit.HOURS.convert(elapsedTimeMillis, TimeUnit.MILLISECONDS) < REFUND_EXPIRATION_TIME_HOURS);
         });
 
         return transactions;

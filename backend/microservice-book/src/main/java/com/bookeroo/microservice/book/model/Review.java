@@ -81,4 +81,26 @@ public class Review {
         this.rating = rating;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        Review review = (Review) object;
+
+        if (id != review.id) return false;
+        if (rating != review.rating) return false;
+        if (!userFullName.equals(review.userFullName)) return false;
+        return text.equals(review.text);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (userFullName != null ? userFullName.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + rating;
+        return result;
+    }
+
 }

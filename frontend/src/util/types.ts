@@ -24,6 +24,36 @@ export type BookItemType = {
   bookCategory: BookCategory;
 };
 
+export type LoginType = {
+  username: string;
+  password: string;
+};
+
+export type RegisterUserType = {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  phoneNumber: string;
+  enabled: boolean;
+};
+
+export type UpdateUserType = {
+  firstName: string;
+  lastName: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  postalCode: string;
+};
+
 export interface Listing {
   id: number;
   userFullName: string | null;
@@ -87,3 +117,58 @@ export interface Review {
   userFullName: string;
   rating: number;
 }
+
+export type RegisterAsSellerType = {
+  abn: string;
+  businessName: string;
+  businessPhone: string;
+};
+
+export type ListingType = {
+  id: string;
+  price: string;
+  bookCondition: string;
+};
+
+export type ViewListingsType = {
+  id: string;
+  userFullName: string;
+  price: string;
+  bookCondition: string;
+  available: boolean;
+};
+
+export type ReviewBookType = {
+  text: string;
+  rating: number;
+  id: string;
+};
+
+export type SingleBookType = {
+  id: string;
+};
+
+export type TransactionType = {
+  id: {
+    listingId: string;
+    buyerId: string;
+  };
+  listing: {
+    id: string;
+    price: string;
+    bookCondition: string;
+    available: boolean;
+  };
+  orderId: string;
+  captureId: string;
+  refundable: boolean;
+};
+
+export type PaymentTokenType = {
+  token: string;
+};
+
+export type GetBookType = {
+  searchTerm: string;
+  type: string;
+};
