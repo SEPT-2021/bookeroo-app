@@ -30,52 +30,24 @@ function ViewTransactions({ classes }: ViewTransactionsProps) {
     }
   );
 
-  const rows = data || [];
+  const rows =
+    data?.map((row) => ({
+      ...row,
+      id: `${row.id?.listingId} ${row.id?.buyerId}`,
+      listingId: row.id?.listingId,
+      buyerId: row.id?.buyerId,
+    })) || [];
 
   const columns: GridColDef[] = [
     {
-      field: "listingsId",
+      field: "listingId",
       headerName: "Listing ID",
       width: 150,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.id?.listingId) {
-          if (params.row.id.listingId) {
-            result.push(`${params.row.id.listingId}`);
-          }
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
     },
     {
       field: "buyerId",
       headerName: "Buyer ID",
       width: 150,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.id?.buyerId) {
-          result.push(`${params.row.id.buyerId}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
-    },
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-      valueGetter: (params) => {
-        let result = [];
-        if (params?.row?.listing?.id) {
-          result.push(`${params?.row?.listing?.id}`);
-        } else {
-          result = ["No Data"];
-        }
-        return result.join(", ");
-      },
     },
     {
       field: "price",
