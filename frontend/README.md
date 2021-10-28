@@ -9,6 +9,8 @@ template.
 We use `yarn` as its faster, and easier to use. To install, do `npm install -g yarn` and then run `yarn` at the root of
 this project to install the needed dependencies.
 
+Our app is deployed on [bookeroo.surge.sh](http://bookeroo.surge.sh). Check it out!
+
 ### Linting and Code Style
 
 We use ESLint and Prettier to enforce a consistent coding styles and best practises within our codebase.\

@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import LoadingButton from "../../util/LoadingButton";
 import AddBook from "./index";
 
 afterEach(cleanup);
@@ -16,23 +15,5 @@ describe("Rendering page AddBook", () => {
       div
     );
     expect(div).toMatchSnapshot();
-  });
-});
-
-describe("LoadingButton render matches snapshot", () => {
-  test("renders button", () => {
-    const button = render(<LoadingButton />);
-    expect(button).toMatchSnapshot();
-  });
-});
-
-describe("AddBook matches snapshot", () => {
-  test("render AddBook", () => {
-    const { container } = render(
-      <QueryClientProvider client={new QueryClient()}>
-        <AddBook />
-      </QueryClientProvider>
-    );
-    expect(container).toMatchSnapshot();
   });
 });

@@ -5,6 +5,7 @@ exports[`Books matches snapshot render Books 1`] = `
   <div
     class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
     role="progressbar"
+    style="top: 80px; position: absolute; width: 100vw;"
   >
     <div
       class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate"
@@ -108,6 +109,7 @@ exports[`Rendering page Books renders without crashing 1`] = `
   <div
     class="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-indeterminate"
     role="progressbar"
+    style="top: 80px; position: absolute; width: 100vw;"
   >
     <div
       class="MuiLinearProgress-bar MuiLinearProgress-barColorPrimary MuiLinearProgress-bar1Indeterminate"

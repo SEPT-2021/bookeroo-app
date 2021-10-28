@@ -23,7 +23,7 @@ public class CustomUserDetails implements UserDetails {
         username = user.getUsername();
         password = user.getPassword();
         enabled = user.isEnabled();
-        authorities = Arrays.stream(user.getRoles().split(","))
+        authorities = Arrays.stream(new String[]{user.getRole()})
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

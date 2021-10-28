@@ -1,26 +1,33 @@
 package com.bookeroo.microservice.book.model;
 
+import com.bookeroo.microservice.book.model.Book.BookCategory;
+import com.bookeroo.microservice.book.model.Book.BookCondition;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Book form data model, used to map to the form data JSON request body.
  */
 public class BookFormData {
 
-    @NotBlank(message = "Title must not be blank")
+    @NotBlank(message = "Title cannot be blank")
     private String title;
-    @NotBlank(message = "Author must not be blank")
+    @NotBlank(message = "Author cannot be blank")
     private String author;
-    @NotBlank(message = "Page count must not be empty")
-    private String pageCount;
-    @NotBlank(message = "ISBN must not be blank")
+    @NotNull(message = "Number of pages cannot be null")
+    private long pageCount;
+    @NotBlank(message = "ISBN cannot be blank")
     private String isbn;
-    @NotBlank(message = "Price must not not be empty")
-    private String price;
     @NotBlank(message = "Books are required to have a brief description")
     private String description;
+    @NotBlank(message = "Price cannot be blank")
+    private String price;
+    @NotNull(message = "Book condition cannot be null")
+    private BookCondition condition;
+    @NotNull(message = "Book category cannot be null")
+    private BookCategory category;
     private MultipartFile coverFile;
     private String coverUrl;
 
@@ -43,11 +50,11 @@ public class BookFormData {
         this.author = author;
     }
 
-    public String getPageCount() {
+    public long getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(String pageCount) {
+    public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -59,6 +66,14 @@ public class BookFormData {
         this.isbn = isbn;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getPrice() {
         return price;
     }
@@ -67,12 +82,20 @@ public class BookFormData {
         this.price = price;
     }
 
-    public String getDescription() {
-        return description;
+    public BookCondition getCondition() {
+        return condition;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCondition(BookCondition condition) {
+        this.condition = condition;
+    }
+
+    public BookCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(BookCategory category) {
+        this.category = category;
     }
 
     public MultipartFile getCoverFile() {
