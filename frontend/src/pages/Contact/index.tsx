@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 
 function Contact({ classes }: ContactProps) {
+  const [isSubmitted, setSubmitted] = useState(false);
   return (
     <div className={classes.root}>
       <Grid>
@@ -72,12 +73,22 @@ function Contact({ classes }: ContactProps) {
                 </Grid>
                 <Grid item xs={12}>
                   <Button
+                    onClick={() => {
+                      setSubmitted(true);
+                      setTimeout(
+                        () => window.open("mailto:hello@bookeroo.com.au"),
+                        1000
+                      );
+                    }}
+                    disabled={isSubmitted}
                     type="submit"
                     variant="contained"
                     color="primary"
                     fullWidth
                   >
-                    Submit
+                    {isSubmitted
+                      ? "Done! We'll get back to you shortly"
+                      : "Submit"}
                   </Button>
                 </Grid>
               </Grid>
