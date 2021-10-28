@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { CSSProperties, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import {
@@ -16,12 +16,34 @@ import NotFoundPage from "../NotFoundPage";
 import { GlobalContext } from "../../components/GlobalContext";
 import DrawerCart from "../../components/DrawerCart";
 import Link from "../../util/Link";
-import { snakeCaseToNormalString } from "../../util/string-util";
+import {
+  getBookMinPrice,
+  snakeCaseToNormalString,
+} from "../../util/string-util";
 import LinearLoading from "../../util/LinearLoading";
 import ListingsTable from "./ListingsTable";
 import { Role } from "../../util/types";
 import Reviews from "./Reviews";
 import AddListingDialog from "./AddListingDialog";
+
+function BookStat({
+  title,
+  text,
+  style,
+}: {
+  title: string;
+  text: string | number;
+  style?: CSSProperties;
+}) {
+  return (
+    <>
+      <Typography variant="h6">{title}</Typography>
+      <Typography gutterBottom style={style}>
+        {text}
+      </Typography>
+    </>
+  );
+}
 
 function SingleBook() {
   const { id } = useParams<{ id: string }>();
@@ -52,11 +74,13 @@ function SingleBook() {
             <img
               src={book.cover}
               alt={book.title}
-              style={{ borderRadius: 15, height: 500, width: "100%" }}
+              style={{ borderRadius: 15, height: 620, width: "100%" }}
             />
           </Grid>
           <Grid item md={8} xs={12} sm={12}>
-            <Paper style={{ width: "100%", height: "100%", padding: 3 }}>
+            <Paper
+              style={{ width: "100%", height: "100%", padding: "40px 50px" }}
+            >
               <Typography variant="h3">{book.title}</Typography>
               <Typography variant="h5" gutterBottom>
                 by {book.author}
@@ -67,12 +91,22 @@ function SingleBook() {
                 "No reviews yet"
               )}
               <br />
-              <Typography variant="caption">
-                Page Count: {book.pageCount}
-              </Typography>
-              <p>Book ISBN: {book.isbn}</p>
-              <p>Book Description: {book.description}</p>
-              <p>Book Category: {snakeCaseToNormalString(book.bookCategory)}</p>
+              <BookStat title="Page Count" text={book.pageCount} />
+              <BookStat title="ISBN" text={book.isbn} />
+              <BookStat title="Description" text={book.description} />
+              <BookStat
+                title="Category"
+                text={snakeCaseToNormalString(book.bookCategory)}
+              />
+              <BookStat
+                title="Category"
+                text={snakeCaseToNormalString(book.bookCategory)}
+              />
+              <BookStat
+                title="Best Price"
+                style={{ marginBottom: 30 }}
+                text={getBookMinPrice(book.listings) || "No stock available"}
+              />
               {user?.role === Role.ROLE_ADMIN && (
                 <Link to={`/editBook/${book.id}`}>
                   <Button

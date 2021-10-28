@@ -55,10 +55,10 @@ export type UpdateUserType = {
 };
 
 export interface Listing {
-  id: number;
-  userFullName: string | null;
+  id: string;
   price: string;
-  bookCondition: BookCondition;
+  bookCondition: string;
+  userFullName: string | null;
   available: boolean;
 }
 
@@ -122,12 +122,6 @@ export type RegisterAsSellerType = {
   abn: string;
   businessName: string;
   businessPhone: string;
-};
-
-export type ListingType = {
-  id: string;
-  price: string;
-  bookCondition: string;
 };
 
 export type ViewListingsType = {

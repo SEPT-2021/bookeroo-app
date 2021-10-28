@@ -31,7 +31,7 @@ interface GlobalContextType {
 
   addToCart(b: CartItem): void;
 
-  removeFromCart(id: number): void;
+  removeFromCart(id: string): void;
 }
 
 export const GlobalContext = createContext<GlobalContextType>({} as never);
@@ -55,7 +55,7 @@ export const GlobalContextProvider: FC<unknown> = ({ children }) => {
       return [...prev, clickedItem];
     });
   };
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string) => {
     setCartItems((prev) => prev.filter((l) => l.listing.id !== id));
   };
   const {

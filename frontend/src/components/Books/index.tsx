@@ -21,6 +21,7 @@ import { BookItemType, Role } from "../../util/types";
 import { GlobalContext } from "../GlobalContext";
 import { deleteBookById } from "../../util/api";
 import Link from "../../util/Link";
+import { getBookMinPrice } from "../../util/string-util";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -93,16 +94,7 @@ export default function BookCard({
               Page Count: {pageCount}
               <br />
               {listings?.length ? (
-                <>
-                  Price:{" "}
-                  {listings
-                    .map((val) => val.price)
-                    .reduce((previousValue, currentValue) =>
-                      currentValue < previousValue
-                        ? currentValue
-                        : previousValue
-                    )}
-                </>
+                <>Price: {getBookMinPrice(listings)}</>
               ) : (
                 "No stock"
               )}
