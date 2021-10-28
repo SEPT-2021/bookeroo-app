@@ -61,6 +61,9 @@ public class DbInitialiser {
             admin.setPhoneNumber("+(61) 413 170 399");
             admin.setEnabled(true);
             admin.setRole("ROLE_ADMIN");
+            transactionRepository.deleteByBuyer_Username(admin.getUsername());
+            listingRepository.deleteAllByUser_Username(admin.getUsername());
+            reviewRepository.deleteAllByUser_Username(admin.getUsername());
             userRepository.deleteUserByUsername(admin.getUsername());
             userRepository.save(admin);
 
