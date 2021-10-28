@@ -19,7 +19,7 @@ import {
 } from "./types";
 
 export const api = axios.create({});
-const backendUrl = process.env.REACT_APP_BACKEND;
+// const backendUrl = process.env.REACT_APP_BACKEND;
 
 function getRouteURL(
   service:
@@ -32,25 +32,31 @@ function getRouteURL(
     | "sellers",
   route: string
 ) {
+  let backendUrl = "";
   const port = (() => {
     switch (service) {
       case "users":
       case "newsletter":
+        backendUrl = "ec2-54-252-228-168.ap-southeast-2.compute.amazonaws.com";
         return 8080;
       case "books":
       case "listings":
+        backendUrl = "ec2-3-25-146-229.ap-southeast-2.compute.amazonaws.com";
         return 8081;
       case "orders":
+        backendUrl = "ec2-54-79-206-117.ap-southeast-2.compute.amazonaws.com";
         return 8082;
       case "admins":
+        backendUrl = "ec2-3-26-63-43.ap-southeast-2.compute.amazonaws.com";
         return 8083;
       case "sellers":
+        backendUrl = "ec2-13-54-253-57.ap-southeast-2.compute.amazonaws.com";
         return 8084;
       default:
         throw new Error(`No port for service: ${service}`);
     }
   })();
-  return `${backendUrl}:${port}/api/${service}/${route}`;
+  return `http://${backendUrl}:${port}/api/${service}/${route}`;
 }
 
 /**
