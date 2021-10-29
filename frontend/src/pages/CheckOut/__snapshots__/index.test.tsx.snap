@@ -504,15 +504,16 @@ exports[`Rendering page CheckOut renders without crashing 1`] = `
               class="MuiBox-root css-1bvc4cc"
             >
               <button
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained"
+                class="MuiButtonBase-root MuiButton-root MuiButton-contained Mui-disabled Mui-disabled"
+                disabled=""
                 style="margin-top: 45px; margin-left: 15px;"
-                tabindex="0"
+                tabindex="-1"
                 type="button"
               >
                 <span
                   class="MuiButton-label"
                 >
-                  Place Order With Paypal
+                  Log in first
                 </span>
               </button>
             </div>
