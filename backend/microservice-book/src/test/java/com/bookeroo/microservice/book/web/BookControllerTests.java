@@ -28,7 +28,8 @@ import static com.bookeroo.microservice.book.security.SecurityConstant.AUTHORIZA
 import static com.bookeroo.microservice.book.security.SecurityConstant.JWT_SCHEME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -166,16 +167,6 @@ public class BookControllerTests {
 
         List<Book> books = Arrays.asList(objectMapper.readValue(response, Book[].class));
         assertTrue(books.contains(book1) && books.contains(book2));
-    }
-
-    @Test
-    void givenBookId_whenDeleteIsRequested_deleteBook() throws Exception {
-        BookFormData formData = setupBookFormData();
-        User user = setupUser();
-        Book book = bookService.saveBook(formData, user.getUsername());
-
-        mockMvc.perform(delete("/api/books/" + book.getId()))
-                .andExpect(status().isOk());
     }
 
     @Test
