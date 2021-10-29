@@ -134,7 +134,7 @@ export const findBookById = makeTypedAPICall<SingleBookType, BookItemType>(
 );
 
 export const deleteBookById = makeTypedAPICall<SingleBookType, unknown>(
-  (args) => api.delete(getRouteURL("books", args.id))
+  (args) => api.delete(getRouteURL("admins", `delete-books/${args.id}`))
 );
 
 export const deleteListingById = makeTypedAPICall<{ id: string }, unknown>(

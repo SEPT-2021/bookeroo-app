@@ -99,10 +99,6 @@ function SingleBook() {
                 text={snakeCaseToNormalString(book.bookCategory)}
               />
               <BookStat
-                title="Category"
-                text={snakeCaseToNormalString(book.bookCategory)}
-              />
-              <BookStat
                 title="Best Price"
                 style={{ marginBottom: 30 }}
                 text={getBookMinPrice(book.listings) || "No stock available"}

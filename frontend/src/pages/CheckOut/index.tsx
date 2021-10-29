@@ -197,9 +197,10 @@ function Checkout() {
                 <Button
                   variant="contained"
                   onClick={onSubmit}
+                  disabled={!userData}
                   style={{ marginTop: 45, marginLeft: 15 }}
                 >
-                  Place Order With Paypal
+                  {userData ? "Place Order With Paypal" : "Log in first"}
                 </Button>
               </Box>
             </Paper>
