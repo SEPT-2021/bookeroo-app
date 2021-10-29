@@ -1,9 +1,13 @@
 package com.bookeroo.microservice.book.validator;
 
 import com.bookeroo.microservice.book.model.Book;
+import com.bookeroo.microservice.book.model.Book.BookCategory;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Implementation of the {@link Validator} for the {@link Book} data model validation.
@@ -23,6 +27,12 @@ public class BookDataValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         Book book = (Book) object;
+
+        Optional<BookCategory> found = Arrays.stream(BookCategory.values())
+                .filter(bookCategory -> bookCategory.name().equals(book.getBookCategory()))
+                .findAny();
+        if (!found.isPresent())
+            errors.rejectValue("bookCategory", "Value", String.format("Unknown book category %s", book.getBookCategory()));
 
         try {
             long pageCount = Long.parseLong(book.getPageCount());

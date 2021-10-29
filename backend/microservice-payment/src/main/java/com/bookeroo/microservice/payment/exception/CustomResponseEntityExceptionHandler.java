@@ -26,4 +26,10 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<?> handleTransactionNotRefundable(TransactionNotRefundableException exception) {
+        TransactionNotRefundableResponse exceptionResponse = new TransactionNotRefundableResponse(exception.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

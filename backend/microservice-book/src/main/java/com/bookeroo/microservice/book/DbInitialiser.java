@@ -95,18 +95,22 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
                     review.setRating(random.nextInt(5) + 1);
                     reviewRepository.save(review);
                 }
+                reviewRepository.flush();
+                bookRepository.flush();
                 book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
                 book = bookRepository.save(book);
 
-                Listing listing = new Listing();
-                User seller = userRepository.save(getRandomUser());
-                listing.setUser(seller);
-                listing.setUserFullName(faker.funnyName().name());
-                listing.setBook(book);
-                listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
-                listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
-                listing.setAvailable(true);
-                listingRepository.save(listing);
+                for (int j = 0; j < (random.nextInt(3) + 1); j++) {
+                    Listing listing = new Listing();
+                    User seller = userRepository.save(getRandomUser());
+                    listing.setUser(seller);
+                    listing.setUserFullName(faker.funnyName().name());
+                    listing.setBook(book);
+                    listing.setPrice(BigDecimal.valueOf(random.nextFloat() * 100.0f).setScale(2, RoundingMode.HALF_EVEN).toString());
+                    listing.setBookCondition(BookCondition.values()[random.nextInt(BookCondition.values().length)].name());
+                    listing.setAvailable(true);
+                    listingRepository.save(listing);
+                }
             }
         }
     }

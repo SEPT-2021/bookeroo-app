@@ -1,6 +1,5 @@
 package com.bookeroo.microservice.book.service;
 
-import com.bookeroo.microservice.book.exception.BookNotFoundException;
 import com.bookeroo.microservice.book.model.Book;
 import com.bookeroo.microservice.book.model.Book.BookCategory;
 import com.bookeroo.microservice.book.model.BookFormData;
@@ -17,7 +16,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class BookServiceTests {
@@ -106,17 +106,6 @@ public class BookServiceTests {
 
         List<Book> books = bookService.getAllBooks();
         assertTrue(books.contains(book1) && books.contains(book2));
-    }
-
-    @Test
-    void givenBookId_whenDeleteRequested_deleteBook() {
-        BookFormData formData = setupBookFormData();
-        User user = setupUser();
-        Book book = bookService.saveBook(formData, user.getUsername());
-        bookService.removeBook(book.getId());
-
-        long id = book.getId();
-        assertThrows(BookNotFoundException.class, () -> bookService.getBook(id));
     }
 
     @Test

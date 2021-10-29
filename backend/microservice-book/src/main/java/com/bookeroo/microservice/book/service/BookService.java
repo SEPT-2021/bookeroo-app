@@ -135,15 +135,6 @@ public class BookService {
         return book;
     }
 
-    public void removeBook(long id) {
-        if (!bookRepository.existsById(id))
-            throw new BookNotFoundException(String.format("Book by id %s not found", id));
-
-        reviewRepository.deleteAllByBook_Id(id);
-        listingRepository.deleteAllByBook_Id(id);
-        bookRepository.deleteById(id);
-    }
-
     public Review addReview(long bookId, String username, Review review) {
         Book book = getBook(bookId);
         Optional<User> user = userRepository.findByUsername(username);
