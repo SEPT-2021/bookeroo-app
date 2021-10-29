@@ -76,7 +76,7 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
             }
 
             Random random = new Random();
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 16; i++) {
                 Book book;
                 try {
                     book = bookRepository.save(getRandomBook());
@@ -84,7 +84,7 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
                     continue;
                 }
 
-                for (int j = 0; j < (random.nextInt(5) + 1); j++) {
+                for (int j = 0; j < (random.nextInt(7) + 1); j++) {
                     Review review = new Review();
                     User reviewer = userRepository.save(getRandomUser());
                     review.setUser(reviewer);
@@ -100,7 +100,7 @@ public class DbInitialiser implements ApplicationListener<ApplicationReadyEvent>
                 book.setRating(reviewRepository.getAverageByBook_Id(book.getId()));
                 book = bookRepository.save(book);
 
-                for (int j = 0; j < (random.nextInt(3) + 1); j++) {
+                for (int j = 0; j < (random.nextInt(5) + 1); j++) {
                     Listing listing = new Listing();
                     User seller = userRepository.save(getRandomUser());
                     listing.setUser(seller);
