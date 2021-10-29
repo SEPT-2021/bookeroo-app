@@ -1,8 +1,10 @@
 package com.bookeroo.microservice.admin.web;
 
 import com.bookeroo.microservice.admin.exception.UserNotFoundException;
+import com.bookeroo.microservice.admin.model.Book;
 import com.bookeroo.microservice.admin.model.User;
 import com.bookeroo.microservice.admin.security.JWTTokenProvider;
+import com.bookeroo.microservice.admin.service.BookService;
 import com.bookeroo.microservice.admin.service.SellerDetailsService;
 import com.bookeroo.microservice.admin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,16 @@ public class AdminController {
     private final UserService userService;
     private final SellerDetailsService sellerDetailsService;
     private final JWTTokenProvider jwtTokenProvider;
+    private final BookService bookService;
 
     @Autowired
     public AdminController(UserService userService,
                            SellerDetailsService sellerDetailsService,
+                           BookService bookService,
                            JWTTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.sellerDetailsService = sellerDetailsService;
+        this.bookService = bookService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -65,6 +70,12 @@ public class AdminController {
     @DeleteMapping("/delete-users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-books/{id}")
+    public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) {
+        bookService.deleteBook(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

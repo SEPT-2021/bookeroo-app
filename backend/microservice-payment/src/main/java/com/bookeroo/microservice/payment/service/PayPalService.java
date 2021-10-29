@@ -148,15 +148,14 @@ public class PayPalService {
         existingTransaction.orElseThrow(() -> new ListingNotFoundException(String.format("No transaction found for listing by id %d", listingId)));
         Transaction transaction = existingTransaction.get();
         if (!transaction.isRefundable())
-            throw new TransactionNotRefundableException(String.format("Transaction by id %s is not refundable", transaction.getId()));
+            throw new TransactionNotRefundableException(String.format("Transaction by id %s is not refundable", transaction.getId().getListingId()));
         CapturesRefundRequest request = new CapturesRefundRequest(transaction.getCaptureId());
         request.prefer("return=representation");
         request.requestBody(buildRefundRequestBody(transaction.getListing()));
 
         HttpResponse<Refund> response = payPalClient.execute(request);
         if (response.statusCode() == HttpStatus.CREATED.value()) {
-            transaction.setRefundable(false);
-            transactionRepository.save(transaction);
+            transactionRepository.delete(transaction);
 
             Listing listing = listingRepository.getById(transaction.getId().getListingId());
             listing.setAvailable(true);

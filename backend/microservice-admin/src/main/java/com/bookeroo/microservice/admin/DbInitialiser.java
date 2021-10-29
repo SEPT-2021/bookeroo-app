@@ -67,15 +67,15 @@ public class DbInitialiser {
             userRepository.deleteUserByUsername(admin.getUsername());
             userRepository.save(admin);
 
-            transactionRepository.deleteAllByBuyer_UsernameContaining("@random.com");
-            listingRepository.deleteAllByUser_UsernameContaining("@random.com");
-            reviewRepository.deleteAllByUser_UsernameContaining("@random.com");
-            userRepository.deleteAllByUsernameContaining("@random.com");
-            try {
-                for (int i = 0; i < 4; i++)
-                    userRepository.save(getRandomUser());
-            } catch (Exception ignore) {
-            }
+//            transactionRepository.deleteAllByBuyer_UsernameContaining("@random.com");
+//            listingRepository.deleteAllByUser_UsernameContaining("@random.com");
+//            reviewRepository.deleteAllByUser_UsernameContaining("@random.com");
+//            userRepository.deleteAllByUsernameContaining("@random.com");
+//            try {
+//                for (int i = 0; i < 4; i++)
+//                    userRepository.save(getRandomUser());
+//            } catch (Exception ignore) {
+//            }
         }
     }
 

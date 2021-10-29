@@ -83,12 +83,6 @@ public class BookController {
         return new ResponseEntity<>(bookService.saveBook(book), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) {
-        bookService.removeBook(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<?> getAllBooks() {
         return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);

@@ -5,6 +5,7 @@ import com.bookeroo.microservice.payment.model.TransactionKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Transa
     List<Transaction> findByBuyer_Id(long id);
 
     List<Transaction> findByOrderId(String id);
+
+    @Transactional
+    void delete(Transaction transaction);
 
 }

@@ -19,4 +19,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Transa
     @Transactional
     void deleteAllByBuyer_UsernameContaining(String username);
 
+    @Transactional
+    void deleteAllByListing_Id(long listingId);
+
 }
